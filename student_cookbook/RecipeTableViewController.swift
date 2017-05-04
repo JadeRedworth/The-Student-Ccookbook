@@ -38,6 +38,8 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     var filteredRecipeList = [Recipes]()
     var recipeIDArray = [String]()
     
+    var mainStoryBoard: Bool = false
+    
     var recipeSelected: Bool = false
     
     @IBAction func buttonLogout(_ sender: Any) {
@@ -96,9 +98,11 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         if self.currentStoryboardName == "Main" {
             let cellNib = UINib(nibName: "RecipeTableViewCell", bundle: nil)
             self.recipesTableView.register(cellNib, forCellReuseIdentifier: "RecipeCell")
+            mainStoryBoard = true
         } else if self.currentStoryboardName == "Ipad" {
             let cellNib = UINib(nibName: "AdminRecipeTableViewCell", bundle: nil)
             self.recipesTableView.register(cellNib, forCellReuseIdentifier: "RecipeCell")
+            mainStoryBoard = false
         }
     }
     
@@ -126,16 +130,16 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func fillData(){
         
-        labelRecipeName.text = recipe?.name
-        labelServingSize.text = "Serves: \(recipe!.servingSize!)"
-        labelPrepTime.text = " \(recipe!.prepTimeHour!) hrs \(recipe!.prepTimeMinute!) mins"
-        labelCookTime.text = "\(recipe!.cookTimeHour!) hrs \(recipe!.cookTimeMinute!) mins"
-        labelType.text = recipe?.type
-        labelCourse.text = recipe?.course
-        ingredientsList = recipe!.ingredients
-        stepsList = recipe!.steps
+        labelRecipeName.text = self.recipe?.name
+        labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
+        labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
+        labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
+        labelType.text = self.recipe?.type
+        labelCourse.text = self.recipe?.course
+        ingredientsList = self.recipe!.ingredients
+        stepsList = self.recipe!.steps
         
-        let imageURL = recipe?.imageURL
+        let imageURL = self.recipe?.imageURL
         imageViewRecipe.loadImageWithCacheWithUrlString(imageURL!)
         
         fetchUserWhoAddedRecipe(completion: {
@@ -167,10 +171,10 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     func handleLogout() {
         try! FIRAuth.auth()!.signOut()
         
-        if self.currentStoryboardName == "Main" {
+        if mainStoryBoard == true {
             let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
             present(vc!, animated: true, completion: nil)
-        } else if self.currentStoryboardName == "Ipad" {
+        } else {
             let vc = UIStoryboard(name: "Ipad", bundle: nil).instantiateInitialViewController()
             present(vc!, animated: true, completion: nil)
         }
@@ -386,13 +390,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                 
                 cell.labelRecipeName.text = recipe.name
                 cell.labelAddedBy.text = "@: \(recipe.addedBy!)"
-                
-                if recipe.imageURL != nil {
-                    if let recipeImageURL = recipe.imageURL {
-                        cell.imageViewRecipe.loadImageWithCacheWithUrlString(recipeImageURL)
-                    }
-                }
-                
                 return cell
             } else {
                 
@@ -401,8 +398,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                 if recipeSelected == true {
                     
                        let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsDetailCell", for: indexPath)
-                    
-                    
                     
                     if (indexPath.section == 0) {
                         cell.textLabel?.text = ingredientsList[indexPath.row].name
@@ -446,10 +441,8 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             self.recipe = self.filteredRecipeList[indexPath.row]
             
             if (tableView == self.recipesTableView){
-                
                 recipeSelected = true
                 fillData()
-                
             }
         }
     }

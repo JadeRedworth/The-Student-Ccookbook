@@ -18,17 +18,33 @@ enum userSelectedScope:Int {
     case admin = 3
 }
 
-class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate {
+class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+
     
     let cellId = "cellId"
+    var imageURL: String!
     
     var ref: FIRDatabaseReference!
     var refHandle: FIRDatabaseHandle!
     
+    var user = User()
     var userList = [User]()
     var selectedUserList = [User]()
     var filteredUserList = [User]()
+    
+    var recipeSelected: Bool = false
+    
+    @IBOutlet weak var userTableView: UITableView!
+    @IBOutlet weak var imageViewUser: UIImageView!
+    @IBOutlet weak var labelUserName: UILabel!
+    @IBOutlet weak var labelUserAge: UILabel!
+    @IBOutlet weak var labelUserGender: UILabel!
+    @IBOutlet weak var labelUserLocation: UILabel!
+    @IBOutlet weak var labelUserNoRecipesCooked: UILabel!
+    @IBOutlet weak var labelUserNoRecipesAdded: UILabel!
+    @IBOutlet weak var labelUserNoRecipesRated: UILabel!
 
+    
     @IBAction func buttonLogout(_ sender: Any) {
         handleLogout()
     }
@@ -49,14 +65,14 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
         }
         
-        tableView.register(AdminUserTableViewCell.self, forCellReuseIdentifier: cellId)
+        self.userTableView.register(AdminUserTableViewCell.self, forCellReuseIdentifier: cellId)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
         
         getUsers()
         
         self.searchBarSetup()
-        self.tableView.reloadData()
+        self.userTableView.reloadData()
     }
     
     func handleLogout() {
@@ -68,7 +84,7 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
     
     func reloadData() {
         getUsers()
-        self.tableView.reloadData()
+        self.userTableView.reloadData()
     }
     
     func getUsers(){
@@ -77,14 +93,30 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
             if result.isEmpty {
                 self.userList = []
                 self.filteredUserList = self.userList
-                self.tableView.reloadData()
             } else {
                 self.userList = result
                 self.filteredUserList = User.generateModelArray(self.userList)
-                self.tableView.reloadData()
             }
+            self.fillData()
+            self.userTableView.reloadData()
         }
-        self.tableView.reloadData()
+    }
+    
+    func fillData() {
+        if recipeSelected != true {
+            self.user = self.filteredUserList[0]
+        }
+        
+        labelUserName.text = "\(self.user.firstName!) \(self.user.lastName!)"
+        labelUserAge.text = "\(String(describing: self.user.age))"
+        labelUserGender.text = self.user.gender
+        labelUserLocation.text = self.user.location
+        labelUserNoRecipesAdded.text = ""
+        labelUserNoRecipesCooked.text = ""
+        labelUserNoRecipesRated.text = ""
+        imageURL = self.user.profilePicURL
+        imageViewUser.loadImageWithCacheWithUrlString(imageURL!)
+        
     }
     
     func searchBarSetup() {
@@ -93,14 +125,14 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
         searchBar.scopeButtonTitles = ["All", "Female","Male", "Admin"]
         searchBar.selectedScopeButtonIndex = 0
         searchBar.delegate = self
-        self.tableView.tableHeaderView = searchBar
+        self.userTableView.tableHeaderView = searchBar
     }
     
     // MARK: - search bar delegate
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             filteredUserList = userList
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
         } else {
             filterTableView(searchBar.selectedScopeButtonIndex, text: searchText)
         }
@@ -109,28 +141,28 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         if selectedScope == 0 {
             filteredUserList = userList
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             
         } else if selectedScope == 1 {
             filteredUserList
                 = userList.filter({ (female) -> Bool in
                 return (female.gender?.contains("Female"))!
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             selectedUserList = filteredUserList
             
         } else if selectedScope == 2 {
             filteredUserList = userList.filter({ (male) -> Bool in
                 return (male.gender?.contains("Male"))!
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             selectedUserList = filteredUserList
             
         } else if selectedScope == 3 {
             filteredUserList = userList.filter({ (admin) -> Bool in
                 return (admin.admin == true)
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             selectedUserList = filteredUserList
         }
     }
@@ -142,7 +174,7 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
                 return (user.firstName?.lowercased().contains(text.lowercased()))! ||
                     (user.lastName?.lowercased().contains(text.lowercased()))!
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             break
             
         case userSelectedScope.female.rawValue:
@@ -150,7 +182,7 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
                 return (female.firstName?.lowercased().contains(text.lowercased()))! ||
                     (female.lastName?.lowercased().contains(text.lowercased()))!
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             break
             
         case userSelectedScope.male.rawValue:
@@ -158,7 +190,7 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
                 return (male.firstName?.lowercased().contains(text.lowercased()))! ||
                     (male.lastName?.lowercased().contains(text.lowercased()))!
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             break
             
         case userSelectedScope.admin.rawValue:
@@ -166,7 +198,7 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
                 return (admin.firstName?.lowercased().contains(text.lowercased()))! ||
                     (admin.lastName?.lowercased().contains(text.lowercased()))!
             })
-            self.tableView.reloadData()
+            self.userTableView.reloadData()
             break
 
         default:
@@ -182,17 +214,17 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
 
     // MARK: - Table view data source
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return filteredUserList.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         
       let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AdminUserTableViewCell
         
-        let user = filteredUserList[indexPath.row]
+        self.user = filteredUserList[indexPath.row]
         
         cell.textLabel?.text = "\(user.firstName!) \(user.lastName!)"
         cell.detailTextLabel?.text = "Age: \(user.age!)  Gender: \(user.gender!)"
@@ -206,7 +238,13 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.user = filteredUserList[indexPath.row]
+        recipeSelected = true
+        fillData()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
     }
     
@@ -232,8 +270,6 @@ class AdminUsersTableViewController: UITableViewController, UISearchBarDelegate 
      
      */
 }
-
-
 
 class AdminUserTableViewCell: UITableViewCell {
     

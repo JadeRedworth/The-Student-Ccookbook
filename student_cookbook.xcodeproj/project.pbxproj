@@ -21,7 +21,6 @@
 		8D1D63591E6B02DF00307B85 /* student_cookbookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1D63581E6B02DF00307B85 /* student_cookbookUITests.swift */; };
 		8D1F092E1E8420E400B9C358 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1F092D1E8420E400B9C358 /* RatingControl.swift */; };
 		8D3083AD1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */; };
-		8D3083B41E8810BA008EEC4D /* AdminApproveDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083B31E8810BA008EEC4D /* AdminApproveDetailsViewController.swift */; };
 		8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */; };
 		8D3083BE1E8A7B73008EEC4D /* RecipeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */; };
 		8D439BF51EB21D53007DD8F6 /* SearchIngredientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */; };
@@ -42,6 +41,7 @@
 		8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B41E6B4BFB00998BF6 /* Steps.swift */; };
 		8D8698B71E6B4C3C00998BF6 /* Timers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B61E6B4C3C00998BF6 /* Timers.swift */; };
 		8D9603E51E6B0469007C892B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D9603E41E6B0469007C892B /* GoogleService-Info.plist */; };
+		8DAEAA0D1EBB76E5007DBD21 /* RoundedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA0C1EBB76E5007DBD21 /* RoundedImage.swift */; };
 		8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */; };
 		8DC6951D1EB527E000D3328D /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC6951C1EB527E000D3328D /* SegmentedControl.swift */; };
 		8DCC4FB21E718B6700BBB9DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCC4FB11E718B6700BBB9DA /* Main.storyboard */; };
@@ -89,7 +89,6 @@
 		8D1D635A1E6B02DF00307B85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1F092D1E8420E400B9C358 /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminRecipesToApproveTableViewController.swift; sourceTree = "<group>"; };
-		8D3083B31E8810BA008EEC4D /* AdminApproveDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminApproveDetailsViewController.swift; sourceTree = "<group>"; };
 		8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeTableViewCell.swift; sourceTree = "<group>"; };
 		8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecipeTableViewCell.xib; sourceTree = "<group>"; };
 		8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchIngredientsViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +110,7 @@
 		8D8698B61E6B4C3C00998BF6 /* Timers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timers.swift; sourceTree = "<group>"; };
 		8D8C16291E6B15B70013AE67 /* student_cookbook-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "student_cookbook-Bridging-Header.h"; sourceTree = "<group>"; };
 		8D9603E41E6B0469007C892B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8DAEAA0C1EBB76E5007DBD21 /* RoundedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedImage.swift; sourceTree = "<group>"; };
 		8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserShoppingListTableViewController.swift; sourceTree = "<group>"; };
 		8DC6951C1EB527E000D3328D /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
 		8DCC4FB11E718B6700BBB9DA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -165,6 +165,7 @@
 		8D1D632C1E6B02DF00307B85 = {
 			isa = PBXGroup;
 			children = (
+				8DAEAA0C1EBB76E5007DBD21 /* RoundedImage.swift */,
 				8D81C1341EB7C8AE008D61F6 /* RoundButton.swift */,
 				8D81C1321EB79F74008D61F6 /* AccountPageVC.swift */,
 				8D81C12C1EB619AA008D61F6 /* Theme.swift */,
@@ -228,7 +229,6 @@
 			isa = PBXGroup;
 			children = (
 				8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */,
-				8D3083B31E8810BA008EEC4D /* AdminApproveDetailsViewController.swift */,
 				8D81C12E1EB62774008D61F6 /* AdminUsersTableViewController.swift */,
 			);
 			name = Admin;
@@ -607,7 +607,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */,
-				8D3083B41E8810BA008EEC4D /* AdminApproveDetailsViewController.swift in Sources */,
 				8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */,
 				8D439BF71EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift in Sources */,
 				8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */,
@@ -633,6 +632,7 @@
 				8D6EF6071E6DAEA900D5FF82 /* Extensions.swift in Sources */,
 				8D6EF5F81E6C458300D5FF82 /* AddRecipeViewController.swift in Sources */,
 				8DC6951D1EB527E000D3328D /* SegmentedControl.swift in Sources */,
+				8DAEAA0D1EBB76E5007DBD21 /* RoundedImage.swift in Sources */,
 				8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */,
 				8D8698B71E6B4C3C00998BF6 /* Timers.swift in Sources */,
 			);
@@ -780,7 +780,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = HCYY3PH5R7;
 				INFOPLIST_FILE = student_cookbook/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jade-redworth.student-cookbook";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -798,7 +798,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = HCYY3PH5R7;
 				INFOPLIST_FILE = student_cookbook/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.jade-redworth.student-cookbook";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -10,7 +10,6 @@ import UIKit
 
 class AdminRecipeTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var imageViewRecipe: UIImageView!
     @IBOutlet weak var labelRecipeName: UILabel!
     @IBOutlet weak var labelAddedBy: UILabel!
     

@@ -17,6 +17,10 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
+    
+    var currentStoryboard: UIStoryboard!
+    var currentStoryboardName: String!
+    
     var loggedInSuccessfully: Bool = false
     
     //Textfields for Login
@@ -36,6 +40,9 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         GIDSignIn.sharedInstance().uiDelegate = self
+        
+        currentStoryboard = self.storyboard
+        self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
         
         buttonLogin.layer.cornerRadius = 5
         buttonRegister.layer.cornerRadius = 5
@@ -64,10 +71,18 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
                 self.ref.child("Users").child(userID).observe(.value, with: { (snapshot) in
                     let userDict = snapshot.value as? NSDictionary
                     let adminStatus: Bool = userDict!["Admin"] as! Bool
-                    if adminStatus == true {
-                        self.performSegue(withIdentifier: "AdminLoginSegue", sender: nil)
+                    
+                    if self.currentStoryboardName == "Main" {
+                         self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
                     } else {
-                        self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
+                        if adminStatus == true {
+                            self.performSegue(withIdentifier: "AdminLoginSegue", sender: nil)
+                        } else {
+                            let alertController = UIAlertController(title: "Error", message: "This account is not registered to an administrator, only admin are authorised!", preferredStyle: UIAlertControllerStyle.alert)
+                            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                            self.present(alertController, animated: true, completion: nil)
+                            self.loggedInSuccessfully = false
+                        }
                     }
                 })
             } else {

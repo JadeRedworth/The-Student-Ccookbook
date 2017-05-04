@@ -44,6 +44,11 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     @IBOutlet weak var textFieldSteps: UITextField!
     @IBOutlet weak var buttonAddSteps: UIButton!
     
+    // Ipad outlets
+    @IBOutlet weak var IngredientsAndStepsTableView: UITableView!
+    @IBOutlet weak var ingredientsAndStepsSegmentControl: UISegmentedControl!
+    
+    
     // Variables
     // Recipes
     var recipes = Recipes()
@@ -87,13 +92,15 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     // Picker Lists
     var courses = ["Breakfast","Lunch","Dinner", "Dessert", "Snack"]
     var types = ["Quick", "Healthy", "Easy", "On a Budget", "Treat your self"]
-    var measurements = ["ml", "grams", "cup"]
+    var measurements = ["Cup", "Grams", "ml", "Oz", "Tbsp", "tsp"]
     var timeHours: [String] = []
     var timeMins: [String] = []
     
-    
     var pickerView = UIPickerView()
     var datasource = [String]()
+    
+    var currentStoryboard: UIStoryboard!
+    var currentStoryboardName: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,13 +109,12 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         
         ref = FIRDatabase.database().reference()
         self.userID = FIRAuth.auth()?.currentUser?.uid
+        currentStoryboard = self.storyboard
+        self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
         
         checkIfUserIsLoggedIn()
         checkIfUserIsAdmin()
-        
-        infoView.alpha = 1
-        ingredientsView.alpha = 0
-        stepsView.alpha = 0
+        setUpViews()
         
         buttonAddSteps.layer.cornerRadius = 5
         buttonAddIngredients.layer.cornerRadius = 5
@@ -145,6 +151,15 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         }
     }
     
+    func setUpViews() {
+        
+        if currentStoryboardName == "Main" {
+            infoView.alpha = 1
+            ingredientsView.alpha = 0
+            stepsView.alpha = 0
+        }
+    }
+    
     func fillRecipeInformation() {
         recipeID = recipes.id
         let imageURL = recipes.imageURL
@@ -173,14 +188,15 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     
     // log out user if they are not logged in
     func handleLogout() {
-        do {
-            try FIRAuth.auth()?.signOut()
-        } catch let logoutError {
-            print(logoutError)
-        }
+        try! FIRAuth.auth()!.signOut()
         
-        let loginViewController = LogInViewController()
-        present(loginViewController, animated: true, completion: nil)
+        if currentStoryboardName == "Main" {
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+            present(vc!, animated: true, completion: nil)
+        } else {
+            let vc = UIStoryboard(name: "Ipad", bundle: nil).instantiateInitialViewController()
+            present(vc!, animated: true, completion: nil)
+        }
     }
     
     // Check if user is an admin
@@ -194,7 +210,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             }
         })
     }
-    
     
     // MARK: Actions
     
@@ -215,6 +230,20 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         present(imagePickerController, animated: true, completion: nil)
     }
     
+    @IBAction func segmentControlViewsIpad(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            ingredientsView.alpha = 1
+            stepsView.alpha = 0
+        case 1:
+            ingredientsView.alpha = 0
+            stepsView.alpha = 1
+        default:
+            break;
+        }
+
+    }
     @IBAction func segmentControlViews(_ sender: SegmentedControl) {
         
         switch sender.selectedIndex {
@@ -250,7 +279,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     }
     
     @IBAction func buttonAddIngredients(_ sender: UIButton) {
-    
+        
         let ingredients = Ingredients()
         if textFieldIngredientName.text != "" && textFieldIngredientsQuantity.text != nil && textFieldMeasurement.text != "" {
             
@@ -264,11 +293,17 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
                 ingredientsList[ingredientToEdit].quantity = ingredients.quantity
                 ingredientsList[ingredientToEdit].measurement = ingredients.measurement
                 editIngredients = false
-
+                
             } else {
                 ingredientsList.append(ingredients)
             }
-            ingredientsTableView.reloadData()
+            
+            if currentStoryboardName == "Main" {
+                ingredientsTableView.reloadData()
+            } else {
+                IngredientsAndStepsTableView.reloadData()
+            }
+            
             textFieldIngredientName.text = ""
             textFieldIngredientsQuantity.text = ""
             textFieldMeasurement.text = ""
@@ -293,7 +328,13 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
                 steps.stepNo = stepsList.count + 1
                 stepsList.append(steps)
             }
-            stepsTableView.reloadData()
+            
+            if currentStoryboardName == "Main" {
+                 stepsTableView.reloadData()
+            } else {
+                IngredientsAndStepsTableView.reloadData()
+            }
+        
             textFieldSteps.text = ""
         } else {
             let alertController = UIAlertController(title: "Error", message: "Please enter a step!", preferredStyle: UIAlertControllerStyle.alert)
@@ -333,7 +374,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         }
         return result
     }
- 
+    
     func getRecipeDataToAdd(completion: @escaping (Bool) -> ()) {
         
         if checkInfo() == true {
@@ -363,10 +404,10 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
                     } else {
                         recipeValues.setValue(true, forKey: "Approved")
                     }
-        if (self.addRecipeIntoDatabase(recipeValues) == true) {
-            completion(true)
-            
-        }
+                    if (self.addRecipeIntoDatabase(recipeValues) == true) {
+                        completion(true)
+                        
+                    }
                 }
             }
         }
@@ -384,7 +425,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             self.recipeID = recipeRef.key
             ingredientsRef = self.ref.child(recipeDocument).child(recipeID).child("Ingredients")
             stepsRef = self.ref.child(recipeDocument).child(recipeID).child("Steps")
-
+            
         } else {
             self.recipeDocument = "UserRecipes"
             if editCheck == true {
@@ -405,9 +446,9 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
                 "Name": self.ingredientsList[i].name ?? "",
                 "Quantity": self.ingredientsList[i].quantity ?? 0,
                 "Measurement": self.ingredientsList[i].measurement ?? ""] as [String : Any]
-
-                ingredientsRef.childByAutoId().setValue(ingredientsValues)
-                self.ingredientsID = ingredientsRef.key
+            
+            ingredientsRef.childByAutoId().setValue(ingredientsValues)
+            self.ingredientsID = ingredientsRef.key
         }
         
         stepsRef.removeValue()
@@ -471,6 +512,17 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     
     // MARK: Table View Methods
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        var returnValue: Int = 0
+        if tableView == self.IngredientsAndStepsTableView {
+            returnValue = 2
+        } else {
+            returnValue = 1
+        }
+        return returnValue
+    }
+    
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -495,13 +547,17 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             }
         }
         edit.backgroundColor = UIColor.clear
-    
+        
         return [edit]
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(editingStyle == UITableViewCellEditingStyle.delete){
-            if tableView == self.ingredientsTableView {
+            if tableView == self.IngredientsAndStepsTableView {
+                ingredientsList.remove(at: indexPath.row)
+                stepsList.remove(at: indexPath.row)
+            }
+            else if tableView == self.ingredientsTableView {
                 ingredientsList.remove(at: indexPath.row)
                 self.ingredientsTableView.reloadData()
                 
@@ -516,11 +572,18 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         
         returnValue = 0
         
-        if tableView == self.ingredientsTableView {
+        if tableView == self.IngredientsAndStepsTableView {
+            if section == 0 {
+                returnValue = ingredientsList.count
+            } else if section == 1 {
+                returnValue = stepsList.count
+            }
+        } else if tableView == self.ingredientsTableView {
             returnValue = ingredientsList.count
         } else if tableView == self.stepsTableView {
             returnValue = stepsList.count
         }
+        
         return returnValue
     }
     
@@ -528,7 +591,19 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         
         var cell: UITableViewCell? = nil
         
-        if tableView == self.ingredientsTableView {
+        if tableView == self.IngredientsAndStepsTableView {
+            
+            cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsToAddCell", for: indexPath)
+            
+            if indexPath.section == 0 {
+                cell?.textLabel?.text = ingredientsList[indexPath.row].name
+                cell?.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
+                
+            } else if indexPath.section == 1 {
+                cell?.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
+                cell?.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+            }
+        } else if tableView == self.ingredientsTableView {
             
             cell = tableView.dequeueReusableCell(withIdentifier: "ingredientsCell", for: indexPath)
             cell?.textLabel?.text = ingredientsList[indexPath.row].name
@@ -542,6 +617,20 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             
         }
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        
+        var returnValue: String = ""
+        
+        if tableView == self.IngredientsAndStepsTableView {
+            if section == 0 {
+                returnValue = "Ingredients To Add"
+            } else if section == 1 {
+                returnValue = "Steps To Add"
+            }
+        }
+        return returnValue
     }
     
     //MARK: UIImagePickerControllerDelegate

@@ -4,7 +4,11 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -42,7 +46,7 @@
                                 </state>
                                 <connections>
                                     <action selector="buttonLogin:" destination="ujZ-SK-y8G" eventType="touchUpInside" id="0na-as-cyY"/>
-                                    <segue destination="f8W-RA-QcK" kind="show" identifier="UserLoginSegue" id="Kq6-f3-3UB"/>
+                                    <segue destination="f8W-RA-QcK" kind="show" identifier="AdminLoginSegue" id="Kq6-f3-3UB"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Dont have an account? " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n2w-dG-VSg">
@@ -258,6 +262,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="f8W-RA-QcK" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="LUu-lX-GVT">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -266,11 +271,244 @@
                     </tabBar>
                     <connections>
                         <segue destination="dgt-30-gGl" kind="relationship" relationship="viewControllers" id="zfU-VP-gYt"/>
+                        <segue destination="AMv-Tx-B0m" kind="relationship" relationship="viewControllers" id="awh-jF-dqe"/>
+                        <segue destination="EvH-iT-50g" kind="relationship" relationship="viewControllers" id="o7g-kA-jkM"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fgV-kV-2Si" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1291.40625" y="-156.4453125"/>
+            <point key="canvasLocation" x="1098" y="-5"/>
+        </scene>
+        <!--Admin Users Table View Controller-->
+        <scene sceneID="2pJ-w1-ehD">
+            <objects>
+                <viewController id="7s7-pc-ZPP" customClass="AdminUsersTableViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="tBz-uS-ZzG"/>
+                        <viewControllerLayoutGuide type="bottom" id="ACd-nx-QG5"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uWK-0V-AAe">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="61k-Ta-W64">
+                                <rect key="frame" x="318" y="64" width="450" height="903"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TkJ-Zg-9z6">
+                                        <rect key="frame" x="116" y="8" width="200" height="199"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="200" id="sPG-yb-tHW"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="100"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="1"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O0Y-Hx-Akt">
+                                        <rect key="frame" x="8" y="229" width="148" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Age:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cnB-lD-iYi">
+                                        <rect key="frame" x="8" y="259" width="148" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gender:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1d-Hv-9G5">
+                                        <rect key="frame" x="8" y="287" width="148" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="Ui3-wA-PZc"/>
+                                            <constraint firstAttribute="width" constant="148" id="X48-oj-t54"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uvA-Nb-Nq8">
+                                        <rect key="frame" x="8" y="316" width="148" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipes Cooked:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AMJ-Cy-yIP">
+                                        <rect key="frame" x="8" y="377" width="148" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="ZIY-Oc-Yp5"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipes Added:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hz2-OS-mGV">
+                                        <rect key="frame" x="8" y="408" width="148" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipes Rated:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4tu-fs-tzN">
+                                        <rect key="frame" x="8" y="436" width="148" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="iMu-h0-h77"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QHA-e2-bAw">
+                                        <rect key="frame" x="164" y="229" width="79.5" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@age" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uBT-y1-ZC1">
+                                        <rect key="frame" x="164" y="258" width="270" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@gender" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="15z-Tl-PAX">
+                                        <rect key="frame" x="164" y="287" width="61" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WCL-sB-NPZ">
+                                        <rect key="frame" x="164" y="315" width="270" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@no_of_recipes_cooked" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UPy-6I-BUo">
+                                        <rect key="frame" x="164" y="377.5" width="166" height="18.5"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@no_of_recipes_added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dsc-7J-oUh">
+                                        <rect key="frame" x="164" y="406" width="270" height="20"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@no-of_recipes_rated" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AaC-15-NPn">
+                                        <rect key="frame" x="164" y="436.5" width="149" height="18.5"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Bny-XL-2ab">
+                                        <rect key="frame" x="8" y="498" width="426" height="397"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="nrz-7L-wa1">
+                                                <rect key="frame" x="0.0" y="55.5" width="426" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nrz-7L-wa1" id="D9U-He-OnL">
+                                                    <rect key="frame" x="0.0" y="0.0" width="426" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="O0Y-Hx-Akt" secondAttribute="leading" id="0tG-6N-8lW"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="top" secondItem="61k-Ta-W64" secondAttribute="top" constant="287" id="4qf-vy-pY7"/>
+                                    <constraint firstItem="cnB-lD-iYi" firstAttribute="top" secondItem="O0Y-Hx-Akt" secondAttribute="bottom" constant="10" id="68y-OI-0vb"/>
+                                    <constraint firstItem="15z-Tl-PAX" firstAttribute="leading" secondItem="m1d-Hv-9G5" secondAttribute="trailing" constant="8" symbolic="YES" id="6AV-5h-IcV"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="trailing" secondItem="uvA-Nb-Nq8" secondAttribute="trailing" id="6mc-tG-KoF"/>
+                                    <constraint firstItem="QHA-e2-bAw" firstAttribute="leading" secondItem="O0Y-Hx-Akt" secondAttribute="trailing" constant="8" symbolic="YES" id="8it-ep-urX"/>
+                                    <constraint firstItem="AaC-15-NPn" firstAttribute="leading" secondItem="4tu-fs-tzN" secondAttribute="trailing" constant="8" symbolic="YES" id="DZ0-38-WHK"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="trailing" secondItem="Hz2-OS-mGV" secondAttribute="trailing" id="Fr0-0W-BWn"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="centerY" secondItem="15z-Tl-PAX" secondAttribute="centerY" id="HWT-9Q-PmQ"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="trailing" secondItem="cnB-lD-iYi" secondAttribute="trailing" id="HbD-x1-zDv"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="top" secondItem="cnB-lD-iYi" secondAttribute="bottom" constant="8" symbolic="YES" id="KOA-N9-kgD"/>
+                                    <constraint firstItem="4tu-fs-tzN" firstAttribute="top" secondItem="Hz2-OS-mGV" secondAttribute="bottom" constant="8" symbolic="YES" id="Kkh-Hf-7zw"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="61k-Ta-W64" secondAttribute="leadingMargin" id="KsK-Oz-zPS"/>
+                                    <constraint firstItem="uvA-Nb-Nq8" firstAttribute="top" secondItem="m1d-Hv-9G5" secondAttribute="bottom" constant="8" symbolic="YES" id="M2P-JG-IVU"/>
+                                    <constraint firstItem="TkJ-Zg-9z6" firstAttribute="top" secondItem="61k-Ta-W64" secondAttribute="topMargin" id="MQr-Nr-63a"/>
+                                    <constraint firstItem="O0Y-Hx-Akt" firstAttribute="bottom" secondItem="QHA-e2-bAw" secondAttribute="bottom" id="OCm-lo-qCs"/>
+                                    <constraint firstItem="AMJ-Cy-yIP" firstAttribute="firstBaseline" secondItem="UPy-6I-BUo" secondAttribute="baseline" id="RlA-fU-gBX"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="trailing" secondItem="4tu-fs-tzN" secondAttribute="trailing" id="SLl-QT-Xlk"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="uvA-Nb-Nq8" secondAttribute="leading" id="Tg6-lk-XUe"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="trailing" secondItem="O0Y-Hx-Akt" secondAttribute="trailing" id="Uoo-rg-KSD"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="cnB-lD-iYi" secondAttribute="leading" id="Wex-pm-WHS"/>
+                                    <constraint firstItem="UPy-6I-BUo" firstAttribute="leading" secondItem="AMJ-Cy-yIP" secondAttribute="trailing" constant="8" symbolic="YES" id="ctE-U5-Sde"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="AMJ-Cy-yIP" secondAttribute="leading" id="jml-5W-bOd"/>
+                                    <constraint firstItem="TkJ-Zg-9z6" firstAttribute="leading" secondItem="61k-Ta-W64" secondAttribute="leading" constant="116" id="nq8-cC-QYI"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="Hz2-OS-mGV" secondAttribute="leading" id="oRI-Gw-wdQ"/>
+                                    <constraint firstItem="4tu-fs-tzN" firstAttribute="top" secondItem="61k-Ta-W64" secondAttribute="top" constant="436" id="p0Z-lh-skA"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="trailing" secondItem="AMJ-Cy-yIP" secondAttribute="trailing" id="ssa-iD-1sQ"/>
+                                    <constraint firstItem="O0Y-Hx-Akt" firstAttribute="top" secondItem="TkJ-Zg-9z6" secondAttribute="bottom" constant="22" id="sv2-5K-sxr"/>
+                                    <constraint firstItem="Hz2-OS-mGV" firstAttribute="top" secondItem="AMJ-Cy-yIP" secondAttribute="bottom" constant="10" id="t75-HN-AiR"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="leading" secondItem="4tu-fs-tzN" secondAttribute="leading" id="ue3-sy-2t8"/>
+                                    <constraint firstItem="4tu-fs-tzN" firstAttribute="firstBaseline" secondItem="AaC-15-NPn" secondAttribute="baseline" id="x62-kv-mDx"/>
+                                    <constraint firstItem="m1d-Hv-9G5" firstAttribute="top" secondItem="15z-Tl-PAX" secondAttribute="top" id="xVD-85-7lm"/>
+                                    <constraint firstItem="O0Y-Hx-Akt" firstAttribute="top" secondItem="QHA-e2-bAw" secondAttribute="top" id="zQf-H5-epl"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="dDM-b2-FKo">
+                                <rect key="frame" x="0.0" y="61" width="310" height="903"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="UsersCell" id="7jN-E2-EOm">
+                                        <rect key="frame" x="0.0" y="28" width="310" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7jN-E2-EOm" id="Af0-T1-BgU">
+                                            <rect key="frame" x="0.0" y="0.0" width="310" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="7s7-pc-ZPP" id="PBa-Oy-MuV"/>
+                                    <outlet property="delegate" destination="7s7-pc-ZPP" id="haR-Px-FrA"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="61k-Ta-W64" secondAttribute="trailing" id="Dx5-0d-Zxz"/>
+                            <constraint firstItem="61k-Ta-W64" firstAttribute="top" secondItem="tBz-uS-ZzG" secondAttribute="bottom" id="Jft-73-lmy"/>
+                            <constraint firstItem="ACd-nx-QG5" firstAttribute="top" secondItem="61k-Ta-W64" secondAttribute="bottom" constant="8" symbolic="YES" id="Wy8-Tr-npE"/>
+                            <constraint firstItem="61k-Ta-W64" firstAttribute="leading" secondItem="uWK-0V-AAe" secondAttribute="leading" constant="318" id="rAo-vf-Do6"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="z0C-5q-aqd">
+                        <barButtonItem key="leftBarButtonItem" title="Logout" id="9z3-JJ-wsZ">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="buttonLogout:" destination="7s7-pc-ZPP" id="dAG-1a-Yod"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="imageViewUser" destination="TkJ-Zg-9z6" id="Mdn-DJ-RNT"/>
+                        <outlet property="labelUserAge" destination="uBT-y1-ZC1" id="bwz-Ut-3mH"/>
+                        <outlet property="labelUserGender" destination="15z-Tl-PAX" id="rzL-4w-OZb"/>
+                        <outlet property="labelUserLocation" destination="WCL-sB-NPZ" id="eFZ-zf-Kxv"/>
+                        <outlet property="labelUserName" destination="QHA-e2-bAw" id="ILb-Tq-Wb3"/>
+                        <outlet property="labelUserNoRecipesAdded" destination="Dsc-7J-oUh" id="QN1-qG-hKl"/>
+                        <outlet property="labelUserNoRecipesCooked" destination="UPy-6I-BUo" id="QCA-5a-dyd"/>
+                        <outlet property="labelUserNoRecipesRated" destination="AaC-15-NPn" id="IW3-TJ-yL3"/>
+                        <outlet property="userTableView" destination="dDM-b2-FKo" id="apJ-aN-RAp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RKm-cc-77E" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2863.28125" y="-797.4609375"/>
         </scene>
         <!--Recipes-->
         <scene sceneID="tRU-CT-QHP">
@@ -293,7 +531,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wiq-Ak-WFf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2744.53125" y="-156.4453125"/>
+            <point key="canvasLocation" x="2098" y="-5"/>
         </scene>
         <!--Recipes-->
         <scene sceneID="bgX-09-fEx">
@@ -303,215 +541,281 @@
                         <viewControllerLayoutGuide type="top" id="ccx-By-9RD"/>
                         <viewControllerLayoutGuide type="bottom" id="lZL-Kw-yoT"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="uNl-JP-bBP" customClass="RecipeTableViewCell" customModule="student_cookbook" customModuleProvider="target">
+                    <view key="view" contentMode="scaleToFill" id="uNl-JP-bBP" userLabel="Recipe Scene" customClass="RecipeTableViewCell" customModule="student_cookbook" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="FpF-dI-b1Y">
-                                <rect key="frame" x="0.0" y="0.0" width="310" height="1024"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k8s-rU-sM8">
+                                <rect key="frame" x="339" y="64" width="429" height="911"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recipe Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s8M-KY-hqz">
+                                        <rect key="frame" x="16" y="269" width="127" height="21"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Added By:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e2u-Nf-X8q">
+                                        <rect key="frame" x="16" y="312" width="127" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="nIR-cF-eqR"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date Added:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i7V-CX-FIM">
+                                        <rect key="frame" x="16" y="352" width="127" height="20"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Preperation Time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Z3-tV-wVA">
+                                        <rect key="frame" x="16" y="381" width="127" height="21"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cooking Time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CGJ-x9-6IG">
+                                        <rect key="frame" x="16" y="410" width="127" height="21"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Serving Size:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P5Y-zH-WdB">
+                                        <rect key="frame" x="16" y="439" width="127" height="21"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="swx-uN-gxX">
+                                        <rect key="frame" x="16" y="468" width="127" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="8Ev-Om-fuV"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Course:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sfd-bQ-2XU">
+                                        <rect key="frame" x="16" y="497" width="127" height="21"/>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Difficulty:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v0G-yp-Bly">
+                                        <rect key="frame" x="16" y="526" width="127" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="cjL-D1-IDe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="EZi-Bc-hy3">
+                                        <rect key="frame" x="8" y="555" width="413" height="348"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="348" id="KMA-e6-kjh"/>
+                                        </constraints>
+                                        <color key="separatorColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="pyS-jr-Foe">
+                                                <rect key="frame" x="0.0" y="56" width="413" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pyS-jr-Foe" id="lFc-Be-Kq3">
+                                                    <rect key="frame" x="0.0" y="0.0" width="413" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="Bvb-Xp-QCq" id="1pf-4K-iqp"/>
+                                            <outlet property="delegate" destination="Bvb-Xp-QCq" id="cD8-ze-akV"/>
+                                        </connections>
+                                    </tableView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@recipe_name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mbu-lj-8BA">
+                                        <rect key="frame" x="151" y="269" width="270" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="R0q-u2-4AQ"/>
+                                            <constraint firstAttribute="width" constant="270" id="nic-13-CWq"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@added_by" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="50V-QO-bpR">
+                                        <rect key="frame" x="151" y="312" width="212" height="19"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@date_added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ql0-3k-79c">
+                                        <rect key="frame" x="151" y="352" width="270" height="19"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@prep_time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r7b-sp-DL3">
+                                        <rect key="frame" x="151" y="381" width="270" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="TPR-g7-iv9"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@cooking_time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EfH-UR-Suz">
+                                        <rect key="frame" x="151" y="410" width="270" height="19"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@serving_size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P4I-LE-5gf">
+                                        <rect key="frame" x="151" y="439" width="270" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="iAJ-c5-kMf"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SxQ-Sb-7qQ">
+                                        <rect key="frame" x="151" y="468" width="270" height="19"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@course" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSc-Ia-O5s">
+                                        <rect key="frame" x="151" y="497" width="270" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="xkR-M7-jLP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="@difficulty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JXM-kb-HdQ">
+                                        <rect key="frame" x="151" y="528" width="270" height="19"/>
+                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FIF-tE-yCq">
+                                        <rect key="frame" x="0.0" y="8" width="421" height="253"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                                <real key="value" value="100"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Jm2-o6-fKG">
+                                        <rect key="frame" x="371" y="294" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="cBr-20-PjJ"/>
+                                            <constraint firstAttribute="height" constant="50" id="j1O-eq-85K"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="1Z3-tV-wVA" secondAttribute="trailing" id="0De-QR-D2a"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="Ql0-3k-79c" secondAttribute="leading" id="0g0-wT-kkO"/>
+                                    <constraint firstItem="r7b-sp-DL3" firstAttribute="top" secondItem="Ql0-3k-79c" secondAttribute="bottom" constant="10" id="0kK-nJ-K2P"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="SxQ-Sb-7qQ" secondAttribute="leading" id="1Z3-JP-d0N"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="JXM-kb-HdQ" secondAttribute="leading" id="2fk-12-Zex"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="Ql0-3k-79c" secondAttribute="trailing" id="2nL-rw-jXW"/>
+                                    <constraint firstItem="EZi-Bc-hy3" firstAttribute="leading" secondItem="k8s-rU-sM8" secondAttribute="leadingMargin" id="4Ry-K5-0yr"/>
+                                    <constraint firstItem="e2u-Nf-X8q" firstAttribute="firstBaseline" secondItem="50V-QO-bpR" secondAttribute="baseline" id="6WU-bf-PjT"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="ZSc-Ia-O5s" secondAttribute="trailing" id="78c-ga-ilj"/>
+                                    <constraint firstItem="EZi-Bc-hy3" firstAttribute="top" secondItem="v0G-yp-Bly" secondAttribute="bottom" constant="8" symbolic="YES" id="B01-fd-kWk"/>
+                                    <constraint firstItem="P4I-LE-5gf" firstAttribute="bottom" secondItem="P5Y-zH-WdB" secondAttribute="bottom" id="BEj-U8-onY"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="FIF-tE-yCq" secondAttribute="trailing" id="BK2-Qn-sCV"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="CGJ-x9-6IG" secondAttribute="leading" id="CXI-6O-gyU"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="bottom" secondItem="s8M-KY-hqz" secondAttribute="bottom" id="FOL-Kx-QnI"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="k8s-rU-sM8" secondAttribute="leading" constant="16" id="Gmj-F2-uef"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="EfH-UR-Suz" secondAttribute="leading" id="H4v-K9-fqa"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="i7V-CX-FIM" secondAttribute="leading" id="H6R-7X-JV4"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="Sfd-bQ-2XU" secondAttribute="trailing" id="JEc-jT-mBK"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="Sfd-bQ-2XU" secondAttribute="leading" id="NOd-XV-ssy"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="CGJ-x9-6IG" secondAttribute="trailing" id="Qt8-3i-7WQ"/>
+                                    <constraint firstItem="FIF-tE-yCq" firstAttribute="leading" secondItem="k8s-rU-sM8" secondAttribute="leading" id="Rpq-iP-ByX"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="P4I-LE-5gf" secondAttribute="leading" id="S0x-hW-7tP"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="Jm2-o6-fKG" secondAttribute="trailing" id="Sel-xd-OTo"/>
+                                    <constraint firstItem="ZSc-Ia-O5s" firstAttribute="top" secondItem="Sfd-bQ-2XU" secondAttribute="top" id="TAA-ge-q28"/>
+                                    <constraint firstItem="e2u-Nf-X8q" firstAttribute="top" secondItem="s8M-KY-hqz" secondAttribute="bottom" constant="22" id="TgX-oo-sCT"/>
+                                    <constraint firstItem="Jm2-o6-fKG" firstAttribute="top" secondItem="Mbu-lj-8BA" secondAttribute="bottom" constant="4" id="UWG-l4-3wy"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="r7b-sp-DL3" secondAttribute="trailing" id="UdG-EO-BI6"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="r7b-sp-DL3" secondAttribute="leading" id="Ude-vW-wS2"/>
+                                    <constraint firstItem="P5Y-zH-WdB" firstAttribute="top" secondItem="CGJ-x9-6IG" secondAttribute="bottom" constant="8" symbolic="YES" id="Uex-ry-wKw"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="top" secondItem="s8M-KY-hqz" secondAttribute="top" id="W56-tf-Wh0"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="i7V-CX-FIM" secondAttribute="trailing" id="W6T-OC-flQ"/>
+                                    <constraint firstItem="JXM-kb-HdQ" firstAttribute="leading" secondItem="v0G-yp-Bly" secondAttribute="trailing" constant="8" symbolic="YES" id="YGO-Vl-Ea2"/>
+                                    <constraint firstItem="P4I-LE-5gf" firstAttribute="top" secondItem="P5Y-zH-WdB" secondAttribute="top" id="YIW-8O-MNQ"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="EZi-Bc-hy3" secondAttribute="trailing" id="YKR-F3-dUe"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="swx-uN-gxX" secondAttribute="leading" id="bcG-cj-5N5"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="top" secondItem="Sfd-bQ-2XU" secondAttribute="bottom" constant="8" symbolic="YES" id="bms-fE-XKl"/>
+                                    <constraint firstItem="ZSc-Ia-O5s" firstAttribute="bottom" secondItem="Sfd-bQ-2XU" secondAttribute="bottom" id="coD-Y5-0do"/>
+                                    <constraint firstItem="CGJ-x9-6IG" firstAttribute="firstBaseline" secondItem="EfH-UR-Suz" secondAttribute="baseline" id="d4T-DB-KAs"/>
+                                    <constraint firstItem="Ql0-3k-79c" firstAttribute="top" secondItem="Jm2-o6-fKG" secondAttribute="bottom" constant="8" symbolic="YES" id="ee0-QO-hj3"/>
+                                    <constraint firstItem="EZi-Bc-hy3" firstAttribute="top" secondItem="JXM-kb-HdQ" secondAttribute="bottom" constant="8" symbolic="YES" id="ffp-om-hVl"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="P4I-LE-5gf" secondAttribute="trailing" id="g0X-GI-owo"/>
+                                    <constraint firstItem="Jm2-o6-fKG" firstAttribute="leading" secondItem="50V-QO-bpR" secondAttribute="trailing" constant="8" symbolic="YES" id="gA9-9s-Ja8"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="s8M-KY-hqz" secondAttribute="leading" id="grB-gV-XaE"/>
+                                    <constraint firstItem="P4I-LE-5gf" firstAttribute="top" secondItem="EfH-UR-Suz" secondAttribute="bottom" constant="10" id="hLV-nq-nwG"/>
+                                    <constraint firstItem="EfH-UR-Suz" firstAttribute="top" secondItem="r7b-sp-DL3" secondAttribute="bottom" constant="8" symbolic="YES" id="ioW-bB-fkc"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="ZSc-Ia-O5s" secondAttribute="leading" id="iqj-ay-EGQ"/>
+                                    <constraint firstItem="Jm2-o6-fKG" firstAttribute="trailing" secondItem="EZi-Bc-hy3" secondAttribute="trailing" id="iz2-XP-3j6"/>
+                                    <constraint firstItem="r7b-sp-DL3" firstAttribute="top" secondItem="1Z3-tV-wVA" secondAttribute="top" id="j2b-m0-nGg"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="s8M-KY-hqz" secondAttribute="trailing" constant="8" symbolic="YES" id="jJ7-WM-1CO"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="top" secondItem="k8s-rU-sM8" secondAttribute="top" constant="269" id="kQb-ND-zys"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="leading" secondItem="50V-QO-bpR" secondAttribute="leading" id="kYV-dw-itU"/>
+                                    <constraint firstItem="SxQ-Sb-7qQ" firstAttribute="top" secondItem="P4I-LE-5gf" secondAttribute="bottom" constant="8" symbolic="YES" id="kvo-JT-zo9"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="SxQ-Sb-7qQ" secondAttribute="trailing" id="lBQ-Bb-8Hw"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="e2u-Nf-X8q" secondAttribute="trailing" id="mpN-NO-M4V"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="JXM-kb-HdQ" secondAttribute="trailing" id="mqd-5M-zFW"/>
+                                    <constraint firstAttribute="trailing" secondItem="FIF-tE-yCq" secondAttribute="trailing" constant="8" id="ndV-6D-kQk"/>
+                                    <constraint firstItem="r7b-sp-DL3" firstAttribute="bottom" secondItem="1Z3-tV-wVA" secondAttribute="bottom" id="nrp-x8-9Nw"/>
+                                    <constraint firstItem="i7V-CX-FIM" firstAttribute="top" secondItem="e2u-Nf-X8q" secondAttribute="bottom" constant="19" id="p9F-fq-MsN"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="trailing" secondItem="EfH-UR-Suz" secondAttribute="trailing" id="qMF-mt-xEU"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="P5Y-zH-WdB" secondAttribute="trailing" id="r2u-za-9xF"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="trailing" secondItem="swx-uN-gxX" secondAttribute="trailing" id="rgk-MP-9Gb"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="e2u-Nf-X8q" secondAttribute="leading" id="rii-lM-rjk"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="P5Y-zH-WdB" secondAttribute="leading" id="tCR-w2-PgE"/>
+                                    <constraint firstItem="Mbu-lj-8BA" firstAttribute="top" secondItem="FIF-tE-yCq" secondAttribute="bottom" constant="8" id="uKq-IC-Bbb"/>
+                                    <constraint firstItem="EZi-Bc-hy3" firstAttribute="bottom" secondItem="k8s-rU-sM8" secondAttribute="bottomMargin" id="vWU-R1-X1y"/>
+                                    <constraint firstItem="FIF-tE-yCq" firstAttribute="top" secondItem="k8s-rU-sM8" secondAttribute="top" constant="8" id="wQl-Kw-xNU"/>
+                                    <constraint firstItem="swx-uN-gxX" firstAttribute="firstBaseline" secondItem="SxQ-Sb-7qQ" secondAttribute="baseline" id="x7J-Yr-FbB"/>
+                                    <constraint firstItem="v0G-yp-Bly" firstAttribute="leading" secondItem="1Z3-tV-wVA" secondAttribute="leading" id="xTc-NN-nry"/>
+                                </constraints>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Aj0-Dh-e9u">
+                                <rect key="frame" x="0.0" y="64" width="310" height="903"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="100" id="eoe-3L-3iX">
-                                        <rect key="frame" x="0.0" y="28" width="310" height="100"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecipesCell" id="eiG-rC-ZZv">
+                                        <rect key="frame" x="0.0" y="28" width="310" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eoe-3L-3iX" id="qDM-Pw-Inl">
-                                            <rect key="frame" x="0.0" y="0.0" width="310" height="100"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="eiG-rC-ZZv" id="pHa-eK-SWV">
+                                            <rect key="frame" x="0.0" y="0.0" width="310" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="Bvb-Xp-QCq" id="1Vy-Qi-8tO"/>
-                                    <outlet property="delegate" destination="Bvb-Xp-QCq" id="hEk-yG-K8p"/>
+                                    <outlet property="dataSource" destination="Bvb-Xp-QCq" id="jYw-Dh-qeY"/>
+                                    <outlet property="delegate" destination="Bvb-Xp-QCq" id="rcc-tL-p47"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uon-Ix-zpc">
-                                <rect key="frame" x="312" y="64" width="456" height="911"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cG0-fn-tS4" userLabel="Details">
-                                        <rect key="frame" x="0.0" y="0.0" width="455" height="1200"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@: User who added recipe" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M2S-Bf-iKs">
-                                                <rect key="frame" x="78" y="312" width="339" height="23"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="13"/>
-                                                <color key="textColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IHp-0J-ahf">
-                                                <rect key="frame" x="20" y="298" width="50" height="50"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            </imageView>
-                                            <view userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1iO-FS-ZUx" userLabel="TimingView">
-                                                <rect key="frame" x="20" y="257" width="414" height="53"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Preptime:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ggD-yq-yVO">
-                                                        <rect key="frame" x="33" y="25" width="121" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cooktime" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQz-zg-7Pt">
-                                                        <rect key="frame" x="147" y="25" width="121" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="CookTimeWhite" translatesAutoresizingMaskIntoConstraints="NO" id="Ny8-xc-1PX">
-                                                        <rect key="frame" x="197" y="8" width="20" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    </imageView>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="PrepTimeWhite" translatesAutoresizingMaskIntoConstraints="NO" id="Ovl-0B-JGD">
-                                                        <rect key="frame" x="83" y="8" width="20" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    </imageView>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Serves:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KuS-MP-fvy">
-                                                        <rect key="frame" x="257" y="25" width="121" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="ServingSizeWhite" translatesAutoresizingMaskIntoConstraints="NO" id="3rq-oV-5f0">
-                                                        <rect key="frame" x="307" y="8" width="20" height="20"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    </imageView>
-                                                </subviews>
-                                                <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
-                                            </view>
-                                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g9Y-nO-WRk">
-                                                <rect key="frame" x="20" y="356" width="414" height="109"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Type:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Te7-hA-UXk">
-                                                        <rect key="frame" x="66" y="87" width="106" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y32-UA-x6B">
-                                                        <rect key="frame" x="66" y="58" width="106" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ec1-GP-Qdh" userLabel="LabelDifficulty">
-                                                        <rect key="frame" x="180" y="29" width="186" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMl-JV-LOm" userLabel="LabelCourse">
-                                                        <rect key="frame" x="180" y="58" width="186" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nm4-uq-843" userLabel="LabelType">
-                                                        <rect key="frame" x="180" y="86" width="186" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Description:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U28-nl-i7f">
-                                                        <rect key="frame" x="66" y="-3" width="339" height="28"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Difficulty:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O7u-EI-sGb">
-                                                        <rect key="frame" x="66" y="29" width="106" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                </subviews>
-                                            </view>
-                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="ywZ-nE-Jis">
-                                                <rect key="frame" x="8" y="483" width="439" height="420"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                                <color key="separatorColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IngredientsAndStepsDetailCell" textLabel="Y7S-Gd-DNc" detailTextLabel="JLk-53-14K" style="IBUITableViewCellStyleValue2" id="m3u-B0-3Sd">
-                                                        <rect key="frame" x="0.0" y="56" width="439" height="44"/>
-                                                        <autoresizingMask key="autoresizingMask"/>
-                                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m3u-B0-3Sd" id="sTe-5a-Rvf">
-                                                            <rect key="frame" x="0.0" y="0.0" width="439" height="44"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                            <subviews>
-                                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Y7S-Gd-DNc">
-                                                                    <rect key="frame" x="15" y="13" width="91" height="18"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="15"/>
-                                                                    <color key="textColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JLk-53-14K">
-                                                                    <rect key="frame" x="112" y="14" width="34" height="17"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="14"/>
-                                                                    <nil key="textColor"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                        </tableViewCellContentView>
-                                                        <color key="tintColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    </tableViewCell>
-                                                </prototypes>
-                                                <connections>
-                                                    <outlet property="dataSource" destination="Bvb-Xp-QCq" id="iGg-gy-Zma"/>
-                                                    <outlet property="delegate" destination="Bvb-Xp-QCq" id="gBa-Ex-Kmv"/>
-                                                </connections>
-                                            </tableView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recipe Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CZT-aY-1we">
-                                                <rect key="frame" x="0.0" y="209" width="455" height="28"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.75318386130000003" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
-                                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QHw-kZ-fpr">
-                                                <rect key="frame" x="0.0" y="0.0" width="455" height="237"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            </imageView>
-                                        </subviews>
-                                        <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="1200" id="vCr-6s-YNr"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="cG0-fn-tS4" firstAttribute="leading" secondItem="Uon-Ix-zpc" secondAttribute="leading" id="X21-Lx-tuC"/>
-                                    <constraint firstItem="cG0-fn-tS4" firstAttribute="centerX" secondItem="Uon-Ix-zpc" secondAttribute="centerX" id="hBz-E6-CzT"/>
-                                    <constraint firstItem="cG0-fn-tS4" firstAttribute="top" secondItem="Uon-Ix-zpc" secondAttribute="top" id="zjz-ZM-3ts"/>
-                                </constraints>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="FpF-dI-b1Y" firstAttribute="top" secondItem="uNl-JP-bBP" secondAttribute="top" id="3at-bG-Rgk"/>
-                            <constraint firstAttribute="bottom" secondItem="FpF-dI-b1Y" secondAttribute="bottom" id="77Z-71-bPg"/>
-                            <constraint firstItem="Uon-Ix-zpc" firstAttribute="top" secondItem="ccx-By-9RD" secondAttribute="bottom" id="BFJ-Sl-IL7"/>
-                            <constraint firstItem="Uon-Ix-zpc" firstAttribute="leading" secondItem="FpF-dI-b1Y" secondAttribute="trailing" constant="2" id="bhq-VE-c7o"/>
-                            <constraint firstItem="Uon-Ix-zpc" firstAttribute="leading" secondItem="uNl-JP-bBP" secondAttribute="leading" constant="312" id="fgt-yG-z7n"/>
-                            <constraint firstItem="Uon-Ix-zpc" firstAttribute="bottom" secondItem="lZL-Kw-yoT" secondAttribute="top" id="fi3-kv-bY1"/>
-                            <constraint firstAttribute="trailing" secondItem="Uon-Ix-zpc" secondAttribute="trailing" id="kXe-ww-hD1"/>
-                            <constraint firstItem="FpF-dI-b1Y" firstAttribute="leading" secondItem="uNl-JP-bBP" secondAttribute="leading" id="v58-Hb-GRE"/>
+                            <constraint firstItem="k8s-rU-sM8" firstAttribute="leading" secondItem="Aj0-Dh-e9u" secondAttribute="trailing" constant="29" id="AF8-kW-jc3"/>
+                            <constraint firstItem="k8s-rU-sM8" firstAttribute="top" secondItem="ccx-By-9RD" secondAttribute="bottom" id="CGh-20-xaO"/>
+                            <constraint firstItem="lZL-Kw-yoT" firstAttribute="top" secondItem="Aj0-Dh-e9u" secondAttribute="bottom" constant="8" symbolic="YES" id="Oaw-51-5do"/>
+                            <constraint firstAttribute="trailing" secondItem="k8s-rU-sM8" secondAttribute="trailing" id="SuF-Gg-xsD"/>
+                            <constraint firstItem="Aj0-Dh-e9u" firstAttribute="leading" secondItem="uNl-JP-bBP" secondAttribute="leading" id="UDg-o9-nxc"/>
+                            <constraint firstItem="k8s-rU-sM8" firstAttribute="top" secondItem="Aj0-Dh-e9u" secondAttribute="top" id="bhV-cW-RN0"/>
+                            <constraint firstItem="k8s-rU-sM8" firstAttribute="bottom" secondItem="lZL-Kw-yoT" secondAttribute="top" id="rVK-iX-4VC"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Recipes" id="BW9-n4-k4s">
@@ -523,33 +827,574 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="hzY-G6-9OJ">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="75Q-Ze-oIu" kind="show" id="Xwg-Bi-kfS"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="imageViewRecipe" destination="QHw-kZ-fpr" id="Fjj-1F-wCU"/>
-                        <outlet property="imageViewUser" destination="IHp-0J-ahf" id="IPn-UH-2iE"/>
-                        <outlet property="ingredientsAndStepsTableView" destination="ywZ-nE-Jis" id="mKe-7B-Obw"/>
-                        <outlet property="labelAddedBy" destination="M2S-Bf-iKs" id="oUh-gm-WaH"/>
-                        <outlet property="labelCookTime" destination="ZQz-zg-7Pt" id="wAX-K2-yuX"/>
-                        <outlet property="labelCourse" destination="EMl-JV-LOm" id="1Vv-JZ-uRz"/>
-                        <outlet property="labelPrepTime" destination="ggD-yq-yVO" id="bXV-Iq-6xo"/>
-                        <outlet property="labelRecipeName" destination="CZT-aY-1we" id="1eP-oN-rpn"/>
-                        <outlet property="labelServingSize" destination="KuS-MP-fvy" id="jqj-Pl-jMM"/>
-                        <outlet property="labelType" destination="nm4-uq-843" id="JAI-jo-2gR"/>
-                        <outlet property="recipesTableView" destination="FpF-dI-b1Y" id="hEe-jX-A52"/>
+                        <outlet property="imageViewRecipe" destination="FIF-tE-yCq" id="KAq-Lb-ZrB"/>
+                        <outlet property="imageViewUser" destination="Jm2-o6-fKG" id="0K5-Ho-7CF"/>
+                        <outlet property="ingredientsAndStepsTableView" destination="EZi-Bc-hy3" id="MpB-LX-yb5"/>
+                        <outlet property="labelAddedBy" destination="50V-QO-bpR" id="9k8-U2-WM7"/>
+                        <outlet property="labelCookTime" destination="EfH-UR-Suz" id="eQi-0X-Zgb"/>
+                        <outlet property="labelCourse" destination="ZSc-Ia-O5s" id="FIk-c2-2sa"/>
+                        <outlet property="labelPrepTime" destination="r7b-sp-DL3" id="rkb-w9-PfN"/>
+                        <outlet property="labelRecipeName" destination="Mbu-lj-8BA" id="cXz-bf-kBt"/>
+                        <outlet property="labelServingSize" destination="P4I-LE-5gf" id="8Pd-cs-1bg"/>
+                        <outlet property="labelType" destination="SxQ-Sb-7qQ" id="NVG-Zd-Ujo"/>
+                        <outlet property="recipesTableView" destination="Aj0-Dh-e9u" id="nNx-3u-ub7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fsa-PJ-D6t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3482.8125" y="-156.4453125"/>
+            <point key="canvasLocation" x="2873.4375" y="-5.2734375"/>
+        </scene>
+        <!--Add Recipe-->
+        <scene sceneID="6Ei-L5-iD1">
+            <objects>
+                <viewController id="BHb-JK-gtb" customClass="AddRecipeViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="AOf-td-oV8"/>
+                        <viewControllerLayoutGuide type="bottom" id="qVD-9w-4Gi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="JXE-Xj-EHD">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="paZ-oT-sue">
+                                <rect key="frame" x="204" y="82" width="361" height="229"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="ZCp-Qp-hZr" appends="YES" id="DU3-eQ-tpg"/>
+                                </connections>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Recipe name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gbv-DR-dNh">
+                                <rect key="frame" x="31" y="322" width="380.00000000000091" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="No. of Servings" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="IzA-un-q3p">
+                                <rect key="frame" x="32" y="436" width="380.00000000000091" height="29.999999999999943"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Course" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="nCV-dU-VjL">
+                                <rect key="frame" x="31" y="360" width="380.00000000000091" height="30.000000000000057"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ib4-Z4-KqV">
+                                <rect key="frame" x="32" y="398" width="380.00000000000091" height="30.000000000000057"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recipe Information:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rwv-g9-COz">
+                                <rect key="frame" x="31" y="322" width="380" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="19"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="bJS-H9-BpV">
+                                <rect key="frame" x="430" y="322" width="318" height="640"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="separatorColor" red="1" green="0.50196081400000003" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IngredientsAndStepsToAddCell" id="K4b-NV-NfX">
+                                        <rect key="frame" x="0.0" y="55.5" width="318" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="K4b-NV-NfX" id="6bQ-XU-Ufw">
+                                            <rect key="frame" x="0.0" y="0.0" width="318" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="BHb-JK-gtb" id="ap4-sG-S4Y"/>
+                                    <outlet property="delegate" destination="BHb-JK-gtb" id="qKm-2E-wpo"/>
+                                </connections>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Preperation Time:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MOG-mp-6dg">
+                                <rect key="frame" x="32" y="475" width="380" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0 Minutes" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="GHu-wS-Ybw">
+                                <rect key="frame" x="227" y="502" width="186.00000000000091" height="29.999999999999858"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0 Hours" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="46B-uH-ki5">
+                                <rect key="frame" x="33" y="502" width="186" height="29.999999999999858"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cooking Time:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="smh-TQ-Dtv">
+                                <rect key="frame" x="33" y="540" width="372" height="20.999999999999915"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ingredients:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iqu-DD-dKw">
+                                <rect key="frame" x="34" y="632" width="379" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0 Minutes" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="tWo-HK-Xoo">
+                                <rect key="frame" x="228" y="567" width="186.00000000000091" height="29.999999999999858"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0 Hours" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ByP-nG-39H">
+                                <rect key="frame" x="34" y="567" width="186" height="29.999999999999858"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ingredient" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="RbI-Ye-ED1">
+                                <rect key="frame" x="33" y="661" width="380.00000000000091" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Quantity" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5Bv-nN-jJC">
+                                <rect key="frame" x="31" y="696" width="380.00000000000091" height="29.999999999999943"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Measurement" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="d1m-sK-va5">
+                                <rect key="frame" x="31" y="734" width="380.00000000000091" height="30.000000000000057"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBD-bu-aRG">
+                                <rect key="frame" x="31" y="772" width="380" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Add Ingredient">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonAddIngredients:" destination="BHb-JK-gtb" eventType="touchUpInside" id="fIe-yB-Xdi"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Step" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gcX-ak-F8G">
+                                <rect key="frame" x="31" y="880" width="380.00000000000091" height="30.000000000000057"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.80000000000000004" colorSpace="calibratedRGB"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wn2-da-Cdm">
+                                <rect key="frame" x="31" y="918" width="380" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Add Step">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonAddSteps:" destination="BHb-JK-gtb" eventType="touchUpInside" id="P2Z-pb-chd"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Steps:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MX7-WP-Lga">
+                                <rect key="frame" x="33" y="851" width="379" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Recipe" id="Bor-vd-wth">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="35C-f8-6RE">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="buttonCancel:" destination="BHb-JK-gtb" id="GLX-25-7SH"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="9Oo-QD-G7q">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="buttonSaveRecipe:" destination="BHb-JK-gtb" id="b5o-cr-7Th"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="IngredientsAndStepsTableView" destination="bJS-H9-BpV" id="2M2-5m-Wpe"/>
+                        <outlet property="buttonAddIngredients" destination="OBD-bu-aRG" id="pFz-D7-6ae"/>
+                        <outlet property="buttonAddSteps" destination="Wn2-da-Cdm" id="koh-rV-zav"/>
+                        <outlet property="photoImageView" destination="paZ-oT-sue" id="Mws-OD-NfB"/>
+                        <outlet property="textFieldCookHour" destination="ByP-nG-39H" id="9lv-bc-ZQU"/>
+                        <outlet property="textFieldCookMin" destination="tWo-HK-Xoo" id="ZGC-mx-gSN"/>
+                        <outlet property="textFieldCourse" destination="nCV-dU-VjL" id="M3Y-eG-xVO"/>
+                        <outlet property="textFieldIngredientName" destination="RbI-Ye-ED1" id="ez4-O8-4tF"/>
+                        <outlet property="textFieldIngredientsQuantity" destination="5Bv-nN-jJC" id="UpG-CG-zoF"/>
+                        <outlet property="textFieldMeasurement" destination="d1m-sK-va5" id="vs7-8b-Vek"/>
+                        <outlet property="textFieldPrepHour" destination="46B-uH-ki5" id="XPl-wt-KQs"/>
+                        <outlet property="textFieldPrepMin" destination="GHu-wS-Ybw" id="Oi5-jh-M7n"/>
+                        <outlet property="textFieldRecipeName" destination="Gbv-DR-dNh" id="dmh-ss-7FK"/>
+                        <outlet property="textFieldServingSize" destination="IzA-un-q3p" id="dyI-iD-WIi"/>
+                        <outlet property="textFieldSteps" destination="gcX-ak-F8G" id="pvC-Mz-vcj"/>
+                        <outlet property="textFieldType" destination="ib4-Z4-KqV" id="VPk-Sm-A7R"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="he4-bt-Tvl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="ZCp-Qp-hZr">
+                    <connections>
+                        <action selector="selectPhotoFromLibrary:" destination="BHb-JK-gtb" id="IOy-fo-HIZ"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="4532.8125" y="-5.2734375"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="fuL-Fr-u3t">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="75Q-Ze-oIu" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="bBW-oL-9Kk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BHb-JK-gtb" kind="relationship" relationship="rootViewController" id="Dk2-lu-klH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EAk-Vt-hke" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3673" y="-5"/>
+        </scene>
+        <!--Admin Recipes To Approve Table View Controller-->
+        <scene sceneID="CUl-eJ-xX8">
+            <objects>
+                <viewController id="8WT-YZ-UIt" customClass="AdminRecipesToApproveTableViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="9qU-Lf-IBR"/>
+                        <viewControllerLayoutGuide type="bottom" id="H6S-xl-6mZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="lJ6-gN-Wv4">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rD5-II-wP8" customClass="RecipeTableViewCell" customModule="student_cookbook" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9zw-Hb-7Jj">
+                                        <rect key="frame" x="318" y="64" width="450" height="911"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Recipe Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTV-EN-dCB">
+                                                <rect key="frame" x="16" y="269" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Added By:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VuI-UI-v8W">
+                                                <rect key="frame" x="16" y="298" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Date Added:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J2P-jN-y7F">
+                                                <rect key="frame" x="16" y="327" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Preperation Time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gik-6i-uS3">
+                                                <rect key="frame" x="16" y="356" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Cooking Time:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DJV-5f-DGS">
+                                                <rect key="frame" x="16" y="385" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Serving Size:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1qz-4z-Mfk">
+                                                <rect key="frame" x="16" y="414" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Type:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nFZ-lZ-tWX">
+                                                <rect key="frame" x="16" y="443" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Course:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hIy-JZ-E1X">
+                                                <rect key="frame" x="16" y="472" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Difficulty:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pXc-0A-QXe">
+                                                <rect key="frame" x="16" y="501" width="148" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Pw4-zF-FMS">
+                                                <rect key="frame" x="8" y="544" width="434" height="305"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                                <color key="separatorColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <prototypes>
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IngredientsAndStepsCell" id="aFa-a6-sRh">
+                                                        <rect key="frame" x="0.0" y="55.5" width="434" height="44"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
+                                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="aFa-a6-sRh" id="2fL-Yd-U8i">
+                                                            <rect key="frame" x="0.0" y="0.0" width="434" height="43.5"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
+                                                        </tableViewCellContentView>
+                                                    </tableViewCell>
+                                                </prototypes>
+                                                <connections>
+                                                    <outlet property="dataSource" destination="8WT-YZ-UIt" id="IHK-S8-3mt"/>
+                                                    <outlet property="delegate" destination="8WT-YZ-UIt" id="gBf-0V-XZi"/>
+                                                </connections>
+                                            </tableView>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@recipe_name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PY3-gO-p5w">
+                                                <rect key="frame" x="172" y="269" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@added_by" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4J-Ck-5A4">
+                                                <rect key="frame" x="172" y="298" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@date_added" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G20-pr-2K6">
+                                                <rect key="frame" x="172" y="327" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@prep_time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2IT-ZQ-O8s">
+                                                <rect key="frame" x="172" y="356" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@cooking_time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cf-CT-6yR">
+                                                <rect key="frame" x="172" y="385" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@serving_size" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7KT-cH-4Ex">
+                                                <rect key="frame" x="172" y="414" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ktQ-Rn-8ZT">
+                                                <rect key="frame" x="172" y="443" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@course" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Baa-WW-XmK">
+                                                <rect key="frame" x="172" y="472" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@difficulty" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oMN-5Y-eZg">
+                                                <rect key="frame" x="172" y="501" width="270" height="21"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="16"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sHq-Q5-nVY">
+                                                <rect key="frame" x="8" y="857" width="434" height="46"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="17"/>
+                                                <state key="normal" title="Button">
+                                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="buttonApprove:" destination="8WT-YZ-UIt" eventType="touchUpInside" id="8VZ-10-67S"/>
+                                                </connections>
+                                            </button>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eO9-su-T6M">
+                                                <rect key="frame" x="0.0" y="8" width="442" height="249"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="LUD-JL-2U0">
+                                        <rect key="frame" x="0.0" y="61" width="310" height="903"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="RecipesToApproveCell" id="I3c-kP-KFp">
+                                                <rect key="frame" x="0.0" y="28" width="310" height="44"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="I3c-kP-KFp" id="qUp-LT-M9s">
+                                                    <rect key="frame" x="0.0" y="0.0" width="310" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </tableViewCellContentView>
+                                            </tableViewCell>
+                                        </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="8WT-YZ-UIt" id="sED-Y8-FS7"/>
+                                            <outlet property="delegate" destination="8WT-YZ-UIt" id="fxD-g2-HNg"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="3i1-fS-q3O"/>
+                    <connections>
+                        <outlet property="buttonApprove" destination="sHq-Q5-nVY" id="2jx-qI-7Db"/>
+                        <outlet property="imageViewRecipe" destination="eO9-su-T6M" id="rCr-c6-jwd"/>
+                        <outlet property="ingredientsAndStepsTableView" destination="Pw4-zF-FMS" id="iwC-4r-W9w"/>
+                        <outlet property="labelAddedBy" destination="g4J-Ck-5A4" id="v4P-OT-Huq"/>
+                        <outlet property="labelCookTime" destination="9cf-CT-6yR" id="GCp-bz-OYv"/>
+                        <outlet property="labelCourse" destination="Baa-WW-XmK" id="Tgd-YP-pRR"/>
+                        <outlet property="labelDateAdded" destination="G20-pr-2K6" id="6aN-Hd-pfn"/>
+                        <outlet property="labelPrepTime" destination="2IT-ZQ-O8s" id="MTw-ek-2DR"/>
+                        <outlet property="labelRecipeName" destination="PY3-gO-p5w" id="rjD-lt-hy6"/>
+                        <outlet property="labelServingSize" destination="7KT-cH-4Ex" id="4ug-Cg-ew8"/>
+                        <outlet property="labelType" destination="ktQ-Rn-8ZT" id="hBg-y1-3Cv"/>
+                        <outlet property="recipesToApproveTableView" destination="LUD-JL-2U0" id="pEV-Ac-YhC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XYZ-NA-4WP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2873" y="764"/>
+        </scene>
+        <!--Users-->
+        <scene sceneID="cX1-Am-ddS">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="AMv-Tx-B0m" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Users" image="UserAccount" selectedImage="UserAccount" id="n7X-3s-RN0"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="gZH-6X-xHT">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="7s7-pc-ZPP" kind="relationship" relationship="rootViewController" id="2Se-tW-cq2"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ITH-sq-0VD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2097.65625" y="-797.4609375"/>
+        </scene>
+        <!--Recipes To Approve-->
+        <scene sceneID="2bK-mL-mPf">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="EvH-iT-50g" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Recipes To Approve" image="RecipesToApprove" selectedImage="RecipesToApprove" id="VCP-zO-cIR"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="JJn-N2-OeK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="8WT-YZ-UIt" kind="relationship" relationship="rootViewController" id="nx6-l7-gAb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8wh-NL-uN2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2098" y="764"/>
         </scene>
     </scenes>
     <resources>
         <image name="Background-ipad-1" width="380" height="512"/>
-        <image name="CookTimeWhite" width="50" height="50"/>
-        <image name="PrepTimeWhite" width="50" height="50"/>
         <image name="RecipeHomeIcon" width="25" height="25"/>
-        <image name="ServingSizeWhite" width="50" height="50"/>
+        <image name="RecipesToApprove" width="25" height="25"/>
         <image name="UploadUserImage" width="100" height="100"/>
+        <image name="UserAccount" width="25" height="25"/>
     </resources>
 </document>
