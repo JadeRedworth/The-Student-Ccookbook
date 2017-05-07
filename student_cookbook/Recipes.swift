@@ -20,18 +20,27 @@ class Recipes: NSObject {
     var prepTimeHour: Int?
     var prepTimeMinute: Int?
     var servingSize: Int?
-    var course: String?
+    var course: Course?
     var type: String?
     var approved: Bool?
     var addedByAdmin: Bool?
     var ingredients = [Ingredients]()
     var steps = [Steps]()
     
-    override init(){
+    enum Course: String {
+        case Breakfast
+        case Lunch
+        case Dinner
+        case Dessert
+        case Snack
+        case All
+    }
+    
+    override init() {
         
     }
     
-    init(id: String, name: String, imageURL: String, addedBy: String, cookTimeHour: Int, cookTimeMin: Int, prepTimeHour: Int, prepTimeMin: Int, servingSize: Int, course: String, type: String, approved: Bool?, addedByAdmin: Bool?, ingredients: [Ingredients], steps: [Steps]) {
+    init(id: String, name: String, imageURL: String, addedBy: String, cookTimeHour: Int, cookTimeMin: Int, prepTimeHour: Int, prepTimeMin: Int, servingSize: Int, course: Course, type: String, approved: Bool?, addedByAdmin: Bool?, ingredients: [Ingredients], steps: [Steps]) {
         self.id = id
         self.name = name
         self.imageURL = imageURL

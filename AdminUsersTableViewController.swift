@@ -11,14 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-enum userSelectedScope:Int {
-    case all = 0
-    case female = 1
-    case male = 2
-    case admin = 3
-}
-
-class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
 
     
     let cellId = "cellId"
@@ -32,7 +25,9 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
     var selectedUserList = [User]()
     var filteredUserList = [User]()
     
-    var recipeSelected: Bool = false
+    var userSelected: Bool = false
+    
+    private let searchController = UISearchController(searchResultsController: nil)
     
     @IBOutlet weak var userTableView: UITableView!
     @IBOutlet weak var imageViewUser: UIImageView!
@@ -71,7 +66,7 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
         
         getUsers()
         
-        self.searchBarSetup()
+        self.setupSearchController()
         self.userTableView.reloadData()
     }
     
@@ -103,7 +98,7 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func fillData() {
-        if recipeSelected != true {
+        if userSelected != true {
             self.user = self.filteredUserList[0]
         }
         
@@ -119,94 +114,39 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
         
     }
     
-    func searchBarSetup() {
-        let searchBar = UISearchBar(frame: CGRect(x:0,y:0,width:(UIScreen.main.bounds.width),height:70))
-        searchBar.showsScopeBar = true
-        searchBar.scopeButtonTitles = ["All", "Female","Male", "Admin"]
-        searchBar.selectedScopeButtonIndex = 0
-        searchBar.delegate = self
-        self.userTableView.tableHeaderView = searchBar
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        userTableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.scopeButtonTitles = ["All","Admin","Users"]
+        searchController.searchBar.delegate = self as UISearchBarDelegate
     }
     
-    // MARK: - search bar delegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredUserList = userList
-            self.userTableView.reloadData()
-        } else {
-            filterTableView(searchBar.selectedScopeButtonIndex, text: searchText)
+    func filterSearchController(searchBar: UISearchBar){
+        guard let scopeString = searchBar.scopeButtonTitles?[searchBar.selectedScopeButtonIndex] else { return }
+        let selectedUser = User.UserType(rawValue: scopeString) ?? .All
+        let searchText = searchBar.text ?? ""
+        
+        filteredUserList = userList.filter { user in
+            let matchingUser = (selectedUser == .All) || (user.userType == selectedUser)
+            let matchingText = (user.firstName?.lowercased().contains(searchText.lowercased()))! || (user.lastName?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
+            return matchingUser && matchingText
         }
+        
+        userTableView.reloadData()
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterSearchController(searchBar: searchController.searchBar)
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        if selectedScope == 0 {
-            filteredUserList = userList
-            self.userTableView.reloadData()
-            
-        } else if selectedScope == 1 {
-            filteredUserList
-                = userList.filter({ (female) -> Bool in
-                return (female.gender?.contains("Female"))!
-            })
-            self.userTableView.reloadData()
-            selectedUserList = filteredUserList
-            
-        } else if selectedScope == 2 {
-            filteredUserList = userList.filter({ (male) -> Bool in
-                return (male.gender?.contains("Male"))!
-            })
-            self.userTableView.reloadData()
-            selectedUserList = filteredUserList
-            
-        } else if selectedScope == 3 {
-            filteredUserList = userList.filter({ (admin) -> Bool in
-                return (admin.admin == true)
-            })
-            self.userTableView.reloadData()
-            selectedUserList = filteredUserList
-        }
+        filterSearchController(searchBar: searchBar)
     }
+
     
-    func filterTableView(_ ind: Int, text: String) {
-        switch ind {
-        case userSelectedScope.all.rawValue:
-            filteredUserList = userList.filter({ (user) -> Bool in
-                return (user.firstName?.lowercased().contains(text.lowercased()))! ||
-                    (user.lastName?.lowercased().contains(text.lowercased()))!
-            })
-            self.userTableView.reloadData()
-            break
-            
-        case userSelectedScope.female.rawValue:
-            filteredUserList = selectedUserList.filter({ (female) -> Bool in
-                return (female.firstName?.lowercased().contains(text.lowercased()))! ||
-                    (female.lastName?.lowercased().contains(text.lowercased()))!
-            })
-            self.userTableView.reloadData()
-            break
-            
-        case userSelectedScope.male.rawValue:
-            filteredUserList = selectedUserList.filter({ (male) -> Bool in
-                return (male.firstName?.lowercased().contains(text.lowercased()))! ||
-                    (male.lastName?.lowercased().contains(text.lowercased()))!
-            })
-            self.userTableView.reloadData()
-            break
-            
-        case userSelectedScope.admin.rawValue:
-            filteredUserList = selectedUserList.filter({ (admin) -> Bool in
-                return (admin.firstName?.lowercased().contains(text.lowercased()))! ||
-                    (admin.lastName?.lowercased().contains(text.lowercased()))!
-            })
-            self.userTableView.reloadData()
-            break
-
-        default:
-            print("No Recipes")
-        }
-    }
-
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -240,7 +180,7 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.user = filteredUserList[indexPath.row]
-        recipeSelected = true
+        userSelected = true
         fillData()
     }
     

@@ -19,7 +19,7 @@ var dataEventType: FIRDataEventType!
 extension String {
     
     func storeImage(image: UIImage!, completed: @escaping (_ result: String) -> Void) {
-
+        
         let uniqueImageName = UUID().uuidString
         let storageRef = FIRStorage.storage().reference().child("recipe_images").child("\(uniqueImageName).jpeg")
         
@@ -52,7 +52,7 @@ extension Array where Element: User {
             query = userRef.child(queryKey)
             dataEventType = .value
         }
-    
+        
         query.observe(dataEventType, with: { (snapshot) in
             print(snapshot)
             
@@ -61,11 +61,11 @@ extension Array where Element: User {
                 
                 let users = User()
                 users.userID = snapshot.key
-                users.admin = userDict["Admin"] as? Bool
+                users.userType = (userDict["UserType"] as? String).map { User.UserType(rawValue: $0) }! ?? User.UserType(rawValue: "")!
                 users.firstName = userDict["FirstName"] as? String ?? ""
                 users.lastName = userDict["LastName"] as? String ?? ""
                 users.email = userDict["Email"] as? String ?? ""
-                users.age = userDict["Age"] as? Int 
+                users.age = userDict["Age"] as? Int
                 users.gender = userDict["Gender"] as? String ?? ""
                 users.location = userDict["Location"] as? String ?? ""
                 users.profilePicURL = userDict["ProfileImageURL"] as? String ?? ""
@@ -100,8 +100,13 @@ extension Array where Element: Recipes {
             }
             
         } else if refName == "UserRecipes" {
-            query = recipeRef.child(queryValue as! String)
-            dataEventType = .childAdded
+            if (queryValue is String) {
+                query = recipeRef.child(queryValue as! String)
+                dataEventType = .childAdded
+            } else {
+                query = recipeRef
+                dataEventType = .childAdded
+            }
         }
         
         recipeList.fillData(query: query, dataEventType: dataEventType!) {
@@ -118,7 +123,7 @@ extension Array where Element: Recipes {
     func fillData(query: FIRDatabaseQuery, dataEventType: FIRDataEventType, completion: @escaping (_ result: [Recipes]) -> Void) {
         
         var recipeList = [Recipes]()
-    
+        
         query.observe(dataEventType, with: { (snapshot) in
             //print(snapshot)
             //print(snapshot.value!)
@@ -136,14 +141,13 @@ extension Array where Element: Recipes {
                 recipes.addedByAdmin = recipeDict["AddedByAdmin"] as? Bool
                 recipes.cookTimeHour = recipeDict["CookTimeHours"] as? Int
                 recipes.cookTimeMinute = recipeDict["CookTimeMinutes"] as? Int
-                recipes.course = recipeDict["Course"] as? String ?? ""
+                recipes.course = (recipeDict["Course"] as? String).map { Recipes.Course(rawValue: $0) } ?? Recipes.Course(rawValue: "")
                 recipes.imageURL = recipeDict["ImageURL"] as? String ?? ""
                 recipes.name = recipeDict["Name"] as? String ?? ""
                 recipes.prepTimeHour = recipeDict["PrepTimeHours"] as? Int
                 recipes.prepTimeMinute = recipeDict["PrepTimeMinutes"] as? Int
                 recipes.servingSize = recipeDict["ServingSize"] as? Int
                 recipes.type = recipeDict["Type"] as? String ?? ""
-                
                 var ingredientsList = [Ingredients]()
                 while let ingItem = ingredientsEnumerator.nextObject() as? FIRDataSnapshot {
                     let ingredients = Ingredients()
@@ -264,12 +268,15 @@ extension UIColor{
 extension UIViewController {
     
     func dismissKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RecipeTableViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
-
+    
     func dismissKeyboard() {
         view.endEditing(true)
     }
 }
+
+
+

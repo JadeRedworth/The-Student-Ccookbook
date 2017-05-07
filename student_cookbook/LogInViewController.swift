@@ -22,6 +22,7 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     var currentStoryboardName: String!
     
     var loggedInSuccessfully: Bool = false
+    var adminStatus: Bool = false
     
     //Textfields for Login
     @IBOutlet weak var textFieldLoginEmail: UITextField!
@@ -70,12 +71,16 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
                 let userID: String = (FIRAuth.auth()?.currentUser?.uid)!
                 self.ref.child("Users").child(userID).observe(.value, with: { (snapshot) in
                     let userDict = snapshot.value as? NSDictionary
-                    let adminStatus: Bool = userDict!["Admin"] as! Bool
-                    
+                    if let userType: String = userDict?["UserType"] as? String {
+                        if userType == "Admin" {
+                            self.adminStatus = true
+                        }
+                    }
+                
                     if self.currentStoryboardName == "Main" {
                          self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
                     } else {
-                        if adminStatus == true {
+                        if self.adminStatus == true {
                             self.performSegue(withIdentifier: "AdminLoginSegue", sender: nil)
                         } else {
                             let alertController = UIAlertController(title: "Error", message: "This account is not registered to an administrator, only admin are authorised!", preferredStyle: UIAlertControllerStyle.alert)

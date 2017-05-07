@@ -11,7 +11,6 @@
 		78DA6E0BEFC1A1FE06322D4A /* Pods_student_cookbookTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF62D45266DADA57AC16FADC /* Pods_student_cookbookTests.framework */; };
 		8D013CE41EBA234400AAA21A /* Ipad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D013CE31EBA234400AAA21A /* Ipad.storyboard */; };
 		8D013CEA1EBA43FB00AAA21A /* RecipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D013CE91EBA43FB00AAA21A /* RecipeTableViewController.swift */; };
-		8D013CED1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D013CEB1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.swift */; };
 		8D013CEE1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D013CEC1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.xib */; };
 		8D0ED6201E6DD6A9001ABEC6 /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0ED61F1E6DD6A9001ABEC6 /* RecipeDetailViewController.swift */; };
 		8D1D63391E6B02DF00307B85 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1D63381E6B02DF00307B85 /* AppDelegate.swift */; };
@@ -73,7 +72,6 @@
 		3C4B63941AB4E985B6C171F0 /* Pods-student_cookbookUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-student_cookbookUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-student_cookbookUITests/Pods-student_cookbookUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8D013CE31EBA234400AAA21A /* Ipad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Ipad.storyboard; path = ../Ipad.storyboard; sourceTree = "<group>"; };
 		8D013CE91EBA43FB00AAA21A /* RecipeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeTableViewController.swift; sourceTree = "<group>"; };
-		8D013CEB1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminRecipeTableViewCell.swift; sourceTree = "<group>"; };
 		8D013CEC1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AdminRecipeTableViewCell.xib; sourceTree = "<group>"; };
 		8D0ED61F1E6DD6A9001ABEC6 /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewController.swift; sourceTree = "<group>"; };
 		8D1D63351E6B02DF00307B85 /* student_cookbook.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = student_cookbook.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -298,7 +296,6 @@
 			children = (
 				8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */,
 				8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */,
-				8D013CEB1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.swift */,
 				8D013CEC1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.xib */,
 			);
 			name = "Recipe Table Cell";
@@ -610,7 +607,6 @@
 				8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */,
 				8D439BF71EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift in Sources */,
 				8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */,
-				8D013CED1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.swift in Sources */,
 				8D8698B31E6B4B1A00998BF6 /* Ingredients.swift in Sources */,
 				8D457B071EB0CE8700A5BFCB /* EditUserDetailsViewController.swift in Sources */,
 				8D1D633B1E6B02DF00307B85 /* LogInViewController.swift in Sources */,

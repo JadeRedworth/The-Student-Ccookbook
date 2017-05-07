@@ -85,8 +85,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         labelServingSize.text = "Serves: \(recipe!.servingSize!)"
         labelPrepTime.text = " \(recipe!.prepTimeHour!) hrs \(recipe!.prepTimeMinute!) mins"
         labelCookTime.text = "\(recipe!.cookTimeHour!) hrs \(recipe!.cookTimeMinute!) mins"
-        labelType.text = recipe?.type
-        labelCourse.text = recipe?.course
+        labelType.text = recipe!.type
+        labelCourse.text = (recipe?.course).map { $0.rawValue }
         ingredientsList = recipe!.ingredients
         stepsList = recipe!.steps
         
@@ -151,7 +151,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsDetailCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
         
         if (indexPath.section == 0) {
             cell.textLabel?.text = ingredientsList[indexPath.row].name

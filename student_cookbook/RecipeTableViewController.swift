@@ -11,16 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-enum recipesSelectedScope:Int {
-    case all = 0
-    case breakfast = 1
-    case lunch = 2
-    case dinner = 3
-    case dessert = 4
-    case snack = 5
-}
-
-class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
     
     var currentStoryboard: UIStoryboard!
     var currentStoryboardName: String!
@@ -30,13 +21,16 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     var recipe: Recipes?
     var recipeList = [Recipes]()
+    var userRecipeList = [Recipes]()
     var ingredientsList = [Ingredients]()
     var stepsList = [Steps]()
     var userList = [User]()
     
-    var selectedRecipeList = [Recipes]()
+    var filteredUserRecipeList = [Recipes]()
     var filteredRecipeList = [Recipes]()
     var recipeIDArray = [String]()
+    
+    private let searchController = UISearchController(searchResultsController: nil)
     
     var mainStoryBoard: Bool = false
     
@@ -59,7 +53,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     @IBOutlet weak var labelCourse: UILabel!
     @IBOutlet weak var labelAddedBy: UILabel!
     
-    
     @IBOutlet weak var recipesTableView: UITableView!
     @IBOutlet weak var ingredientsAndStepsTableView: UITableView!
     
@@ -77,6 +70,8 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         registerNib()
         
+        self.recipesTableView.register(AdminRecipeTableViewCell.self, forCellReuseIdentifier: "RecipesCell")
+        
         ref = FIRDatabase.database().reference()
         
         uid = FIRAuth.auth()?.currentUser?.uid
@@ -89,7 +84,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         getRecipes()
         
-        self.searchBarSetup()
+        self.setupSearchController()
         self.recipesTableView.reloadData()
     }
     
@@ -99,10 +94,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             let cellNib = UINib(nibName: "RecipeTableViewCell", bundle: nil)
             self.recipesTableView.register(cellNib, forCellReuseIdentifier: "RecipeCell")
             mainStoryBoard = true
-        } else if self.currentStoryboardName == "Ipad" {
-            let cellNib = UINib(nibName: "AdminRecipeTableViewCell", bundle: nil)
-            self.recipesTableView.register(cellNib, forCellReuseIdentifier: "RecipeCell")
-            mainStoryBoard = false
         }
     }
     
@@ -125,7 +116,22 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                 self.recipesTableView.reloadData()
             }
         }
-        recipesTableView.reloadData()
+        
+        if self.currentStoryboardName == "Ipad" {
+            userRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "",queryValue: false as AnyObject, ref: ref) {
+                (result: [Recipes]) in
+                if result.isEmpty {
+                    self.userRecipeList = []
+                    self.filteredUserRecipeList = self.recipeList
+                } else {
+                    self.userRecipeList = result
+                    self.filteredUserRecipeList = Recipes.generateModelArray(self.recipeList)
+                    self.recipesTableView.reloadData()
+                    
+                }
+            }
+        }
+        self.recipesTableView.reloadData()
     }
     
     func fillData(){
@@ -134,8 +140,8 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
         labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
         labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
-        labelType.text = self.recipe?.type
-        labelCourse.text = self.recipe?.course
+        labelType.text = self.recipe!.type
+        labelCourse.text = (self.recipe?.course).map { $0.rawValue }
         ingredientsList = self.recipe!.ingredients
         stepsList = self.recipe!.steps
         
@@ -156,7 +162,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
-        userList.fetchUsers(refName: "Users", queryKey: recipe!.addedBy!, queryValue: "" as AnyObject, ref: ref) {
+        userList.fetchUsers(refName: "Users", queryKey: self.recipe!.addedBy!, queryValue: "" as AnyObject, ref: ref) {
             (result: [User]) in
             if result.isEmpty {
                 self.userList = []
@@ -166,7 +172,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             }
         }
     }
-
+    
     
     func handleLogout() {
         try! FIRAuth.auth()!.signOut()
@@ -180,123 +186,42 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
-    func searchBarSetup() {
-        let searchBar = UISearchBar(frame: CGRect(x:0,y:0,width:(UIScreen.main.bounds.width),height:70))
-        searchBar.showsScopeBar = true
-        searchBar.scopeButtonTitles = ["All", "Breakfast","Lunch","Dinner", "Dessert", "Snack"]
-        searchBar.selectedScopeButtonIndex = 0
-        searchBar.delegate = self
-        recipesTableView.tableHeaderView = searchBar
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        recipesTableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.scopeButtonTitles = ["All","Breakfast","Lunch","Dinner", "Dessert", "Snack"]
+        searchController.searchBar.delegate = self as UISearchBarDelegate
     }
     
-    // MARK: - search bar delegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredRecipeList = recipeList
-            recipesTableView.reloadData()
-        } else {
-            filterTableView(searchBar.selectedScopeButtonIndex, text: searchText)
+    func filterSearchController(searchBar: UISearchBar){
+        guard let scopeString = searchBar.scopeButtonTitles?[searchBar.selectedScopeButtonIndex] else { return }
+        let selectedCourse = Recipes.Course(rawValue: scopeString) ?? .All
+        let searchText = searchBar.text ?? ""
+        
+        filteredRecipeList = recipeList.filter { recipe in
+            let matchingCourse = (selectedCourse == .All) || (recipe.course == selectedCourse)
+            let matchingText = (recipe.name?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
+            return matchingCourse && matchingText
         }
+        
+        filteredUserRecipeList = userRecipeList.filter { recipe in
+            let matchingCourse = (selectedCourse == .All) || (recipe.course == selectedCourse)
+            let matchingText = (recipe.name?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
+            return matchingCourse && matchingText
+        }
+        
+        recipesTableView.reloadData()
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterSearchController(searchBar: searchController.searchBar)
     }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        if selectedScope == 0 {
-            filteredRecipeList = recipeList
-            recipesTableView.reloadData()
-            
-        } else if selectedScope == 1 {
-            filteredRecipeList = recipeList.filter({ (breakfast) -> Bool in
-                return (breakfast.course?.contains("Breakfast"))!
-            })
-            recipesTableView.reloadData()
-            selectedRecipeList = filteredRecipeList
-            
-        } else if selectedScope == 2 {
-            filteredRecipeList = recipeList.filter({ (lunch) -> Bool in
-                return (lunch.course?.contains("Lunch"))!
-            })
-            recipesTableView.reloadData()
-            selectedRecipeList = filteredRecipeList
-            
-        } else if selectedScope == 3 {
-            filteredRecipeList = recipeList.filter({ (dinner) -> Bool in
-                return (dinner.course?.contains("Dinner"))!
-            })
-            recipesTableView.reloadData()
-            selectedRecipeList = filteredRecipeList
-            
-        } else if selectedScope == 4 {
-            filteredRecipeList = recipeList.filter({ (dessert) -> Bool in
-                return (dessert.course?.contains("Dessert"))!
-            })
-            recipesTableView.reloadData()
-            selectedRecipeList = filteredRecipeList
-            
-        } else if selectedScope == 5 {
-            filteredRecipeList = recipeList.filter({ (snack) -> Bool in
-                return (snack.course?.contains("Snack"))!
-            })
-            recipesTableView.reloadData()
-            selectedRecipeList = filteredRecipeList
-        }
+        filterSearchController(searchBar: searchBar)
     }
-    
-    func filterTableView(_ ind: Int, text: String) {
-        switch ind {
-        case recipesSelectedScope.all.rawValue:
-            filteredRecipeList = recipeList.filter({ (recipes) -> Bool in
-                return (recipes.name?.lowercased().contains(text.lowercased()))! ||
-                    (recipes.type?.lowercased().contains(text.lowercased()))!
-            })
-            recipesTableView.reloadData()
-            break
-            
-        case recipesSelectedScope.breakfast.rawValue:
-            filteredRecipeList = selectedRecipeList.filter({ (breakfast) -> Bool in
-                return (breakfast.name?.lowercased().contains(text.lowercased()))! ||
-                    (breakfast.type?.lowercased().contains(text.lowercased()))!
-            })
-            recipesTableView.reloadData()
-            break
-            
-        case recipesSelectedScope.lunch.rawValue:
-            filteredRecipeList = selectedRecipeList.filter({ (lunch) -> Bool in
-                return (lunch.name?.lowercased().contains(text.lowercased()))! ||
-                    (lunch.type?.lowercased().contains(text.lowercased()))!
-            })
-            recipesTableView.reloadData()
-            break
-            
-        case recipesSelectedScope.dinner.rawValue:
-            filteredRecipeList = selectedRecipeList.filter({ (dinner) -> Bool in
-                return (dinner.name?.lowercased().contains(text.lowercased()))! ||
-                    (dinner.type?.lowercased().contains(text.lowercased()))!
-            })
-            recipesTableView.reloadData()
-            break
-            
-        case recipesSelectedScope.dessert.rawValue:
-            filteredRecipeList = selectedRecipeList.filter({ (dessert) -> Bool in
-                return (dessert.name?.lowercased().contains(text.lowercased()))! ||
-                    (dessert.type?.lowercased().contains(text.lowercased()))!
-            })
-            recipesTableView.reloadData()
-            break
-            
-        case recipesSelectedScope.snack.rawValue:
-            filteredRecipeList = selectedRecipeList.filter({ (snack) -> Bool in
-                return (snack.name?.lowercased().contains(text.lowercased()))! ||
-                    (snack.type?.lowercased().contains(text.lowercased()))!
-            })
-            recipesTableView
-                .reloadData()
-            break
-            
-        default:
-            print("No Recipes")
-        }
-    }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -304,6 +229,20 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     // MARK: - Table view data source
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        var returnValue: String = ""
+        
+        if currentStoryboardName == "Ipad" {
+            if tableView == self.ingredientsAndStepsTableView {
+                if section == 0 {
+                    returnValue = "Ingredients"
+                } else if section == 1 {
+                    returnValue = "Steps"
+                }
+            }
+        }
+        return returnValue
+    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         
@@ -311,7 +250,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         if (tableView == self.recipesTableView){
             returnValue = 1
-            
         } else if (tableView == self.ingredientsAndStepsTableView){
             returnValue = 2
         }
@@ -351,83 +289,97 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         var returnValue: Int = 0
         
         if (tableView == self.recipesTableView){
-            returnValue = self.filteredRecipeList.count
-        } else if (tableView == self.ingredientsAndStepsTableView){
-            if (section == 0){
-                returnValue = self.ingredientsList.count
-            } else if (section == 1){
-                returnValue = self.stepsList.count
+            returnValue = searchController.isActive ? filteredRecipeList.count : recipeList.count
+            
+        }
+        if self.currentStoryboardName == "Ipad" {
+            if (tableView == self.ingredientsAndStepsTableView){
+                if (section == 0){
+                    returnValue = self.ingredientsList.count
+                } else if (section == 1){
+                    returnValue = self.stepsList.count
+                }
             }
         }
-        
         return returnValue
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let recipe = filteredRecipeList[indexPath.row]
-        
-        if (self.currentStoryboardName == "Main") {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! RecipeTableViewCell
+    
+        if tableView == self.recipesTableView {
             
-            cell.labelRecipeName.text = recipe.name
-            cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
+            let recipe = searchController.isActive ? filteredRecipeList[indexPath.row] : recipeList[indexPath.row]
             
-            if recipe.imageURL != nil {
-                if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
+            if currentStoryboardName == "Main" {
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! RecipeTableViewCell
+                
+                cell.labelRecipeName?.text = recipe.name
+                
+                self.recipe = recipe
+                
+                fetchUserWhoAddedRecipe(completion: {
+                    result in
+                    if result {
+                        cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                    }
+                })
+                
+                if recipe.imageURL != nil {
+                    if let recipeImageURL = recipe.imageURL {
+                        cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
+                    }
                 }
-            }
-            
-            return cell
-            
-        } else {
-            
-            if (tableView == self.recipesTableView){
-                
-                let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! AdminRecipeTableViewCell
-                
-                cell.labelRecipeName.text = recipe.name
-                cell.labelAddedBy.text = "@: \(recipe.addedBy!)"
                 return cell
+                
             } else {
                 
-                 let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsDetailCell", for: indexPath)
+                let cell = tableView.dequeueReusableCell(withIdentifier: "RecipesCell", for: indexPath) as! AdminRecipeTableViewCell
                 
-                if recipeSelected == true {
-                    
-                       let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsDetailCell", for: indexPath)
-                    
-                    if (indexPath.section == 0) {
-                        cell.textLabel?.text = ingredientsList[indexPath.row].name
-                        cell.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
-                        
-                        
-                    } else if (indexPath.section == 1){
-                        
-                        cell.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
-                        cell.detailTextLabel?.numberOfLines = 0
-                        cell.detailTextLabel?.lineBreakMode = .byWordWrapping
-                        cell.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+                cell.textLabel?.text = recipe.name
+                
+                self.recipe = recipe
+                
+                fetchUserWhoAddedRecipe(completion: {
+                    result in
+                    if result {
+                        cell.detailTextLabel?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
                     }
-                    
-                    return cell
-                } else {
-                    if (indexPath.section == 0) {
-                        cell.textLabel?.text = ""
-                        cell.detailTextLabel?.text = ""
+                })
                 
-                    } else if (indexPath.section == 1){
-                
-                        cell.textLabel?.text = ""
-                        cell.detailTextLabel?.numberOfLines = 0
-                        cell.detailTextLabel?.lineBreakMode = .byWordWrapping
-                        cell.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+                if recipe.imageURL != nil {
+                    if let recipeImageURL = recipe.imageURL {
+                        cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
                     }
-                    return cell
                 }
+                return cell
             }
+            
+        }
+        
+        if tableView == self.ingredientsAndStepsTableView {
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
+            
+            
+            if (indexPath.section == 0) {
+                cell.textLabel?.text = ingredientsList[indexPath.row].name
+                cell.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
+                
+                
+            } else {
+                
+                cell.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
+                cell.detailTextLabel?.numberOfLines = 0
+                cell.detailTextLabel?.lineBreakMode = .byWordWrapping
+                cell.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+            }
+             return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
+            cell.textLabel?.text = ""
+            return cell
         }
     }
     
@@ -438,14 +390,17 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             performSegue(withIdentifier: "RecipeDetailSegue", sender: indexPath)
         } else if (self.currentStoryboardName == "Ipad"){
             
-            self.recipe = self.filteredRecipeList[indexPath.row]
-            
             if (tableView == self.recipesTableView){
+                self.recipe = self.filteredRecipeList[indexPath.row]
                 recipeSelected = true
+                self.ingredientsList = (recipe?.ingredients)!
+                self.stepsList = (recipe?.steps)!
                 fillData()
+                self.ingredientsAndStepsTableView.reloadData()
             }
         }
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let nav = segue.destination as! UINavigationController
@@ -464,5 +419,38 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
         return
+    }
+}
+
+class AdminRecipeTableViewCell: UITableViewCell {
+    
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        textLabel?.frame = CGRect(x: 64, y: textLabel!.frame.origin.y - 2, width: textLabel!.frame.width, height: textLabel!.frame.height)
+        
+        detailTextLabel?.frame = CGRect(x: 64, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
+    }
+    
+    let recipeImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.setCircleSize()
+        return imageView
+    }()
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: .subtitle, reuseIdentifier: "RecipesCell")
+        
+        addSubview(recipeImageView)
+        
+        recipeImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        recipeImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        recipeImageView.widthAnchor.constraint(equalToConstant: 48).isActive = true
+        recipeImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

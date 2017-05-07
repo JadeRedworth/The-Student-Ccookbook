@@ -838,11 +838,11 @@
                         <viewControllerLayoutGuide type="bottom" id="rvu-nK-HGh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="sAA-GE-zk7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gwe-ru-w6O">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dT-7z-8Jf">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1200"/>
@@ -980,7 +980,7 @@
                                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                                 <color key="separatorColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                 <prototypes>
-                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IngredientsAndStepsDetailCell" textLabel="INc-rn-wuN" detailTextLabel="9RQ-Mt-nDa" style="IBUITableViewCellStyleValue2" id="nNj-26-3Ap">
+                                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IngredientsAndStepsCell" textLabel="INc-rn-wuN" detailTextLabel="9RQ-Mt-nDa" style="IBUITableViewCellStyleValue2" id="nNj-26-3Ap">
                                                         <rect key="frame" x="0.0" y="55.333333333333336" width="398" height="44"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nNj-26-3Ap" id="XDg-Ht-RIb">
@@ -1059,7 +1059,7 @@
                     <connections>
                         <outlet property="imageViewRecipe" destination="Ugl-lx-quF" id="WV8-lL-l7k"/>
                         <outlet property="imageViewUser" destination="bD3-ZV-SYy" id="YIa-qO-m9U"/>
-                        <outlet property="ingredientsAndStepsTableView" destination="YQc-EB-dfc" id="Z00-NZ-2jV"/>
+                        <outlet property="ingredientsAndStepsTableView" destination="YQc-EB-dfc" id="qnl-oU-1Mj"/>
                         <outlet property="labelAddedBy" destination="ifT-BN-cFI" id="CZ7-VM-FdO"/>
                         <outlet property="labelCookTime" destination="MQZ-5s-aih" id="vCv-o3-YXP"/>
                         <outlet property="labelCourse" destination="v6e-Ea-pbC" id="6Vf-9S-Eng"/>
@@ -1083,7 +1083,7 @@
                         <viewControllerLayoutGuide type="bottom" id="SjE-LL-F8e"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="IN4-45-wBe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Background-1" translatesAutoresizingMaskIntoConstraints="NO" id="MW6-gE-q9f">
@@ -1690,13 +1690,13 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="My Recipes" id="bmq-It-wLJ">
                         <barButtonItem key="leftBarButtonItem" title="Logout" id="0mr-Zr-QmI">
-                            <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="buttonLogout:" destination="vLU-xZ-sY3" id="Nb7-m4-cNr"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="id0-cT-Gc1">
-                            <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="aiE-jy-le9" kind="show" identifier="EditRecipeSegue" id="ffd-FT-QIb"/>
                             </connections>
@@ -2167,7 +2167,7 @@
         <image name="UserAccount" width="25" height="25"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="DtH-93-lRa"/>
-        <segue reference="U5f-Tm-EIV"/>
+        <segue reference="Pjg-E0-DTC"/>
+        <segue reference="ffd-FT-QIb"/>
     </inferredMetricsTieBreakers>
 </document>

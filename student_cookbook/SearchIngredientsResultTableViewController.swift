@@ -78,7 +78,7 @@ class SearchIngredientsResultTableViewController: UITableViewController {
 
         let recipe = recipeList[indexPath.row]
         cell.textLabel?.text = recipe.name
-        cell.detailTextLabel?.text = recipe.course
+        cell.detailTextLabel?.text = recipe.course?.rawValue
 
         return cell
     }

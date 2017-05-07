@@ -166,7 +166,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         photoImageView.loadImageWithCacheWithUrlString(imageURL!)
         textFieldRecipeName.text = recipes.name
         textFieldServingSize.text = "\(recipes.servingSize!)"
-        textFieldCourse.text = recipes.course
+        textFieldCourse.text = recipes.course?.rawValue
         textFieldType.text = recipes.type
         textFieldCookHour.text = "\(recipes.cookTimeHour!)"
         textFieldCookMin.text = "\(recipes.cookTimeMinute!)"

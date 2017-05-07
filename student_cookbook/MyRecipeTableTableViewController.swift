@@ -11,16 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-enum selectedScope:Int {
-    case all = 0
-    case breakfast = 1
-    case lunch = 2
-    case dinner = 3
-    case dessert = 4
-    case snack = 5
-}
-
-class MyRecipeTableViewController: UITableViewController, UISearchBarDelegate {
+class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate {
     
     var cellId = "RecipeCell"
     
@@ -41,7 +32,8 @@ class MyRecipeTableViewController: UITableViewController, UISearchBarDelegate {
     
     var recipesID = [String]()
     
-    
+    private let searchController = UISearchController(searchResultsController: nil)
+
     @IBAction func buttonLogout(_ sender: Any) {
         handleLogout()
     }
@@ -72,7 +64,7 @@ class MyRecipeTableViewController: UITableViewController, UISearchBarDelegate {
         getMyRecipes()
         getMyFavourites()
         
-        self.searchBarSetup()
+        self.setupSearchController()
         self.tableView.reloadData()
     }
     
@@ -135,193 +127,42 @@ class MyRecipeTableViewController: UITableViewController, UISearchBarDelegate {
         present(vc!, animated: true, completion: nil)
     }
     
-    
-    func searchBarSetup() {
-        let searchBar = UISearchBar(frame: CGRect(x:0,y:0,width:(UIScreen.main.bounds.width),height:70))
-        searchBar.showsScopeBar = true
-        searchBar.scopeButtonTitles = ["All", "Breakfast","Lunch","Dinner", "Dessert", "Snack"]
-        searchBar.selectedScopeButtonIndex = 0
-        searchBar.delegate = self
-        self.tableView.tableHeaderView = searchBar
+    func setupSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.scopeButtonTitles = ["All","Breakfast","Lunch","Dinner", "Dessert", "Snack"]
+        searchController.searchBar.delegate = self as UISearchBarDelegate
     }
     
-    // MARK: - search bar delegate
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredMyRecipeList = myRecipeList
-            filteredFavouritesRecipeList = favRecipeList
-            self.tableView.reloadData()
-        } else {
-            filterTableView(searchBar.selectedScopeButtonIndex, text: searchText)
+    func filterSearchController(searchBar: UISearchBar){
+        guard let scopeString = searchBar.scopeButtonTitles?[searchBar.selectedScopeButtonIndex] else { return }
+        let selectedCourse = Recipes.Course(rawValue: scopeString) ?? .All
+        let searchText = searchBar.text ?? ""
+        
+        filteredMyRecipeList = myRecipeList.filter { recipe in
+            let matchingCourse = (selectedCourse == .All) || (recipe.course == selectedCourse)
+            let matchingText = (recipe.name?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
+            return matchingCourse && matchingText
         }
+        
+        filteredFavouritesRecipeList = favRecipeList.filter { recipe in
+            let matchingCourse = (selectedCourse == .All) || (recipe.course == selectedCourse)
+            let matchingText = (recipe.name?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
+            return matchingCourse && matchingText
+        }
+        
+        tableView.reloadData()
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        filterSearchController(searchBar: searchController.searchBar)
+    }
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        if selectedScope == 0 {
-            filteredMyRecipeList = myRecipeList
-            filteredFavouritesRecipeList = favRecipeList
-            self.tableView.reloadData()
-            
-        } else if selectedScope == 1 {
-            
-            filteredMyRecipeList = myRecipeList.filter({ (breakfast) -> Bool in
-                return (breakfast.course?.contains("Breakfast"))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (breakfast) -> Bool in
-                return (breakfast.course?.contains("Breakfast"))!
-            })
-            
-            selectedMyRecipeList = filteredMyRecipeList
-            selectedFavouritesRecipeList = filteredFavouritesRecipeList
-            self.tableView.reloadData()
-            
-        } else if selectedScope == 2 {
-            
-            filteredMyRecipeList = myRecipeList.filter({ (lunch) -> Bool in
-                return (lunch.course?.contains("Lunch"))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (lunch) -> Bool in
-                return (lunch.course?.contains("Lunch"))!
-            })
-            
-            selectedMyRecipeList = filteredMyRecipeList
-            selectedFavouritesRecipeList = filteredFavouritesRecipeList
-            self.tableView.reloadData()
-            
-        } else if selectedScope == 3 {
-            filteredMyRecipeList = myRecipeList.filter({ (dinner) -> Bool in
-                return (dinner.course?.contains("Dinner"))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (dinner) -> Bool in
-                return (dinner.course?.contains("Dinner"))!
-            })
-            
-            selectedMyRecipeList = filteredMyRecipeList
-            selectedFavouritesRecipeList = filteredFavouritesRecipeList
-            self.tableView.reloadData()
-            
-        } else if selectedScope == 4 {
-            filteredMyRecipeList = myRecipeList.filter({ (dessert) -> Bool in
-                return (dessert.course?.contains("Dessert"))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (dessert) -> Bool in
-                return (dessert.course?.contains("Dessert"))!
-            })
-            
-            selectedMyRecipeList = filteredMyRecipeList
-            selectedFavouritesRecipeList = filteredFavouritesRecipeList
-            self.tableView.reloadData()
-            
-        } else if selectedScope == 5 {
-            filteredMyRecipeList = myRecipeList.filter({ (snack) -> Bool in
-                return (snack.course?.contains("Snack"))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (snack) -> Bool in
-                return (snack.course?.contains("Snack"))!
-            })
-            
-            selectedMyRecipeList = filteredMyRecipeList
-            selectedFavouritesRecipeList = filteredFavouritesRecipeList
-            self.tableView.reloadData()
-        }
+        filterSearchController(searchBar: searchBar)
     }
-    
-    func filterTableView(_ ind: Int, text: String) {
-        switch ind {
-        case selectedScope.all.rawValue:
-            
-            filteredMyRecipeList = myRecipeList.filter({ (recipes) -> Bool in
-                return (recipes.name?.lowercased().contains(text.lowercased()))! ||
-                    (recipes.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (recipes) -> Bool in
-                return (recipes.name?.lowercased().contains(text.lowercased()))! ||
-                    (recipes.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            self.tableView.reloadData()
-            break
-            
-        case selectedScope.breakfast.rawValue:
-            
-            filteredMyRecipeList = selectedMyRecipeList.filter({ (breakfast) -> Bool in
-                return (breakfast.name?.lowercased().contains(text.lowercased()))! ||
-                    (breakfast.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (breakfast) -> Bool in
-                return (breakfast.name?.lowercased().contains(text.lowercased()))! ||
-                    (breakfast.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            self.tableView.reloadData()
-            break
-            
-        case selectedScope.lunch.rawValue:
-            filteredMyRecipeList = selectedMyRecipeList.filter({ (lunch) -> Bool in
-                return (lunch.name?.lowercased().contains(text.lowercased()))! ||
-                    (lunch.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (lunch) -> Bool in
-                return (lunch.name?.lowercased().contains(text.lowercased()))! ||
-                    (lunch.type?.lowercased().contains(text.lowercased()))!
-            })
-            self.tableView.reloadData()
-            break
-            
-        case selectedScope.dinner.rawValue:
-            filteredMyRecipeList = selectedMyRecipeList.filter({ (dinner) -> Bool in
-                return (dinner.name?.lowercased().contains(text.lowercased()))! ||
-                    (dinner.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (dinner) -> Bool in
-                return (dinner.name?.lowercased().contains(text.lowercased()))! ||
-                    (dinner.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            self.tableView.reloadData()
-            break
-            
-        case selectedScope.dessert.rawValue:
-            filteredMyRecipeList = selectedMyRecipeList.filter({ (dessert) -> Bool in
-                return (dessert.name?.lowercased().contains(text.lowercased()))! ||
-                    (dessert.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (dessert) -> Bool in
-                return (dessert.name?.lowercased().contains(text.lowercased()))! ||
-                    (dessert.type?.lowercased().contains(text.lowercased()))!
-            })
-            self.tableView.reloadData()
-            break
-            
-        case selectedScope.snack.rawValue:
-            filteredMyRecipeList = selectedMyRecipeList.filter({ (snack) -> Bool in
-                return (snack.name?.lowercased().contains(text.lowercased()))! ||
-                    (snack.type?.lowercased().contains(text.lowercased()))!
-            })
-            
-            filteredFavouritesRecipeList = favRecipeList.filter({ (snack) -> Bool in
-                return (snack.name?.lowercased().contains(text.lowercased()))! ||
-                    (snack.type?.lowercased().contains(text.lowercased()))!
-            })
-            self.tableView.reloadData()
-            break
-            
-        default:
-            print("No Recipes")
-        }
-    }
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -488,5 +329,3 @@ class MyRecipeTableViewController: UITableViewController, UISearchBarDelegate {
         return
     }
 }
-
-

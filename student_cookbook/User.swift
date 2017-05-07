@@ -18,14 +18,19 @@ class User: NSObject {
     var location: String?
     var email: String?
     var profilePicURL: String?
-    var admin: Bool?
+    var userType: UserType?
     
+    enum UserType: String {
+        case Admin
+        case User
+        case All
+    }
     
     override init(){
         
     }
     
-    init(userID: String, firstName: String, lastName: String, age: Int, gender: String, location: String, email: String, profilePicURL: String, admin: Bool) {
+    init(userID: String, firstName: String, lastName: String, age: Int, gender: String, location: String, email: String, profilePicURL: String, userType: UserType) {
         self.userID = userID
         self.firstName = firstName
         self.lastName = lastName
@@ -34,7 +39,7 @@ class User: NSObject {
         self.location = location
         self.email = email
         self.profilePicURL = profilePicURL
-        self.admin = admin
+        self.userType = userType
     }
     
     class func generateModelArray(_ userList: [User]) -> [User]{
@@ -50,7 +55,7 @@ class User: NSObject {
                 location: userList[i].location!,
                 email: userList[i].email!,
                 profilePicURL: userList[i].profilePicURL!,
-                admin: userList[i].admin!))
+                userType: userList[i].userType!))
         }
         return userArray
     }

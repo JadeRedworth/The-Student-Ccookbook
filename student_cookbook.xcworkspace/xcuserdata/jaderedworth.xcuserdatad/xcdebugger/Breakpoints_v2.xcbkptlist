@@ -10,11 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "student_cookbook/RecipeTableViewController.swift"
-            timestampString = "515611983.077038"
+            timestampString = "515869249.075917"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "723"
-            endingLineNumber = "723">
+            startingLineNumber = "710"
+            endingLineNumber = "710"
+            landmarkName = "AdminRecipeTableViewCell"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -24,11 +26,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "student_cookbook/RecipeTableViewController.swift"
-            timestampString = "515611983.077038"
+            timestampString = "515869249.075917"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "724"
-            endingLineNumber = "724">
+            startingLineNumber = "711"
+            endingLineNumber = "711"
+            landmarkName = "AdminRecipeTableViewCell"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -38,11 +42,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "student_cookbook/RecipeTableViewController.swift"
-            timestampString = "515611983.077038"
+            timestampString = "515869249.075917"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "721"
-            endingLineNumber = "721">
+            startingLineNumber = "708"
+            endingLineNumber = "708"
+            landmarkName = "AdminRecipeTableViewCell"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
