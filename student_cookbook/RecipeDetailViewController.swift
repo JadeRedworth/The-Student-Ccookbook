@@ -25,6 +25,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     var userList = [User]()
     var shoppingList = [String]()
     
+    var buttonTag: Int = 0
+    
     
     // Image outlets
     @IBOutlet weak var imageViewRecipe: UIImageView!
@@ -38,6 +40,48 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var labelType: UILabel!
     @IBOutlet weak var labelCourse: UILabel!
     @IBOutlet weak var labelAddedBy: UILabel!
+    @IBOutlet weak var labelDateAdded: UILabel!
+    @IBOutlet weak var labelDifficulty: UILabel!
+    
+    @IBOutlet var starButtons: [UIButton]!
+    
+    @IBAction func starButtonTapped(_ sender: UIButton) {
+        let tag = sender.tag
+        
+        buttonTag = tag
+        
+        for button in starButtons {
+            if button.tag <= tag {
+                button.setImage(UIImage(named: "highlightedStar.png"), for:  UIControlState.normal)
+                
+                let alert = UIAlertController(title: "Confirm Rating", message: "Would you like to confirm this rating?", preferredStyle: UIAlertControllerStyle.actionSheet)
+                
+                let yes = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: setRating)
+                
+                let no = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil)
+                
+                alert.addAction(yes)
+                alert.addAction(no)
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else {
+                button.setImage(UIImage(named: "emptyStar.png"), for: UIControlState.normal)
+                
+                let alert = UIAlertController(title: "Confirm Rating", message: "Would you like to confirm this rating?", preferredStyle: UIAlertControllerStyle.actionSheet)
+                
+                let yes = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: setRating)
+                
+                let no = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil)
+                
+                alert.addAction(yes)
+                alert.addAction(no)
+                
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+        
+    }
     
     @IBOutlet weak var ingredientsAndStepsTableView: UITableView!
     
@@ -87,6 +131,11 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         labelCookTime.text = "\(recipe!.cookTimeHour!) hrs \(recipe!.cookTimeMinute!) mins"
         labelType.text = recipe!.type
         labelCourse.text = (recipe?.course).map { $0.rawValue }
+        labelDateAdded.text = "Added: \(recipe!.dateAdded!)"
+        labelDifficulty.text = "\(recipe!.difficulty!)"
+        
+        fillStarRatings()
+        
         ingredientsList = recipe!.ingredients
         stepsList = recipe!.steps
         
@@ -96,7 +145,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         fetchUserWhoAddedRecipe(completion: {
             result in
             if result {
-                self.labelAddedBy.text = "\(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                self.labelAddedBy.text = "@: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
                 if let userProfileURL = self.userList[0].profilePicURL {
                     self.imageViewUser.loadImageWithCacheWithUrlString(userProfileURL)
                     self.imageViewUser.makeImageCircle()
@@ -104,6 +153,17 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 }
             }
         })
+    }
+    
+    func fillStarRatings(){
+        
+        let recipeRating = recipe?.rating
+        
+        for button in starButtons {
+            if button.tag <= recipeRating! {
+                button.setImage(UIImage(named: "filledStar.png"), for:  UIControlState.normal)
+            }
+        }
     }
     
     func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
@@ -116,6 +176,25 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 completion(true)
             }
         }
+    }
+    
+    func setRating(alert: UIAlertAction){
+        
+        let ratingRef = ref.child("Recipes").child((recipe?.id)!).child("Ratings").child("\(buttonTag)")
+        
+        ratingRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.value is NSNull {
+                ratingRef.setValue(1)
+            } else {
+                var value = snapshot.value as! Int
+                value = value + 1
+                ratingRef.setValue(value)
+            }
+            
+            let alertController = UIAlertController(title: "Success", message: "Rating: \(self.buttonTag) stars has been saved :)", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        })
     }
     
     

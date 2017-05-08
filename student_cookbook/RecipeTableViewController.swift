@@ -134,6 +134,10 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         self.recipesTableView.reloadData()
     }
     
+    func addRating(){
+        
+    }
+    
     func fillData(){
         
         labelRecipeName.text = self.recipe?.name

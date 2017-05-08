@@ -132,13 +132,30 @@ extension Array where Element: Recipes {
                 //print(recipeDict)
                 
                 let recipes = Recipes()
+                let ratingsEnumerator = snapshot.childSnapshot(forPath: "Ratings").children
                 let ingredientsEnumerator = snapshot.childSnapshot(forPath: "Ingredients").children
                 let stepsEnumerator = snapshot.childSnapshot(forPath: "Steps").children
                 
                 recipes.id = snapshot.key
                 recipes.addedBy = recipeDict["AddedBy"] as? String ?? ""
+                recipes.dateAdded = recipeDict["DateAdded"] as? String ?? ""
                 recipes.approved = recipeDict["Approved"] as? Bool
                 recipes.addedByAdmin = recipeDict["AddedByAdmin"] as? Bool
+
+
+                var rating: Int = 0
+                var averageRating: Int = 0
+                var key: Int = 0
+                var value: Int = 0
+                while let ratingItem = ratingsEnumerator.nextObject() as? FIRDataSnapshot {
+                    value = (ratingItem.value as? Int)!
+                    key = Int(ratingItem.key)!
+                    rating += key*value
+                }
+                averageRating = rating/5
+                recipes.rating = averageRating
+                
+                recipes.difficulty = recipeDict["Difficulty"] as? Int
                 recipes.cookTimeHour = recipeDict["CookTimeHours"] as? Int
                 recipes.cookTimeMinute = recipeDict["CookTimeMinutes"] as? Int
                 recipes.course = (recipeDict["Course"] as? String).map { Recipes.Course(rawValue: $0) } ?? Recipes.Course(rawValue: "")
