@@ -23,6 +23,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     // Info
     @IBOutlet weak var textFieldRecipeName: UITextField!
     @IBOutlet weak var textFieldServingSize: UITextField!
+    @IBOutlet weak var textFieldDifficulty: UITextField!
     @IBOutlet weak var textFieldPrepHour: UITextField!
     @IBOutlet weak var textFieldPrepMin: UITextField!
     @IBOutlet weak var textFieldCookHour: UITextField!
@@ -46,7 +47,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     
     // Ipad outlets
     @IBOutlet weak var IngredientsAndStepsTableView: UITableView!
-    @IBOutlet weak var ingredientsAndStepsSegmentControl: UISegmentedControl!
     
     
     // Variables
@@ -93,6 +93,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     var courses = ["Breakfast","Lunch","Dinner", "Dessert", "Snack"]
     var types = ["Quick", "Healthy", "Easy", "On a Budget", "Treat your self"]
     var measurements = ["Cup", "Grams", "ml", "Oz", "Tbsp", "tsp"]
+    var difficulty = ["1", "2", "3", "4", "5"]
     var timeHours: [String] = []
     var timeMins: [String] = []
     
@@ -123,21 +124,8 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         self.timeMins = [Int] (0...59).map{ String($0)}
         
         pickerView.delegate = self
-        textFieldMeasurement.inputView = pickerView
-        textFieldType.inputView = pickerView
-        textFieldCourse.inputView = pickerView
-        textFieldCookHour.inputView = pickerView
-        textFieldCookMin.inputView = pickerView
-        textFieldPrepHour.inputView = pickerView
-        textFieldPrepMin.inputView = pickerView
         
-        textFieldMeasurement.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldCourse.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldType.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldCookHour.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldCookMin.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldPrepHour.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldPrepMin.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        setUpPickerViews()
         
         setUpToolBar()
         
@@ -160,6 +148,27 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         }
     }
     
+    func setUpPickerViews(){
+        
+        textFieldMeasurement.inputView = pickerView
+        textFieldType.inputView = pickerView
+        textFieldCourse.inputView = pickerView
+        textFieldDifficulty.inputView = pickerView
+        textFieldCookHour.inputView = pickerView
+        textFieldCookMin.inputView = pickerView
+        textFieldPrepHour.inputView = pickerView
+        textFieldPrepMin.inputView = pickerView
+        
+        textFieldMeasurement.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldCourse.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldType.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldDifficulty.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldCookHour.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldCookMin.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldPrepHour.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldPrepMin.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+    }
+    
     func fillRecipeInformation() {
         recipeID = recipes.id
         let imageURL = recipes.imageURL
@@ -168,6 +177,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         textFieldServingSize.text = "\(recipes.servingSize!)"
         textFieldCourse.text = recipes.course?.rawValue
         textFieldType.text = recipes.type
+        textFieldDifficulty.text = "\(recipes.difficulty!)"
         textFieldCookHour.text = "\(recipes.cookTimeHour!)"
         textFieldCookMin.text = "\(recipes.cookTimeMinute!)"
         textFieldPrepHour.text = "\(recipes.prepTimeHour!)"
@@ -242,7 +252,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         default:
             break;
         }
-
+        
     }
     @IBAction func segmentControlViews(_ sender: SegmentedControl) {
         
@@ -330,11 +340,11 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             }
             
             if currentStoryboardName == "Main" {
-                 stepsTableView.reloadData()
+                stepsTableView.reloadData()
             } else {
                 IngredientsAndStepsTableView.reloadData()
             }
-        
+            
             textFieldSteps.text = ""
         } else {
             let alertController = UIAlertController(title: "Error", message: "Please enter a step!", preferredStyle: UIAlertControllerStyle.alert)
@@ -384,10 +394,17 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
                 if !result.isEmpty {
                     photoImageURL = result
                     
+                    if self.currentStoryboardName == "Ipad" {
+                        self.adminStatus = true
+                    } else {
+                        self.adminStatus = false
+                    }
+                    
                     let recipeValues = [
                         "Name": self.textFieldRecipeName.text! as AnyObject,
                         "ImageURL": photoImageURL,
                         "AddedBy": self.userID,
+                        "DateAdded": "\(Date())",
                         "ServingSize": Int(self.textFieldServingSize.text!)!,
                         "PrepTimeHours":  Int(self.textFieldPrepHour.text!)!,
                         "PrepTimeMinutes": Int(self.textFieldPrepMin.text!)!,
@@ -395,6 +412,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
                         "CookTimeMinutes": Int(self.textFieldCookMin.text!)!,
                         "Course": self.textFieldCourse.text!,
                         "Type": self.textFieldType.text!,
+                        "Difficulty": Int(self.textFieldDifficulty.text!)!,
                         "AddedByAdmin": self.adminStatus] as NSMutableDictionary
                     
                     if self.adminStatus != true {
@@ -493,7 +511,8 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             textFieldCourse.text = courses[row]
         } else if datasource == types {
             textFieldType.text = types[row]
-            
+        } else if datasource == difficulty {
+            textFieldDifficulty.text = difficulty[row]
         } else if datasource == timeHours {
             if cookHour == true {
                 textFieldCookHour.text = timeHours[row]
@@ -515,10 +534,13 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     func numberOfSections(in tableView: UITableView) -> Int {
         
         var returnValue: Int = 0
-        if tableView == self.IngredientsAndStepsTableView {
-            returnValue = 2
-        } else {
+        
+        if currentStoryboardName == "Main" {
             returnValue = 1
+        } else {
+            if tableView == self.IngredientsAndStepsTableView {
+                returnValue = 2
+            }
         }
         return returnValue
     }
@@ -553,17 +575,20 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(editingStyle == UITableViewCellEditingStyle.delete){
-            if tableView == self.IngredientsAndStepsTableView {
-                ingredientsList.remove(at: indexPath.row)
-                stepsList.remove(at: indexPath.row)
-            }
-            else if tableView == self.ingredientsTableView {
-                ingredientsList.remove(at: indexPath.row)
-                self.ingredientsTableView.reloadData()
+            if currentStoryboardName == "Ipad" {
+                if tableView == self.IngredientsAndStepsTableView {
+                    ingredientsList.remove(at: indexPath.row)
+                    stepsList.remove(at: indexPath.row)
+                }
+            } else {
+                if tableView == self.ingredientsTableView {
+                    ingredientsList.remove(at: indexPath.row)
+                    self.ingredientsTableView.reloadData()
                 
-            } else if tableView == self.stepsTableView {
-                stepsList.remove(at: indexPath.row)
-                self.stepsTableView.reloadData()
+                } else if tableView == self.stepsTableView {
+                    stepsList.remove(at: indexPath.row)
+                    self.stepsTableView.reloadData()
+                }
             }
         }
     }
@@ -572,18 +597,21 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         
         returnValue = 0
         
-        if tableView == self.IngredientsAndStepsTableView {
-            if section == 0 {
+        if currentStoryboardName == "Main" {
+            if tableView == self.ingredientsTableView {
                 returnValue = ingredientsList.count
-            } else if section == 1 {
+            } else if tableView == self.stepsTableView {
                 returnValue = stepsList.count
             }
-        } else if tableView == self.ingredientsTableView {
-            returnValue = ingredientsList.count
-        } else if tableView == self.stepsTableView {
-            returnValue = stepsList.count
+        } else {
+            if tableView == self.IngredientsAndStepsTableView {
+                if section == 0 {
+                    returnValue = ingredientsList.count
+                } else if section == 1 {
+                    returnValue = stepsList.count
+                }
+            }
         }
-        
         return returnValue
     }
     
@@ -591,43 +619,57 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         
         var cell: UITableViewCell? = nil
         
-        if tableView == self.IngredientsAndStepsTableView {
+        if currentStoryboardName == "Ipad" {
             
-            cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsToAddCell", for: indexPath)
-            
-            if indexPath.section == 0 {
+            if tableView == self.IngredientsAndStepsTableView {
+                
+                cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsToAddCell", for: indexPath)
+                
+                if indexPath.section == 0 {
+                    cell?.textLabel?.text = ingredientsList[indexPath.row].name
+                    cell?.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
+                    
+                } else if indexPath.section == 1 {
+                    cell?.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
+                    cell?.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+                }
+            }
+        } else {
+            if tableView == self.ingredientsTableView {
+                
+                cell = tableView.dequeueReusableCell(withIdentifier: "ingredientsCell", for: indexPath)
                 cell?.textLabel?.text = ingredientsList[indexPath.row].name
                 cell?.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
                 
-            } else if indexPath.section == 1 {
+            } else if tableView == self.stepsTableView {
+                
+                cell = tableView.dequeueReusableCell(withIdentifier: "stepsCell", for: indexPath)
                 cell?.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
                 cell?.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+                
             }
-        } else if tableView == self.ingredientsTableView {
-            
-            cell = tableView.dequeueReusableCell(withIdentifier: "ingredientsCell", for: indexPath)
-            cell?.textLabel?.text = ingredientsList[indexPath.row].name
-            cell?.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
-            
-        } else if tableView == self.stepsTableView {
-            
-            cell = tableView.dequeueReusableCell(withIdentifier: "stepsCell", for: indexPath)
-            cell?.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
-            cell?.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
-            
         }
         return cell!
     }
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
         var returnValue: String = ""
         
-        if tableView == self.IngredientsAndStepsTableView {
-            if section == 0 {
+        if currentStoryboardName == "Main" {
+            if tableView == self.ingredientsTableView {
                 returnValue = "Ingredients To Add"
-            } else if section == 1 {
+            } else if tableView == self.stepsTableView {
                 returnValue = "Steps To Add"
+            }
+        } else {
+            if tableView == self.IngredientsAndStepsTableView {
+                if section == 0 {
+                    returnValue = "Ingredients To Add"
+                } else if section == 1 {
+                    returnValue = "Steps To Add"
+                }
             }
         }
         return returnValue
@@ -679,6 +721,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         toolBar.setItems([flexSpace,textBtn,flexSpace,doneButton], animated: true)
         textFieldMeasurement.inputAccessoryView = toolBar
         textFieldCourse.inputAccessoryView = toolBar
+        textFieldDifficulty.inputAccessoryView = toolBar
         textFieldType.inputAccessoryView = toolBar
         textFieldCookHour.inputAccessoryView = toolBar
         textFieldCookMin.inputAccessoryView = toolBar
@@ -689,6 +732,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     func donePressed(sender: UIBarButtonItem) {
         textFieldMeasurement.resignFirstResponder()
         textFieldType.resignFirstResponder()
+        textFieldDifficulty.resignFirstResponder()
         textFieldCourse.resignFirstResponder()
         textFieldCookHour.resignFirstResponder()
         textFieldCookMin.resignFirstResponder()
@@ -704,39 +748,38 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     func myTargetFunction(textField: UITextField) {
         if textField == textFieldMeasurement {
             datasource = measurements
-            self.pickerView.reloadAllComponents()
         } else if textField == textFieldCourse {
             datasource = courses
-            self.pickerView.reloadAllComponents()
         } else if textField == textFieldType {
             datasource = types
-            self.pickerView.reloadAllComponents()
+        } else if textField == textFieldDifficulty {
+            datasource = difficulty
         } else if textField == textFieldCookHour {
             datasource = timeHours
             resetBools()
             cookHour = true
-            self.pickerView.reloadAllComponents()
         } else if textField == textFieldCookMin {
             datasource = timeMins
             resetBools()
             cookMin = true
-            self.pickerView.reloadAllComponents()
         } else if textField == textFieldPrepHour {
             datasource = timeHours
             resetBools()
             prepHour = true
-            self.pickerView.reloadAllComponents()
+
         } else if textField == textFieldPrepMin {
             datasource = timeMins
             resetBools()
             prepMin = true
-            self.pickerView.reloadAllComponents()
         }
+        
+        self.pickerView.reloadAllComponents()
+        self.pickerView.selectRow(0, inComponent: 0, animated: true)
     }
     
     func checkTextFields() -> Bool {
         var result: Bool = true
-        if (textFieldRecipeName.text != "" && textFieldServingSize.text != "" && textFieldCookHour.text != "" && textFieldCookMin.text != "" && textFieldPrepHour.text != "" && textFieldPrepMin.text != "" && textFieldCourse.text != "" && textFieldType.text != "") {
+        if (textFieldRecipeName.text != "" && textFieldServingSize.text != "" && textFieldCookHour.text != "" && textFieldCookMin.text != "" && textFieldPrepHour.text != "" && textFieldPrepMin.text != "" && textFieldCourse.text != "" && textFieldType.text != "" && textFieldDifficulty.text != "") {
             result = false
         }
         return result

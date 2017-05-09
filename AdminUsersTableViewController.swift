@@ -13,6 +13,8 @@ import FirebaseDatabase
 
 class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchBarDelegate {
 
+    var currentStoryboard: UIStoryboard!
+    var currentStoryboardName: String!
     
     let cellId = "cellId"
     var imageURL: String!
@@ -49,10 +51,11 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        self.dismissKeyboardWhenTappedAround()
         
         ref = FIRDatabase.database().reference()
+        
+        currentStoryboard = self.storyboard
+        self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
         
         uid = FIRAuth.auth()?.currentUser?.uid
         
@@ -60,6 +63,7 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
         }
         
+        self.dismissKeyboardWhenTappedAround()
         self.userTableView.register(AdminUserTableViewCell.self, forCellReuseIdentifier: cellId)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
@@ -92,7 +96,9 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
                 self.userList = result
                 self.filteredUserList = User.generateModelArray(self.userList)
             }
-            self.fillData()
+            if self.currentStoryboardName == "Ipad" {
+                self.fillData()
+            }
             self.userTableView.reloadData()
         }
     }
@@ -180,8 +186,12 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.user = filteredUserList[indexPath.row]
-        userSelected = true
-        fillData()
+        if currentStoryboardName == "Ipad" {
+            userSelected = true
+            fillData()
+        } else {
+             self.performSegue(withIdentifier: "ViewUserDetails", sender: nil)
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -209,6 +219,10 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
      }
      
      */
+    
+    //override func performSegue(withIdentifier identifier: String, sender: Any?) {
+        
+    //}
 }
 
 class AdminUserTableViewCell: UITableViewCell {

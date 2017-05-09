@@ -62,7 +62,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         currentStoryboard = self.storyboard
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
         
@@ -428,7 +428,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
 
 class AdminRecipeTableViewCell: UITableViewCell {
     
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -458,3 +457,4 @@ class AdminRecipeTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

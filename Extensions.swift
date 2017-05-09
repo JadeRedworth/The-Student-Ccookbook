@@ -57,7 +57,6 @@ extension Array where Element: User {
             print(snapshot)
             
             if let userDict = snapshot.value as? [String: AnyObject] {
-                //print(recipeDict)
                 
                 let users = User()
                 users.userID = snapshot.key
@@ -77,6 +76,41 @@ extension Array where Element: User {
     }
 }
 
+extension Array where Element: RecipeReviews {
+    
+    func fetchRecipeReviews(refName: String, queryKey: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
+        
+        var recipeReviewList = [RecipeReviews]()
+        let recipeReviewRef = ref.child(refName)
+        
+        query = recipeReviewRef.child(queryKey)
+        dataEventType = .value
+        
+        query.observe(dataEventType, with: { (snapshot) in
+            
+            recipeReviewList.removeAll()
+            
+            let reviewsEnumerator = snapshot.children
+            while let reviewItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
+                let key = reviewItem.key
+                
+                let rEnumerator = reviewItem.children
+                while let re = rEnumerator.nextObject() as? FIRDataSnapshot {
+                    let review = RecipeReviews()
+                    review.userID = key
+                    review.recipeReviewID = re.key
+                    if let reviewDict = re.value as? [String: AnyObject] {
+                        review.review = reviewDict["Review"] as? String ?? ""
+                        review.ratingNo = reviewDict["Rating"] as? Int
+                    }
+                    recipeReviewList.append(review)
+                }
+            }
+            completion(recipeReviewList)
+        })
+    }
+}
+
 extension Array where Element: Recipes {
     
     func fetchRecipes(refName: String, queryKey: String, queryValue: AnyObject, ref: FIRDatabaseReference, completion: @escaping (_ result: [Recipes]) -> Void) {
@@ -90,7 +124,11 @@ extension Array where Element: Recipes {
                 dataEventType = .childAdded
                 
             } else if (queryValue is String) {
-                query = recipeRef.child(queryValue as! String)
+                if queryKey == "AddedBy" {
+                    query = recipeRef.queryOrdered(byChild: queryKey).queryEqual(toValue: queryValue)
+                } else {
+                    query = recipeRef.child(queryValue as! String)
+                }
             }
             
             if queryKey.isEmpty {

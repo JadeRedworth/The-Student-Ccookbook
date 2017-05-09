@@ -42,6 +42,7 @@
 		8DAEAA0D1EBB76E5007DBD21 /* RoundedImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA0C1EBB76E5007DBD21 /* RoundedImage.swift */; };
 		8DAEAA111EC09DA0007DBD21 /* Ratings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA101EC09DA0007DBD21 /* Ratings.swift */; };
 		8DAEAA171EC0AE1D007DBD21 /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA161EC0AE1D007DBD21 /* RatingControl.swift */; };
+		8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */; };
 		8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */; };
 		8DC6951D1EB527E000D3328D /* SegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC6951C1EB527E000D3328D /* SegmentedControl.swift */; };
 		8DCC4FB21E718B6700BBB9DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCC4FB11E718B6700BBB9DA /* Main.storyboard */; };
@@ -111,6 +112,7 @@
 		8DAEAA0C1EBB76E5007DBD21 /* RoundedImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedImage.swift; sourceTree = "<group>"; };
 		8DAEAA101EC09DA0007DBD21 /* Ratings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ratings.swift; sourceTree = "<group>"; };
 		8DAEAA161EC0AE1D007DBD21 /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
+		8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeReviews.swift; sourceTree = "<group>"; };
 		8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserShoppingListTableViewController.swift; sourceTree = "<group>"; };
 		8DC6951C1EB527E000D3328D /* SegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentedControl.swift; sourceTree = "<group>"; };
 		8DCC4FB11E718B6700BBB9DA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				8D8698AC1E6B3CAF00998BF6 /* Recipes.swift */,
 				8D8698B41E6B4BFB00998BF6 /* Steps.swift */,
 				8DAEAA101EC09DA0007DBD21 /* Ratings.swift */,
+				8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -629,6 +632,7 @@
 				8D8698AD1E6B3CAF00998BF6 /* Recipes.swift in Sources */,
 				8D0ED6201E6DD6A9001ABEC6 /* RecipeDetailViewController.swift in Sources */,
 				8D6EF6071E6DAEA900D5FF82 /* Extensions.swift in Sources */,
+				8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */,
 				8D6EF5F81E6C458300D5FF82 /* AddRecipeViewController.swift in Sources */,
 				8DC6951D1EB527E000D3328D /* SegmentedControl.swift in Sources */,
 				8DAEAA0D1EBB76E5007DBD21 /* RoundedImage.swift in Sources */,
