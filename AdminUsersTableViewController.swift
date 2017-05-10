@@ -190,39 +190,29 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
             userSelected = true
             fillData()
         } else {
-             self.performSegue(withIdentifier: "ViewUserDetails", sender: nil)
+            tableView.deselectRow(at: indexPath, animated: true)
+             self.performSegue(withIdentifier: "ViewAccountDetails", sender: indexPath)
         }
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
     }
     
-    /*
-     
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     return true
-     }
-     
-     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-     
-     let favorites = UITableViewRowAction(style: .normal, title: "Add To Favourites") { action, index in
-     let userRef = self.ref.child("Users").child(self.uid).child("Favourites").childByAutoId()
-     let favValue = ["RecipeID": self.filteredRecipeList[indexPath.row].id]
-     userRef.setValue(favValue)
-     self.showAlert(title: "Success", message: "Recipe has been added to Favourites")
-     
-     }
-     favorites.backgroundColor = UIColor.blue
-     
-     return [favorites]
-     }
-     
-     */
-    
-    //override func performSegue(withIdentifier identifier: String, sender: Any?) {
+    //MARK: Segue
+   
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-    //}
+        let nav = segue.destination as! UINavigationController
+        
+        if segue.identifier == "ViewAccountDetails" {
+            let indexPath = (sender as! NSIndexPath)
+            let controller = nav.topViewController as! AccountViewController
+            let selectedRow = filteredUserList[indexPath.row]
+            controller.user = selectedRow
+        }
+    }
 }
 
 class AdminUserTableViewCell: UITableViewCell {

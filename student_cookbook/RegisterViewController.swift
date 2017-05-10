@@ -32,7 +32,6 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
-        buttonRegister.layer.cornerRadius = 5
     }
 
     override func didReceiveMemoryWarning() {

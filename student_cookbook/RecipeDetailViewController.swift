@@ -61,6 +61,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         ref = FIRDatabase.database().reference()
         userID = (FIRAuth.auth()?.currentUser?.uid)!
+        
         self.reviewsTableView.register(RecipeDetailsReviewsTableCell.self, forCellReuseIdentifier: cellId)
         
         fillData()
@@ -138,19 +139,19 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func fillData(){
         
-        labelRecipeName.text = recipe?.name
-        labelServingSize.text = "Serves: \(recipe!.servingSize!)"
-        labelPrepTime.text = " \(recipe!.prepTimeHour!) hrs \(recipe!.prepTimeMinute!) mins"
-        labelCookTime.text = "\(recipe!.cookTimeHour!) hrs \(recipe!.cookTimeMinute!) mins"
-        labelType.text = recipe!.type
-        labelCourse.text = (recipe?.course).map { $0.rawValue }
-        labelDateAdded.text = "Added: \(recipe!.dateAdded!)"
-        labelDifficulty.text = "\(recipe!.difficulty!)"
+        labelRecipeName.text = self.recipe?.name
+        labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
+        labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
+        labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
+        labelType.text = self.recipe!.type
+        labelCourse.text = (self.recipe?.course).map { $0.rawValue }
+        labelDateAdded.text = "Added: \(self.recipe!.dateAdded!)"
+        labelDifficulty.text = "\(self.recipe!.difficulty!)"
         
-        ingredientsList = recipe!.ingredients
-        stepsList = recipe!.steps
+        ingredientsList = self.recipe!.ingredients
+        stepsList = self.recipe!.steps
         
-        imageURL = recipe?.imageURL
+        imageURL = self.recipe?.imageURL
         imageViewRecipe.loadImageWithCacheWithUrlString(imageURL!)
         
         fetchUserWhoAddedRecipe(completion: {
@@ -342,8 +343,6 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! RecipeDetailsReviewsTableCell
             
-            cell.textLabel?.text = "\(self.userReviewList[indexPath.row].firstName!) \(self.userReviewList[indexPath.row].lastName!)"
-            
             var ratingString: String = ""
             let rating: String = "\(recipeReviewList[indexPath.row].ratingNo!)"
             
@@ -368,7 +367,10 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 break
             }
             
-            cell.detailTextLabel?.text = ratingString + " " + self.recipeReviewList[indexPath.row].review!
+            cell.textLabel?.text = "\(self.userReviewList[indexPath.row].firstName!) \(self.userReviewList[indexPath.row].lastName!)" + " " + ratingString
+            cell.textLabel?.font = UIFont(name:"Gill Sans SemiBold", size: 14.0)
+            
+            cell.detailTextLabel?.text = self.recipeReviewList[indexPath.row].review!
             
             if let imageURL = self.userReviewList[indexPath.row].profilePicURL {
                 cell.userImageView.loadImageWithCacheWithUrlString(imageURL)

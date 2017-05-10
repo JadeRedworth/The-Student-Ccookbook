@@ -13,7 +13,7 @@ import FirebaseStorage
 
 class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
-    @IBOutlet weak var segmentConrtolViews: SegmentedControl!
+    @IBOutlet weak var segmentConrtolViews: UISegmentedControl!
     
     // Views
     @IBOutlet weak var infoView: UIView!
@@ -254,9 +254,10 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         }
         
     }
-    @IBAction func segmentControlViews(_ sender: SegmentedControl) {
+    
+    @IBAction func segmentControlViews(_ sender: UISegmentedControl) {
         
-        switch sender.selectedIndex {
+        switch sender.selectedSegmentIndex {
         case 0:
             infoView.alpha = 1
             ingredientsView.alpha = 0

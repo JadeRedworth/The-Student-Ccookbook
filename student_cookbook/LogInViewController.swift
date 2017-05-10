@@ -24,6 +24,8 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     var loggedInSuccessfully: Bool = false
     var adminStatus: Bool = false
     
+    @IBOutlet weak var imageViewBackground: UIImageView!
+    
     //Textfields for Login
     @IBOutlet weak var textFieldLoginEmail: UITextField!
     @IBOutlet weak var textFieldLoginPassword: UITextField!
@@ -44,10 +46,6 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         
         currentStoryboard = self.storyboard
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
-        
-        buttonLogin.layer.cornerRadius = 5
-        buttonRegister.layer.cornerRadius = 5
- 
     }
     
     /*
