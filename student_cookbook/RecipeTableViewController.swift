@@ -277,14 +277,20 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let favorites = UITableViewRowAction(style: .normal, title: "Add To Favourites") { action, index in
-            let userRef = self.ref.child("Users").child(self.uid).child("Favourites").childByAutoId()
-            let favValue = ["RecipeID": self.filteredRecipeList[indexPath.row].id]
-            userRef.setValue(favValue)
-            self.showAlert(title: "Success", message: "Recipe has been added to Favourites")
             
+            let userRef = self.ref.child("Users").child(self.uid).child("Favourites")
+            query = userRef.queryOrdered(byChild: "RecipeID").queryEqual(toValue: self.filteredRecipeList[indexPath.row].id)
+            query.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    self.showAlert(title: "Error", message: "This recipe has already been added to your Favourites.")
+                } else {
+                    let favValue = ["RecipeID": self.filteredRecipeList[indexPath.row].id]
+                    userRef.childByAutoId().setValue(favValue)
+                    self.showAlert(title: "Success", message: "Recipe has been added to Favourites.")
+                }
+            })
         }
         favorites.backgroundColor = UIColor.blue
-        
         return [favorites]
     }
     
@@ -413,8 +419,8 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             let controller = nav.topViewController as! RecipeDetailViewController
             
             let indexPath = (sender as! NSIndexPath)
-            let selectedRow = filteredRecipeList[indexPath.row]
-            controller.recipe = selectedRow
+            let selectedRow = filteredRecipeList[indexPath.row].id
+            controller.recipeId = selectedRow!
         }
     }
     

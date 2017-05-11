@@ -36,6 +36,37 @@ extension String {
             })
         }
     }
+    
+    func getStarRating(rating: String) -> String { 
+        
+        var ratingString = ""
+        
+        switch (rating) {
+            
+        case "0":
+        ratingString = "☆☆☆☆☆"
+            
+        case "1":
+            ratingString = "★☆☆☆☆"
+            break
+        case "2":
+            ratingString = "★★☆☆☆"
+            break
+        case "3":
+            ratingString = "★★★☆☆"
+            break
+        case "4":
+            ratingString = "★★★★☆"
+            break
+        case "5":
+            ratingString = "★★★★★"
+            break
+        default:
+            break
+        }
+        
+        return ratingString
+    }
 }
 
 extension Array where Element: User {
@@ -78,33 +109,37 @@ extension Array where Element: User {
 
 extension Array where Element: RecipeReviews {
     
-    func fetchRecipeReviews(refName: String, queryKey: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
+    func fetchRecipeReviews(refName: String, queryKey: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
         
-        var recipeReviewList = [RecipeReviews]()
         let recipeReviewRef = ref.child(refName)
         
-        query = recipeReviewRef.child(queryKey)
-        dataEventType = .value
+        if (queryKey == "") {
+            query = recipeReviewRef.child(queryValue)
+            dataEventType = .value
+        } else {
+            query = recipeReviewRef.queryOrdered(byChild: queryKey).queryEqual(toValue: queryValue)
+            dataEventType = .value
+        }
         
+        var recipeReviewList = [RecipeReviews]()
+
         query.observe(dataEventType, with: { (snapshot) in
             
-            recipeReviewList.removeAll()
+            //recipeReviewList.removeAll()
+            let recipeID = snapshot.key
             
             let reviewsEnumerator = snapshot.children
             while let reviewItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
-                let key = reviewItem.key
-                
-                let rEnumerator = reviewItem.children
-                while let re = rEnumerator.nextObject() as? FIRDataSnapshot {
-                    let review = RecipeReviews()
-                    review.userID = key
-                    review.recipeReviewID = re.key
-                    if let reviewDict = re.value as? [String: AnyObject] {
-                        review.review = reviewDict["Review"] as? String ?? ""
-                        review.ratingNo = reviewDict["Rating"] as? Int
-                    }
-                    recipeReviewList.append(review)
+        
+                let review = RecipeReviews()
+                review.recipeID = recipeID
+                review.recipeReviewID = reviewItem.key
+                if let reviewDict = reviewItem.value as? [String: AnyObject] {
+                    review.userID = reviewDict["UserID"] as? String ?? ""
+                    review.review = reviewDict["Review"] as? String ?? ""
+                    review.ratingNo = reviewDict["Rating"] as? Int
                 }
+                recipeReviewList.append(review)
             }
             completion(recipeReviewList)
         })

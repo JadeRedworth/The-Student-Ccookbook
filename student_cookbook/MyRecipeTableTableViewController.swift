@@ -78,16 +78,16 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         myRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: uid! as AnyObject, ref: ref) {
             (result: [Recipes]) in
             print(result)
-            self.myRecipeList += result
-            self.filteredMyRecipeList += Recipes.generateModelArray(self.myRecipeList)
+            self.myRecipeList = result
+            self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
             self.tableView.reloadData()
         }
         
         myRecipeList.fetchRecipes(refName: "Recipes", queryKey:  "AddedBy", queryValue: uid! as AnyObject, ref: ref) {
             (result: [Recipes]) in
             print(result)
-            self.myRecipeList += result
-            self.filteredMyRecipeList += Recipes.generateModelArray(self.myRecipeList)
+            self.myRecipeList = result
+            self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
             self.tableView.reloadData()
         }
     }

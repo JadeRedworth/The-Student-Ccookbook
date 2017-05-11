@@ -25,6 +25,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     var ingredientsList = [Ingredients]()
     var stepsList = [Steps]()
     var userList = [User]()
+    var recipeList = [Recipes]()
     
     var recipeReviewList = [RecipeReviews]()
     var userReviewList = [User]()
@@ -32,6 +33,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     var buttonTag: Int = 0
     var review: String?
+    var recipeRating:Int = 0
+    var recipeId: String = ""
     
     // Image outlets
     @IBOutlet weak var imageViewRecipe: UIImageView!
@@ -47,6 +50,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var labelAddedBy: UILabel!
     @IBOutlet weak var labelDateAdded: UILabel!
     @IBOutlet weak var labelDifficulty: UILabel!
+    @IBOutlet weak var labelAverageRating: UILabel!
+    @IBOutlet weak var labelNoOfReviews: UILabel!
     
     @IBOutlet var starButtons: [UIButton]!
     
@@ -134,40 +139,49 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-    
-    
-    
     func fillData(){
         
-        labelRecipeName.text = self.recipe?.name
-        labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
-        labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
-        labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
-        labelType.text = self.recipe!.type
-        labelCourse.text = (self.recipe?.course).map { $0.rawValue }
-        labelDateAdded.text = "Added: \(self.recipe!.dateAdded!)"
-        labelDifficulty.text = "\(self.recipe!.difficulty!)"
-        
-        ingredientsList = self.recipe!.ingredients
-        stepsList = self.recipe!.steps
-        
-        imageURL = self.recipe?.imageURL
-        imageViewRecipe.loadImageWithCacheWithUrlString(imageURL!)
-        
-        fetchUserWhoAddedRecipe(completion: {
-            result in
-            if result {
-                self.labelAddedBy.text = "@: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
-                if let userProfileURL = self.userList[0].profilePicURL {
-                    self.imageViewUser.loadImageWithCacheWithUrlString(userProfileURL)
-                    self.imageViewUser.makeImageCircle()
-                    self.imageViewUser.contentMode = .scaleAspectFill
-                }
+        recipeList.fetchRecipes(refName: "Recipes", queryKey: "",queryValue: recipeId as AnyObject, ref: ref) {
+            (result: [Recipes]) in
+            if result.isEmpty {
+                self.recipeList = []
+            } else {
+                self.recipeList = result
+                self.recipe = self.recipeList[0]
+                
+                self.labelRecipeName.text = self.recipe?.name
+                self.labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
+                self.labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
+                self.labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
+                self.labelType.text = self.recipe!.type
+                self.labelCourse.text = (self.recipe?.course).map { $0.rawValue }
+                self.labelDateAdded.text = "Added: \(self.recipe!.dateAdded!)"
+                self.labelDifficulty.text = "\(self.recipe!.difficulty!)"
+                self.recipeRating = self.recipe!.rating!
+                self.ingredientsList = self.recipe!.ingredients
+                self.stepsList = self.recipe!.steps
+                
+                self.ingredientsAndStepsTableView.reloadData()
+                
+                self.imageURL = self.recipe?.imageURL
+                self.imageViewRecipe.loadImageWithCacheWithUrlString(self.imageURL!)
+                
+                self.fetchUserWhoAddedRecipe(completion: {
+                    result in
+                    if result {
+                        self.labelAddedBy.text = "@: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                        if let userProfileURL = self.userList[0].profilePicURL {
+                            self.imageViewUser.loadImageWithCacheWithUrlString(userProfileURL)
+                            self.imageViewUser.makeImageCircle()
+                            self.imageViewUser.contentMode = .scaleAspectFill
+                        }
+                    }
+                })
+                
+                self.fillStarRatings()
+                self.getReviews()
             }
-        })
-        
-        fillStarRatings()
-        getReviews()
+        }
     }
     
     func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
@@ -181,19 +195,21 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             }
         }
     }
-
+    
     
     //MARK: Ratings
     
     func fillStarRatings(){
         
-        let recipeRating = recipe?.rating
-        
         for button in starButtons {
-            if button.tag <= recipeRating! {
+            if button.tag <= recipeRating {
                 button.setImage(UIImage(named: "filledStar.png"), for:  UIControlState.normal)
             }
         }
+        
+        var ratingString: String = ""
+        ratingString = ratingString.getStarRating(rating: "\(recipeRating)")
+        labelAverageRating.text = ratingString
     }
     
     func setRating(alert: UIAlertAction){
@@ -226,14 +242,16 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func getReviews(){
         
-        recipeReviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: (recipe?.id)!, ref: ref, completion: {
+        recipeReviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: (recipe?.id)!, ref: ref, completion: {
             (result: [RecipeReviews]) in
             self.recipeReviewList.removeAll()
             self.userReviewList.removeAll()
             self.reviewsTableView.reloadData()
             if result.isEmpty {
+                self.labelNoOfReviews.text = "0 reviews"
             } else {
                 self.recipeReviewList = result
+                self.labelNoOfReviews.text = "\(self.recipeReviewList.count) reviews"
                 for i in 0..<self.recipeReviewList.count {
                     self.userReviewList.fetchUsers(refName: "Users", queryKey: self.recipeReviewList[i].userID!, queryValue: "" as AnyObject, ref: self.ref) {
                         (result: [User]) in
@@ -262,13 +280,12 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
             self.review = textField?.text
-            let reviewRef = self.ref.child("RecipeReviews").child((self.recipe?.id)!).child(self.userID!).childByAutoId()
-            reviewRef.setValue(["Review": self.review!, "Rating": self.buttonTag])
+            let reviewRef = self.ref.child("RecipeReviews").child((self.recipe?.id)!).childByAutoId()
+            reviewRef.setValue(["UserID": self.userID!, "Review": self.review!, "Rating": self.buttonTag])
         }))
         
         self.present(alert, animated:  true, completion: nil)
-        
-        
+        fillData()
     }
     
     
@@ -341,45 +358,28 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         if tableView == self.reviewsTableView {
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! RecipeDetailsReviewsTableCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeReviewsCell", for: indexPath) as! RecipeDetailsReviewsTableCell
             
-            var ratingString: String = ""
+            
             let rating: String = "\(recipeReviewList[indexPath.row].ratingNo!)"
+            var ratingString: String = ""
+            ratingString = ratingString.getStarRating(rating: rating)
             
-            switch (rating) {
-                
-            case "1":
-                ratingString = "⭐️"
-                break
-            case "2":
-                ratingString = "⭐️⭐️"
-                break
-            case "3":
-                ratingString = "⭐️⭐️⭐️"
-                break
-            case "4":
-                ratingString = "⭐️⭐️⭐️⭐️"
-                break
-            case "5":
-                ratingString = "⭐️⭐️⭐️⭐️⭐️"
-                break
-            default:
-                break
-            }
-            
-            cell.textLabel?.text = "\(self.userReviewList[indexPath.row].firstName!) \(self.userReviewList[indexPath.row].lastName!)" + " " + ratingString
-            cell.textLabel?.font = UIFont(name:"Gill Sans SemiBold", size: 14.0)
-            
-            cell.detailTextLabel?.text = self.recipeReviewList[indexPath.row].review!
+            cell.labelUserName?.text = "\(self.userReviewList[indexPath.row].firstName!) \(self.userReviewList[indexPath.row].lastName!)"
+            cell.labelReviewStars.text = ratingString
+            cell.labelReview.text = self.recipeReviewList[indexPath.row].review
             
             if let imageURL = self.userReviewList[indexPath.row].profilePicURL {
-                cell.userImageView.loadImageWithCacheWithUrlString(imageURL)
+                cell.userReviewImageView.loadImageWithCacheWithUrlString(imageURL)
+                cell.userReviewImageView.makeImageCircle()
             }
             
             return cell
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeReviewsCell", for: indexPath)
-            cell.textLabel?.text = ""
+            let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeReviewsCell", for: indexPath) as! RecipeDetailsReviewsTableCell
+            cell.labelUserName.text = ""
+            cell.labelReview.text = ""
+            cell.labelReviewStars.text = ""
             return cell
         }
     }
@@ -410,33 +410,20 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
 
 class RecipeDetailsReviewsTableCell: UITableViewCell {
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        textLabel?.frame = CGRect(x: 64, y: textLabel!.frame.origin.y - 2, width: textLabel!.frame.width, height: textLabel!.frame.height)
-        
-        detailTextLabel?.frame = CGRect(x: 64, y: detailTextLabel!.frame.origin.y + 2, width: detailTextLabel!.frame.width, height: detailTextLabel!.frame.height)
+    @IBOutlet weak var userReviewImageView: UIImageView!
+    @IBOutlet weak var labelUserName: UILabel!
+    @IBOutlet weak var labelReviewStars: UILabel!
+    @IBOutlet weak var labelReview: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
     }
     
-    let userImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.setCircleSize()
-        return imageView
-    }()
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: "RecipeReviewsCell")
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
         
-        addSubview(userImageView)
-        
-        userImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
-        userImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        userImageView.widthAnchor.constraint(equalToConstant: 48).isActive = true
-        userImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        // Configure the view for the selected state
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
 }
-

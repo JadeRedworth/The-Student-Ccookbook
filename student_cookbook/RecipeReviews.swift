@@ -11,6 +11,7 @@ import UIKit
 
 class RecipeReviews: NSObject {
     
+    var recipeID: String?
     var recipeReviewID: String?
     var userID: String?
     var review: String?
@@ -20,7 +21,8 @@ class RecipeReviews: NSObject {
         
     }
     
-    init(recipeReviewID: String, userID: String, review: String, ratingNo: Int){
+    init(recipeID: String, recipeReviewID: String, userID: String, review: String, ratingNo: Int){
+        self.recipeID = recipeID
         self.recipeReviewID = recipeReviewID
         self.userID = userID
         self.review = review

@@ -10,13 +10,18 @@ import Foundation
 import UIKit
 import Firebase
 
-class AccountViewController: UIViewController, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
+class AccountViewController: UIViewController, UITabBarDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
     var userID: String!
+    var loggedInUser: String!
     var userList = [User]()
+    
     var userRecipeList = [Recipes]()
+    var friendsList = [User]()
+    var reviewList = [RecipeReviews]()
+    
     var user: User?
     var selectedRecipe = false
     
@@ -33,22 +38,34 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     @IBOutlet weak var noAddedRecipesLabel: UILabel!
     @IBOutlet weak var noRatedRecipesLabel: UILabel!
     @IBOutlet weak var noCookedRecipesLabel: UILabel!
-   
+    
     @IBOutlet weak var editButton: RoundButton!
     @IBOutlet weak var addFriendButton: RoundButton!
     
     @IBOutlet weak var recipesInfoLabel: UILabel!
     
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var myRecipesCollectionView: UICollectionView!
+    @IBOutlet weak var friendsTableView: UITableView!
+    @IBOutlet weak var reviewsTableView: UITableView!
     
-   // @IBOutlet weak var userInfoTableView: UITableView!
-   
+    // View outlets
+    @IBOutlet weak var recipeView: UIView!
+    @IBOutlet weak var friendsView: UIView!
+    @IBOutlet weak var reviewsView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
-
+        
+        recipeView.alpha = 1
+        friendsView.alpha = 0
+        reviewsView.alpha = 0
+        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
+        
+        loggedInUser = (FIRAuth.auth()?.currentUser?.uid)!
         
         if self.user == nil {
             userID = (FIRAuth.auth()?.currentUser?.uid)!
@@ -60,15 +77,41 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             editButton.isHidden = true
             addFriendButton.isHidden = false
         }
+        getFriends()
+        getReviews()
     }
     
+    @IBAction func segmentControlView(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+        case 0:
+            recipeView.alpha = 1
+            friendsView.alpha = 0
+            reviewsView.alpha = 0
+        case 1:
+            recipeView.alpha = 0
+            friendsView.alpha = 1
+            reviewsView.alpha = 0
+        case 2:
+            recipeView.alpha = 0
+            friendsView.alpha = 0
+            reviewsView.alpha = 1
+        default:
+            break
+        }
+    }
     @IBAction func backButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func editAccountDetails(_ sender: Any) {
         if userID == (FIRAuth.auth()?.currentUser?.uid) {
             performSegue(withIdentifier: "EditAccountDetailsSegue", sender: self)
         }
+    }
+    
+    @IBAction func buttonAddFriend(_ sender: Any) {
+        let userFriendRef = ref.child("UserFriends").child(loggedInUser).childByAutoId()
+        userFriendRef.setValue(self.user?.userID)
     }
     
     func reloadData() {
@@ -112,11 +155,88 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
                 self.myRecipesCollectionView.isHidden = true
                 self.recipesInfoLabel.isHidden = false
             }
-
+            
+        }
+        
+        self.noAddedRecipesLabel.text = "\(userRecipeList.count)"
+        
+        self.noRatedRecipesLabel.text = "0"
+        
+        self.noCookedRecipesLabel.text = "0"
+    }
+    
+    func getFriends(){
+        let friendIDRef = ref.child("UserFriends").child(loggedInUser)
+        friendIDRef.observe(.childAdded, with: { (snapshot) in
+            self.friendsList.fetchUsers(refName: "Users", queryKey: snapshot.value as! String, queryValue: "" as AnyObject, ref: self.ref) {
+                (result: [User]) in
+                if result.isEmpty {
+                    self.friendsList = []
+                    self.friendsTableView.reloadData()
+                } else {
+                    self.friendsList += result
+                    self.friendsTableView.reloadData()
+                }
+            }
+        })
+    }
+    
+    func getReviews(){
+        reviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "UserID", queryValue: userID, ref: ref) {
+            (result: [RecipeReviews]) in
+            if result.isEmpty {
+                print("Result Empty")
+            } else {
+                self.reviewList = result
+            }
+        }
+        
+    }
+    
+    //MARK: Table View Methods
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView == self.friendsTableView {
+            return friendsList.count
+        } else {
+            return reviewList.count
         }
     }
-    //MARK: Collection View Methods
     
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if tableView == self.friendsTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsCell", for: indexPath) as? FriendsTableViewCell
+            
+            if friendsList.isEmpty {
+                
+            } else {
+                cell?.labelFriendName.text = "\(self.friendsList[indexPath.row].firstName!) \(self.friendsList[indexPath.row].lastName!)"
+                if let profileImageURL = self.friendsList[indexPath.row].profilePicURL {
+                    cell?.friendsImageView.loadImageWithCacheWithUrlString(profileImageURL)
+                    cell?.friendsImageView.makeImageCircle()
+                }
+            }
+            
+            return cell!
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewCell", for: indexPath) as? ReviewsTableViewCell
+            
+            if reviewList.isEmpty {
+                
+            } else {
+                cell?.labelRecipeName.text = self.reviewList[indexPath.row].recipeID
+                var starRating: String = ""
+                starRating = starRating.getStarRating(rating: "\(reviewList[indexPath.row].ratingNo!)")
+                cell?.labelStar.text = starRating
+            }
+            
+            return cell!
+        }
+    }
+    
+    
+    //MARK: Collection View Methods
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.userRecipeList.count
@@ -151,13 +271,14 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             return true
         }
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let nav = segue.destination as! UINavigationController
         
         if segue.identifier == "EditAccountDetailsSegue" {
             let controller = nav.topViewController as! EditUserDetailsViewController
-                controller.user = self.user
+            controller.user = self.user
         } else if segue.identifier == "UserRecipeDetails" {
             let indexPath = (sender as! NSIndexPath)
             let controller = nav.topViewController as! RecipeDetailViewController
@@ -172,4 +293,17 @@ class MyCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var recipeImageView: UIImageView!
     @IBOutlet weak var recipeName: UILabel!
+}
+
+class FriendsTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var friendsImageView: UIImageView!
+    @IBOutlet weak var labelFriendName: UILabel!
+}
+
+class ReviewsTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var labelRecipeName: UILabel!
+    @IBOutlet weak var labelReview: UILabel!
+    @IBOutlet weak var labelStar: UILabel!
 }
