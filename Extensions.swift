@@ -16,6 +16,37 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 var query = FIRDatabaseQuery()
 var dataEventType: FIRDataEventType!
 
+extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func handleSelectImageView() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        print("Cancelled Picker")
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] {
+            selectedImageFromPicker = editedImage as! UIImage
+        } else if let originalImage = info["UIImagePickerControllerOriginaImage"]{
+            selectedImageFromPicker = originalImage as! UIImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker {
+            photoImageView.image = selectedImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+}
+
 extension String {
     
     func storeImage(image: UIImage!, completed: @escaping (_ result: String) -> Void) {
@@ -25,12 +56,10 @@ extension String {
         
         if let storedImage = image, let uploadData = UIImageJPEGRepresentation(storedImage, 0.1) {
             storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
-                print(metadata!)
                 if error != nil {
                     print(error!)
                     return
                 } else if let photoImageURL = metadata?.downloadURL()?.absoluteString {
-                    print(photoImageURL)
                     completed(photoImageURL)
                 }
             })
@@ -69,6 +98,45 @@ extension String {
     }
 }
 
+extension Array where Element == String {
+    func fetchFavourites(refName: String, queryKey: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void) {
+        var recipeIDs = [String]()
+        let favouritesRef = ref.child(refName).child(queryValue)
+        favouritesRef.observe(.value, with: { (snapshot) in
+            recipeIDs.removeAll()
+            let favourtiesEnumerator = snapshot.childSnapshot(forPath: "Favourites").children
+            while let favItem = favourtiesEnumerator.nextObject() as? FIRDataSnapshot {
+                recipeIDs.append(favItem.childSnapshot(forPath: "RecipeID").value as! String)
+            }
+            completion(recipeIDs)
+        })
+    }
+    
+    func fetchUserReviews(refName: String, queryKey: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void){
+        var reviewIDs = [String]()
+        let userReviewRef = ref.child(refName).child(queryKey)
+        userReviewRef.observe(.value, with: { (snapshot) in
+            let reviewsEnumerator = snapshot.childSnapshot(forPath: "Reviews").children
+            while let reviewsItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
+                reviewIDs.append(reviewsItem.childSnapshot(forPath: "RecipeReviewID").value as! String)
+            }
+            completion(reviewIDs)
+        })
+    }
+    
+    func fetchRecipeReviews(refName: String, queryKey: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void){
+        var reviewIDs = [String]()
+        let recipeReviewRef = ref.child(refName).child(queryKey)
+        recipeReviewRef.observe(.value, with: { (snapshot) in
+            let reviewsEnumerator = snapshot.childSnapshot(forPath: "Reviews").children
+            while let reviewsItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
+                reviewIDs.append(reviewsItem.childSnapshot(forPath: "RecipeRatingID").value as! String)
+            }
+            completion(reviewIDs)
+        })
+    }
+}
+
 extension Array where Element: User {
     
     func fetchUsers(refName: String, queryKey: String, queryValue: AnyObject, ref: FIRDatabaseReference, completion: @escaping (_ result: [User]) -> Void) {
@@ -85,7 +153,6 @@ extension Array where Element: User {
         }
         
         query.observe(dataEventType, with: { (snapshot) in
-            print(snapshot)
             
             if let userDict = snapshot.value as? [String: AnyObject] {
                 
@@ -112,43 +179,31 @@ extension Array where Element: RecipeReviews {
     func fetchRecipeReviews(refName: String, queryKey: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
         
         let recipeReviewRef = ref.child(refName)
-        
-        if (queryKey == "") {
-            query = recipeReviewRef.child(queryValue)
-            dataEventType = .value
-        } else {
-            query = recipeReviewRef.queryOrdered(byChild: queryKey).queryEqual(toValue: queryValue)
-            dataEventType = .value
-        }
+        query = recipeReviewRef.child(queryValue)
+        dataEventType = .value
         
         var recipeReviewList = [RecipeReviews]()
 
         query.observe(dataEventType, with: { (snapshot) in
             
-            //recipeReviewList.removeAll()
-            let recipeID = snapshot.key
-            
-            let reviewsEnumerator = snapshot.children
-            while let reviewItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
-        
+            if let reviewDict = snapshot.value as? [String: AnyObject] {
                 let review = RecipeReviews()
-                review.recipeID = recipeID
-                review.recipeReviewID = reviewItem.key
-                if let reviewDict = reviewItem.value as? [String: AnyObject] {
-                    review.userID = reviewDict["UserID"] as? String ?? ""
-                    review.review = reviewDict["Review"] as? String ?? ""
-                    review.ratingNo = reviewDict["Rating"] as? Int
-                }
+                review.recipeID = reviewDict["RecipeID"] as? String ?? ""
+                review.userID = reviewDict["UserID"] as? String ?? ""
+                review.review = reviewDict["Review"] as? String ?? ""
+                review.ratingNo = reviewDict["Rating"] as? Int
+                
                 recipeReviewList.append(review)
             }
-            completion(recipeReviewList)
+             completion(recipeReviewList)
+            
         })
     }
 }
 
 extension Array where Element: Recipes {
     
-    func fetchRecipes(refName: String, queryKey: String, queryValue: AnyObject, ref: FIRDatabaseReference, completion: @escaping (_ result: [Recipes]) -> Void) {
+    func fetchRecipes(refName: String, queryKey: String, queryValue: AnyObject, recipeToSearch: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [Recipes]) -> Void) {
         
         var recipeList = [Recipes]()
         let recipeRef = ref.child(refName)
@@ -182,7 +237,7 @@ extension Array where Element: Recipes {
             }
         }
         
-        recipeList.fillData(query: query, dataEventType: dataEventType!) {
+        recipeList.fillData(query: query, dataEventType: dataEventType!, recipeToSearch: recipeToSearch) {
             (result: [Recipes]) in
             recipeList = result
             completion(recipeList)
@@ -193,19 +248,16 @@ extension Array where Element: Recipes {
         }
     }
     
-    func fillData(query: FIRDatabaseQuery, dataEventType: FIRDataEventType, completion: @escaping (_ result: [Recipes]) -> Void) {
+    func fillData(query: FIRDatabaseQuery, dataEventType: FIRDataEventType, recipeToSearch: String, completion: @escaping (_ result: [Recipes]) -> Void) {
         
         var recipeList = [Recipes]()
         
         query.observe(dataEventType, with: { (snapshot) in
-            //print(snapshot)
-            //print(snapshot.value!)
             
             if let recipeDict = snapshot.value as? [String: AnyObject] {
-                //print(recipeDict)
                 
                 let recipes = Recipes()
-                let ratingsEnumerator = snapshot.childSnapshot(forPath: "Ratings").children
+                let ratingsEnumerator = snapshot.childSnapshot(forPath: "Ratings").childSnapshot(forPath: "Values").children
                 let ingredientsEnumerator = snapshot.childSnapshot(forPath: "Ingredients").children
                 let stepsEnumerator = snapshot.childSnapshot(forPath: "Steps").children
                 
@@ -258,9 +310,15 @@ extension Array where Element: Recipes {
                     stepsList.append(steps)
                 }
                 recipes.steps = stepsList
-                recipeList.append(recipes)
+                
+                if recipeToSearch.isEmpty {
+                    recipeList.append(recipes)
+                } else {
+                    if ("\(recipes.course!)" == recipeToSearch) || (recipes.type == recipeToSearch) {
+                        recipeList.append(recipes)
+                    }
+                }
             }
-            //print("Not reached")
             completion(recipeList)
         })
     }

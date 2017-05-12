@@ -30,19 +30,23 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     var ingredientsList = [Ingredients]()
     var stepsList = [Steps]()
     
+    var selectedRecipe = Recipes()
+    
     var recipesID = [String]()
     
     private let searchController = UISearchController(searchResultsController: nil)
-
+    
     @IBAction func buttonLogout(_ sender: Any) {
         handleLogout()
     }
-
+    
     var ingredientsID: String!
     var stepsID: String!
     var valueToPass:String!
     var uid: String!
+    
     var editCheck: Bool = false
+    var deleteCheck: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,11 +62,23 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
         }
         
-        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
         
         getMyRecipes()
-        getMyFavourites()
+        
+        getMyFavourites(completion: {
+            result in
+            if result {
+                for i in 0..<self.recipesID.count {
+                    self.filteredFavouritesRecipeList.removeAll()
+                    self.favRecipeList.fetchRecipes(refName: "Recipes", queryKey: "", queryValue: self.recipesID[i] as AnyObject, recipeToSearch: "", ref: self.ref) {
+                        (result: [Recipes]) in
+                        self.filteredFavouritesRecipeList += Recipes.generateModelArray(result)
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+        })
         
         self.setupSearchController()
         self.tableView.reloadData()
@@ -70,56 +86,63 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     
     func reloadData() {
         getMyRecipes()
-        getMyFavourites()
-        self.tableView.reloadData()
-    }
-    
-    func getMyRecipes() {
-        myRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: uid! as AnyObject, ref: ref) {
-            (result: [Recipes]) in
-            print(result)
-            self.myRecipeList = result
-            self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
-            self.tableView.reloadData()
-        }
-        
-        myRecipeList.fetchRecipes(refName: "Recipes", queryKey:  "AddedBy", queryValue: uid! as AnyObject, ref: ref) {
-            (result: [Recipes]) in
-            print(result)
-            self.myRecipeList = result
-            self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
-            self.tableView.reloadData()
-        }
-    }
-    
-    func getMyFavourites() {
-        fetchFavourites() {
+        self.filteredFavouritesRecipeList.removeAll()
+        self.recipesID.removeAll()
+        getMyFavourites(completion: {
             result in
             if result {
                 for i in 0..<self.recipesID.count {
-                    self.favRecipeList.fetchRecipes(refName: "Recipes", queryKey: "", queryValue: self.recipesID[i] as AnyObject, ref: self.ref) {
-                         (result: [Recipes]) in
-                        self.favRecipeList += result
-                        self.filteredFavouritesRecipeList = Recipes.generateModelArray(self.favRecipeList)
+                    self.favRecipeList.fetchRecipes(refName: "Recipes", queryKey: "", queryValue: self.recipesID[i] as AnyObject, recipeToSearch: "", ref: self.ref) {
+                        (result: [Recipes]) in
+                        self.filteredFavouritesRecipeList += Recipes.generateModelArray(result)
                         self.tableView.reloadData()
                     }
                 }
             }
+        })
+        self.tableView.reloadData()
+    }
+    
+    func getMyRecipes() {
+        
+        self.myRecipeList.removeAll()
+        self.filteredMyRecipeList.removeAll()
+        self.tableView.reloadData()
+        myRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: uid! as AnyObject, recipeToSearch: "", ref: ref) {
+            (result: [Recipes]) in
+            if result.isEmpty {
+                self.myRecipeList = []
+            } else {
+                self.myRecipeList = result
+                self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
+                self.tableView.reloadData()
+            }
+        }
+        
+        self.myRecipeList.removeAll()
+        self.filteredMyRecipeList.removeAll()
+        self.tableView.reloadData()
+        myRecipeList.fetchRecipes(refName: "Recipes", queryKey:  "AddedBy", queryValue: uid! as AnyObject, recipeToSearch: "", ref: ref) {
+            (result: [Recipes]) in
+            self.myRecipeList = result
+            self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
+            self.tableView.reloadData()
         }
     }
     
-    func fetchFavourites(completion: @escaping (_ result: Bool) -> Void) {
-        let favouritesRef = self.ref.child("Users").child(uid)
-        favouritesRef.observe(.value, with: { (snapshot) in
-            print(snapshot)
-            let favourtiesEnumerator = snapshot.childSnapshot(forPath: "Favourites").children
-            while let favItem = favourtiesEnumerator.nextObject() as? FIRDataSnapshot {
-                self.recipesID.append(favItem.childSnapshot(forPath: "RecipeID").value as! String)
+    func getMyFavourites(completion: @escaping (Bool) -> ()) {
+        self.tableView.reloadData()
+        self.recipesID.fetchFavourites(refName: "Users", queryKey: "", queryValue: uid, ref: ref) {
+            (result: [String]) in
+            self.recipesID = result
+            if self.recipesID.isEmpty {
+            } else {
+                completion(true)
             }
-            completion(true)
-        })
+        }
     }
 
+    
     func handleLogout() {
         try! FIRAuth.auth()!.signOut()
         
@@ -132,7 +155,7 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         tableView.tableHeaderView = searchController.searchBar
-        searchController.searchBar.scopeButtonTitles = ["All","Breakfast","Lunch","Dinner", "Dessert", "Snack"]
+        searchController.searchBar.scopeButtonTitles = ["All","Breakfast","Lunch","Dinner", "Dessert"]
         searchController.searchBar.delegate = self as UISearchBarDelegate
     }
     
@@ -210,13 +233,13 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! RecipeTableViewCell
-    
+        
         if (indexPath.section == 0){
             
             let recipe = filteredMyRecipeList[indexPath.row]
             cell.labelRecipeName.text = recipe.name
             cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
-        
+            
             if recipe.imageURL != nil {
                 if let recipeImageURL = recipe.imageURL {
                     cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
@@ -237,7 +260,7 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         
         return cell
     }
-        
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: "MyRecipeDetailSegue", sender: indexPath)
@@ -246,81 +269,78 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let nav = segue.destination as! UINavigationController
-        var selectedRow = Recipes()
+        let controller = nav.topViewController as! RecipeDetailViewController
+    
         let indexPath = (sender as! NSIndexPath)
+        var selectedRow = Recipes()
         
-        if segue.identifier == "MyRecipeDetailSegue" {
-            
-            let controller = nav.topViewController as! RecipeDetailViewController
-            
-            if (indexPath.section == 0){
-                selectedRow = filteredMyRecipeList[indexPath.row]
-            } else if (indexPath.section == 1){
-                selectedRow = filteredFavouritesRecipeList[indexPath.row]
-            }
-            
-            controller.recipe = selectedRow
-            
-        } else if segue.identifier == "EditRecipeSegue" {
-            
-            let editController = nav.topViewController as! AddRecipeViewController
-            
-            if (indexPath.section == 0) {
-                selectedRow = filteredMyRecipeList[indexPath.row]
-            } else if (indexPath.section == 1){
-                selectedRow = filteredFavouritesRecipeList[indexPath.row]
-            }
-            editController.recipes = selectedRow
-            editController.editCheck = self.editCheck
+        if indexPath.section == 0 {
+            selectedRow = filteredMyRecipeList[indexPath.row]
+        } else if indexPath.section == 1 {
+            selectedRow = filteredFavouritesRecipeList[indexPath.row]
         }
+        controller.recipeId = selectedRow.id!
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        let edit = UITableViewRowAction(style: .normal, title: "Edit Recipe") { action, index in
-            self.editCheck = true
-            self.performSegue(withIdentifier: "EditRecipeSegue", sender: indexPath)
-        }
-        edit.backgroundColor = UIColor.yellow
-        
-        let favorites = UITableViewRowAction(style: .normal, title: "Add To Favourites") { action, index in
-            let userRef = self.ref.child("Users").child(self.uid).child("Favourites").childByAutoId()
-            let favValue = ["RecipeID": self.filteredMyRecipeList[indexPath.row].id]
-            userRef.setValue(favValue)
-            self.showAlert(title: "Success", message: "Recipe has been added to Favourites")
-            
-        }
-        favorites.backgroundColor = UIColor.blue
-        
-        return [edit, favorites]
-    }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(editingStyle == UITableViewCellEditingStyle.delete){
-            let recipeToRemove = self.filteredMyRecipeList[indexPath.row].id
             
-            ref.child("UserRecipes").child(uid).child(recipeToRemove!).removeValue(completionBlock: { (error, ref) in
-                if error != nil {
-                    print("Failed to Delete Recipes", error as Any)
-                    self.showAlert(title: "Error", message: "Failed to delete Recipe")
-                    return
-                }
-            })
-            ref.child("Recipes").child(recipeToRemove!).removeValue(completionBlock: { (error, ref) in
-                if error != nil {
-                    print("Failed to Delete Recipes", error as Any)
-                    self.showAlert(title: "Error", message: "Failed to delete Recipe")
-                    return
-                }
-            })
-            filteredMyRecipeList.remove(at: indexPath.row)
-            self.tableView.reloadData()
+            self.selectedRecipe = self.filteredMyRecipeList[indexPath.row]
+            if indexPath.section == 0 {
+                let alert = UIAlertController(title: "❗️", message: "Are you sure you want to delete this recipe?", preferredStyle: UIAlertControllerStyle.actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: { (action: UIAlertAction!) in
+                    
+                self.ref.child("UserRecipes").child(self.uid).child(self.selectedRecipe.id!).removeValue(completionBlock: { (error, ref) in
+                    if error != nil {
+                        print("Failed to Delete Recipes", error as Any)
+                        self.showAlert(title: "Error", message: "Failed to delete Recipe")
+                        return
+                    }
+                })
+                    
+                self.ref.child("Recipes").child(self.selectedRecipe.id!).removeValue(completionBlock: { (error, ref) in
+                    if error != nil {
+                        print("Failed to Delete Recipes", error as Any)
+                        self.showAlert(title: "Error", message: "Failed to delete Recipe")
+                        return
+                    }
+                })
+                self.filteredMyRecipeList.remove(at: indexPath.row)
+                self.tableView.reloadData()
+                }))
+                
+                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler:nil))
+                
+                self.present(alert, animated: true, completion: nil)
+                
+            } else if indexPath.section == 1 {
+                
+                let alert = UIAlertController(title: "❗️", message: "Are you sure you want to remove this recipe from favourites?", preferredStyle: UIAlertControllerStyle.actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: { (action: UIAlertAction!) in
+                    let removeFavouriteRef = self.ref.child("Users").child(self.uid).child("Favourites")
+                    query = removeFavouriteRef.queryOrdered(byChild: "RecipeID").queryEqual(toValue: self.selectedRecipe.id)
+                    query.observe(.value, with: { (snapshot) in
+                        if snapshot.exists() {
+                            print(snapshot)
+                        }
+                    })
+                }))
+                
+                alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil))
+                
+                self.present(alert, animated: true, completion: nil)
+            }
         }
     }
+    
+
     
     func showAlert(title: String, message: String){
         let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)

@@ -117,7 +117,7 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
     }
     
     func getRecipes(){
-        recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: false as AnyObject, ref: ref) {
+        recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: false as AnyObject, recipeToSearch: "", ref: ref) {
             (result: [Recipes]) in
             if result.isEmpty {
                 self.recipeList = []

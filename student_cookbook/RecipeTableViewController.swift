@@ -18,7 +18,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     var ref: FIRDatabaseReference!
     var refHandle: FIRDatabaseHandle!
-    
+    var recipeToSearch: String?
     var recipe: Recipes?
     var recipeList = [Recipes]()
     var userRecipeList = [Recipes]()
@@ -36,8 +36,9 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     var recipeSelected: Bool = false
     
-    @IBAction func buttonLogout(_ sender: Any) {
-        handleLogout()
+    @IBAction func buttonBack(_ sender: Any) {
+        recipeToSearch = ""
+        dismiss(animated: true, completion: nil)
     }
     
     // Image outlets
@@ -62,7 +63,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         currentStoryboard = self.storyboard
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
         
@@ -104,21 +105,40 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     func getRecipes(){
-        recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved",queryValue: true as AnyObject, ref: ref) {
-            (result: [Recipes]) in
-            if result.isEmpty {
-                self.recipeList = []
-                self.filteredRecipeList = self.recipeList
-                self.recipesTableView.reloadData()
-            } else {
-                self.recipeList = result
-                self.filteredRecipeList = Recipes.generateModelArray(self.recipeList)
-                self.recipesTableView.reloadData()
+        if (self.recipeToSearch?.isEmpty)! {
+            recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved",queryValue: true as AnyObject, recipeToSearch: "", ref: ref) {
+                (result: [Recipes]) in
+                if result.isEmpty {
+                
+                    self.recipeList = []
+                    self.filteredRecipeList = self.recipeList
+                    self.recipesTableView.reloadData()
+                
+                } else {
+                    self.recipeList = result
+                    self.filteredRecipeList = Recipes.generateModelArray(self.recipeList)
+                    self.recipesTableView.reloadData()
+                }
+            }
+            
+        } else {
+            
+            recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: true as AnyObject, recipeToSearch: recipeToSearch!, ref: ref) {
+                (result: [Recipes]) in
+                if result.isEmpty {
+                    self.recipeList = []
+                    self.filteredRecipeList = self.recipeList
+                    self.recipesTableView.reloadData()
+                } else {
+                    self.recipeList = result
+                    self.filteredRecipeList = Recipes.generateModelArray(self.recipeList)
+                    self.recipesTableView.reloadData()
+                }
             }
         }
         
         if self.currentStoryboardName == "Ipad" {
-            userRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "",queryValue: false as AnyObject, ref: ref) {
+            userRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "",queryValue: false as AnyObject, recipeToSearch: "", ref: ref) {
                 (result: [Recipes]) in
                 if result.isEmpty {
                     self.userRecipeList = []
@@ -195,7 +215,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         recipesTableView.tableHeaderView = searchController.searchBar
-        searchController.searchBar.scopeButtonTitles = ["All","Breakfast","Lunch","Dinner", "Dessert", "Snack"]
+        searchController.searchBar.scopeButtonTitles = ["All","Breakfast","Lunch","Dinner", "Dessert"]
         searchController.searchBar.delegate = self as UISearchBarDelegate
     }
     
@@ -316,7 +336,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
+        
         if tableView == self.recipesTableView {
             
             let recipe = searchController.isActive ? filteredRecipeList[indexPath.row] : recipeList[indexPath.row]
@@ -326,6 +346,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                 let cell = tableView.dequeueReusableCell(withIdentifier: "RecipeCell", for: indexPath) as! RecipeTableViewCell
                 
                 cell.labelRecipeName?.text = recipe.name
+                cell.labelCourse.text = recipe.course.map { $0.rawValue }
                 
                 self.recipe = recipe
                 
@@ -333,8 +354,13 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                     result in
                     if result {
                         cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                        cell.userImageView.loadImageWithCacheWithUrlString(self.userList[0].profilePicURL!)
+                        cell.userImageView.makeImageCircle()
                     }
                 })
+                var starRating: String = ""
+                starRating = starRating.getStarRating(rating: "\(recipe.rating!)")
+                cell.labelRating.text = starRating
                 
                 if recipe.imageURL != nil {
                     if let recipeImageURL = recipe.imageURL {
@@ -385,7 +411,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                 cell.detailTextLabel?.lineBreakMode = .byWordWrapping
                 cell.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
             }
-             return cell
+            return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
             cell.textLabel?.text = ""

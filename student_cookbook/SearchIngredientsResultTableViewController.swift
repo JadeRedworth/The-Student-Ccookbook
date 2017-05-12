@@ -31,7 +31,7 @@ class SearchIngredientsResultTableViewController: UITableViewController {
             result in
             if result {
                 for i in 0..<self.recipesID.count {
-                    self.recipeList.fetchRecipes(refName: "Recipes", queryKey: "", queryValue: self.recipesID[i] as AnyObject, ref: self.ref) {
+                    self.recipeList.fetchRecipes(refName: "Recipes", queryKey: "", queryValue: self.recipesID[i] as AnyObject, recipeToSearch: "", ref: self.ref) {
                         (result: [Recipes]) in
                         print(result)
                             self.recipeList += result

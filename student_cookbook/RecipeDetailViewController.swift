@@ -28,6 +28,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     var recipeList = [Recipes]()
     
     var recipeReviewList = [RecipeReviews]()
+    var recipeReviewIDs = [String]()
     var userReviewList = [User]()
     var shoppingList = [String]()
     
@@ -141,7 +142,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func fillData(){
         
-        recipeList.fetchRecipes(refName: "Recipes", queryKey: "",queryValue: recipeId as AnyObject, ref: ref) {
+        recipeList.fetchRecipes(refName: "Recipes", queryKey: "",queryValue: recipeId as AnyObject, recipeToSearch: "", ref: ref) {
             (result: [Recipes]) in
             if result.isEmpty {
                 self.recipeList = []
@@ -242,31 +243,41 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func getReviews(){
         
-        recipeReviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: (recipe?.id)!, ref: ref, completion: {
-            (result: [RecipeReviews]) in
-            self.recipeReviewList.removeAll()
-            self.userReviewList.removeAll()
-            self.reviewsTableView.reloadData()
+        recipeReviewIDs.fetchRecipeReviews(refName: "Recipes", queryKey: (recipe?.id)!, ref: ref) {
+            (result: [String]) in
             if result.isEmpty {
-                self.labelNoOfReviews.text = "0 reviews"
+               
             } else {
-                self.recipeReviewList = result
-                self.labelNoOfReviews.text = "\(self.recipeReviewList.count) reviews"
-                for i in 0..<self.recipeReviewList.count {
-                    self.userReviewList.fetchUsers(refName: "Users", queryKey: self.recipeReviewList[i].userID!, queryValue: "" as AnyObject, ref: self.ref) {
-                        (result: [User]) in
+                self.recipeReviewIDs = result
+                for i in 0..<self.recipeReviewIDs.count {
+                    self.recipeReviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: self.recipeReviewIDs[i], ref: self.ref, completion: {
+                        (result: [RecipeReviews]) in
+                        self.recipeReviewList.removeAll()
+                        self.userReviewList.removeAll()
+                        self.reviewsTableView.reloadData()
                         if result.isEmpty {
-                            
+                            self.labelNoOfReviews.text = "0 reviews"
                         } else {
-                            self.userReviewList += result
-                            if self.userReviewList.count == self.recipeReviewList.count {
-                                self.reviewsTableView.reloadData()
+                            self.recipeReviewList = result
+                            self.labelNoOfReviews.text = "\(self.recipeReviewList.count) reviews"
+                            for i in 0..<self.recipeReviewList.count {
+                                self.userReviewList.fetchUsers(refName: "Users", queryKey: self.recipeReviewList[i].userID!, queryValue: "" as AnyObject, ref: self.ref) {
+                                    (result: [User]) in
+                                    if result.isEmpty {
+                            
+                                    } else {
+                                        self.userReviewList += result
+                                        if self.userReviewList.count == self.recipeReviewList.count {
+                                            self.reviewsTableView.reloadData()
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    })
                 }
             }
-        })
+        }
     }
     
     func leaveReview(alert: UIAlertAction){
@@ -280,13 +291,17 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let textField = alert?.textFields![0]
             self.review = textField?.text
-            let reviewRef = self.ref.child("RecipeReviews").child((self.recipe?.id)!).childByAutoId()
-            reviewRef.setValue(["UserID": self.userID!, "Review": self.review!, "Rating": self.buttonTag])
+            let reviewRef = self.ref.child("RecipeReviews").childByAutoId()
+            reviewRef.setValue(["RecipeID": self.recipe?.id! as Any, "UserID": self.userID!, "Review": self.review!, "Rating": self.buttonTag])
+            let userRef = self.ref.child("Users").child(self.userID!).child("Reviews").childByAutoId()
+            userRef.setValue(["RecipeReviewID": reviewRef.key])
+            let recipeRef = self.ref.child("Recipes").child((self.recipe?.id!)!).child("Reviews").childByAutoId()
+            recipeRef.setValue(["RecipeRatingID": reviewRef.key])
         }))
         
         self.present(alert, animated:  true, completion: nil)
         fillData()
-    }
+        }
     
     
     

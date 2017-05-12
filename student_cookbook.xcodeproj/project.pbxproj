@@ -18,6 +18,9 @@
 		8D1D63431E6B02DF00307B85 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D1D63411E6B02DF00307B85 /* LaunchScreen.storyboard */; };
 		8D1D634E1E6B02DF00307B85 /* student_cookbookTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1D634D1E6B02DF00307B85 /* student_cookbookTests.swift */; };
 		8D1D63591E6B02DF00307B85 /* student_cookbookUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1D63581E6B02DF00307B85 /* student_cookbookUITests.swift */; };
+		8D2B66691EC5F7150057EC2A /* RecipeHomeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B66681EC5F7150057EC2A /* RecipeHomeTableViewController.swift */; };
+		8D2B666B1EC63A8A0057EC2A /* MyReviewsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B666A1EC63A8A0057EC2A /* MyReviewsTableViewController.swift */; };
+		8D2B666D1EC63BD10057EC2A /* UserReviewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2B666C1EC63BD10057EC2A /* UserReviewsTableViewCell.swift */; };
 		8D3083AD1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */; };
 		8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */; };
 		8D3083BE1E8A7B73008EEC4D /* RecipeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */; };
@@ -87,6 +90,9 @@
 		8D1D63541E6B02DF00307B85 /* student_cookbookUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = student_cookbookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D1D63581E6B02DF00307B85 /* student_cookbookUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = student_cookbookUITests.swift; sourceTree = "<group>"; };
 		8D1D635A1E6B02DF00307B85 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D2B66681EC5F7150057EC2A /* RecipeHomeTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeHomeTableViewController.swift; sourceTree = "<group>"; };
+		8D2B666A1EC63A8A0057EC2A /* MyReviewsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyReviewsTableViewController.swift; sourceTree = "<group>"; };
+		8D2B666C1EC63BD10057EC2A /* UserReviewsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserReviewsTableViewCell.swift; sourceTree = "<group>"; };
 		8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminRecipesToApproveTableViewController.swift; sourceTree = "<group>"; };
 		8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeTableViewCell.swift; sourceTree = "<group>"; };
 		8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecipeTableViewCell.xib; sourceTree = "<group>"; };
@@ -239,6 +245,7 @@
 		8D6EF5FD1E6C755300D5FF82 /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
+				8D2B66681EC5F7150057EC2A /* RecipeHomeTableViewController.swift */,
 				8D013CE91EBA43FB00AAA21A /* RecipeTableViewController.swift */,
 				8D0ED61F1E6DD6A9001ABEC6 /* RecipeDetailViewController.swift */,
 				8D6EF5F71E6C458300D5FF82 /* AddRecipeViewController.swift */,
@@ -246,6 +253,7 @@
 				8DEB4D471E8A88B9009164C5 /* Recipe Table Cell */,
 				8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */,
 				8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */,
+				8D2B666A1EC63A8A0057EC2A /* MyReviewsTableViewController.swift */,
 			);
 			name = Recipes;
 			sourceTree = "<group>";
@@ -303,6 +311,7 @@
 				8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */,
 				8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */,
 				8D013CEC1EBA4E4C00AAA21A /* AdminRecipeTableViewCell.xib */,
+				8D2B666C1EC63BD10057EC2A /* UserReviewsTableViewCell.swift */,
 			);
 			name = "Recipe Table Cell";
 			sourceTree = "<group>";
@@ -620,6 +629,7 @@
 				8DE266561E804252009B68A9 /* MyRecipeTableTableViewController.swift in Sources */,
 				8D8698AF1E6B3CDC00998BF6 /* User.swift in Sources */,
 				8D81C1331EB79F74008D61F6 /* AccountPageVC.swift in Sources */,
+				8D2B666B1EC63A8A0057EC2A /* MyReviewsTableViewController.swift in Sources */,
 				8D1D63391E6B02DF00307B85 /* AppDelegate.swift in Sources */,
 				8D8698B11E6B3D3500998BF6 /* UserTableViewController.swift in Sources */,
 				8D8698A71E6B227A00998BF6 /* AccountViewController.swift in Sources */,
@@ -635,7 +645,9 @@
 				8D6EF6071E6DAEA900D5FF82 /* Extensions.swift in Sources */,
 				8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */,
 				8D6EF5F81E6C458300D5FF82 /* AddRecipeViewController.swift in Sources */,
+				8D2B666D1EC63BD10057EC2A /* UserReviewsTableViewCell.swift in Sources */,
 				8DAEAA0D1EBB76E5007DBD21 /* RoundedImage.swift in Sources */,
+				8D2B66691EC5F7150057EC2A /* RecipeHomeTableViewController.swift in Sources */,
 				8DAEAA171EC0AE1D007DBD21 /* RatingControl.swift in Sources */,
 				8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */,
 				8D8698B71E6B4C3C00998BF6 /* Timers.swift in Sources */,

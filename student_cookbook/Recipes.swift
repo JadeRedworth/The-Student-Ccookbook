@@ -39,7 +39,6 @@ class Recipes: NSObject {
         case Lunch
         case Dinner
         case Dessert
-        case Snack
         case All
     }
     

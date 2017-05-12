@@ -11,7 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 
-class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
+class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
     @IBOutlet weak var segmentConrtolViews: UISegmentedControl!
     
@@ -90,7 +90,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     var recipeUpdated: Bool! = false
     
     // Picker Lists
-    var courses = ["Breakfast","Lunch","Dinner", "Dessert", "Snack"]
+    var courses = ["Breakfast","Lunch","Dinner", "Dessert"]
     var types = ["Quick", "Healthy", "Easy", "On a Budget", "Treat your self"]
     var measurements = ["Cup", "Grams", "ml", "Oz", "Tbsp", "tsp"]
     var difficulty = ["1", "2", "3", "4", "5"]
@@ -108,6 +108,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         
         self.dismissKeyboardWhenTappedAround()
         
+        photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
         ref = FIRDatabase.database().reference()
         self.userID = FIRAuth.auth()?.currentUser?.uid
         currentStoryboard = self.storyboard
@@ -138,7 +139,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
             fillRecipeInformation()
         }
     }
-    
+
     func setUpViews() {
         
         if currentStoryboardName == "Main" {
@@ -222,23 +223,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     }
     
     // MARK: Actions
-    
-    // Select photo from photo library
-    @IBAction func selectPhotoFromLibrary(_ sender: UITapGestureRecognizer) {
-        
-        print("imagePressed")
-        
-        // Hide the keyboard
-        textFieldRecipeName.resignFirstResponder()
-        
-        let imagePickerController = UIImagePickerController()
-        
-        // only allows photos to be picked --> TODO allow user to take photos
-        imagePickerController.sourceType = .photoLibrary
-        
-        imagePickerController.delegate = self
-        present(imagePickerController, animated: true, completion: nil)
-    }
     
     @IBAction func segmentControlViewsIpad(_ sender: UISegmentedControl) {
         
@@ -675,28 +659,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
         }
         return returnValue
     }
-    
-    //MARK: UIImagePickerControllerDelegate
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        // Dismiss the picker if the user canceled.
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        // The info dictionary may contain multiple representations of the image. You want to use the original.
-        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-        
-        // Set photoImageView to display the selected image.
-        photoImageView.image = selectedImage
-        
-        // Dismiss the picker.
-        dismiss(animated: true, completion: nil)
-    }
-    
     // MARK: Misc Methods
     
     // ToolBar
@@ -803,6 +765,66 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UIImagePic
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func RBSquareImageTo(image: UIImage, size: CGSize) -> UIImage {
+        return RBResizeImage(image: RBSquareImage(image: image), targetSize: size)
+    }
+    
+    func RBSquareImage(image: UIImage) -> UIImage {
+        let originalWidth  = image.size.width
+        let originalHeight = image.size.height
+        var x: CGFloat = 0.0
+        var y: CGFloat = 0.0
+        var edge: CGFloat = 0.0
+        
+        if (originalWidth > originalHeight) {
+            // landscape
+            edge = originalHeight
+            x = (originalWidth - edge) / 2.0
+            y = 0.0
+            
+        } else if (originalHeight > originalWidth) {
+            // portrait
+            edge = originalWidth
+            x = 0.0
+            y = (originalHeight - originalWidth) / 2.0
+        } else {
+            // square
+            edge = originalWidth
+        }
+        
+        let cropSquare = CGRect(x:x, y:y, width:edge, height:edge)
+        let imageRef = image.cgImage!.cropping(to: cropSquare);
+        
+        
+        return UIImage(cgImage: imageRef!, scale: UIScreen.main.scale, orientation: image.imageOrientation)
+    }
+    
+    func RBResizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / image.size.width
+        let heightRatio = targetSize.height / image.size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio, height: size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRect(x:0, y:0, width:newSize.width, height:newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
     }
 }
 
