@@ -697,11 +697,11 @@
                         <viewControllerLayoutGuide type="bottom" id="rvu-nK-HGh"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="sAA-GE-zk7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gwe-ru-w6O">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1dT-7z-8Jf">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1700"/>
@@ -1066,8 +1066,16 @@
                                 <action selector="buttonCancel:" destination="Zjz-qQ-ZXd" id="suF-rV-Elc"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="hMh-NB-eKq">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="buttonEdit:" destination="Zjz-qQ-ZXd" id="1aX-7A-ZFQ"/>
+                                <segue destination="aiE-jy-le9" kind="show" identifier="EditRecipeSegue" id="uJh-w6-yJP"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="buttonEdit" destination="hMh-NB-eKq" id="51h-OS-n8a"/>
                         <outlet property="imageViewRecipe" destination="Ugl-lx-quF" id="WV8-lL-l7k"/>
                         <outlet property="imageViewUser" destination="bD3-ZV-SYy" id="YIa-qO-m9U"/>
                         <outlet property="ingredientsAndStepsTableView" destination="YQc-EB-dfc" id="qnl-oU-1Mj"/>
@@ -1093,7 +1101,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xXF-xO-G8J" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tapGestureRecognizer id="gPy-dF-13Y"/>
             </objects>
-            <point key="canvasLocation" x="4877" y="-484"/>
+            <point key="canvasLocation" x="4876.811594202899" y="-484.23913043478262"/>
         </scene>
         <!--Add Recipe-->
         <scene sceneID="iIw-vS-szM">
@@ -1104,7 +1112,7 @@
                         <viewControllerLayoutGuide type="bottom" id="SjE-LL-F8e"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="IN4-45-wBe">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bGZ-2b-9Dg" userLabel="Info View">
@@ -1705,10 +1713,11 @@
                                 <action selector="buttonLogout:" destination="R4e-jY-bNN" id="FW1-eu-GQ3"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="fiu-cu-6Bu">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="gjZ-i9-ncN">
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="aiE-jy-le9" kind="show" id="eex-Cg-I6p"/>
+                                <action selector="buttonAdd:" destination="R4e-jY-bNN" id="4lI-bx-FXh"/>
+                                <segue destination="aiE-jy-le9" kind="show" identifier="AddRecipeSegue" id="c06-aR-0kd"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1922,9 +1931,6 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="id0-cT-Gc1">
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <segue destination="aiE-jy-le9" kind="show" identifier="EditRecipeSegue" id="ffd-FT-QIb"/>
-                                </connections>
                             </barButtonItem>
                             <barButtonItem id="CEz-Uu-NEB"/>
                         </rightBarButtonItems>
@@ -1939,7 +1945,7 @@
         <scene sceneID="MpB-gv-iVY">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SJ3-MD-VXM" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="My Recipes" image="Favourites" selectedImage="Favourites" id="en1-IH-xeg"/>
+                    <tabBarItem key="tabBarItem" title="My Recipes" image="MyRecipes" selectedImage="MyRecipes" id="en1-IH-xeg"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="DSG-Je-QRM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -3114,7 +3120,7 @@
         <image name="Background-1" width="540" height="960"/>
         <image name="CookTimeBlack" width="50" height="50"/>
         <image name="DefaultImage" width="360" height="360"/>
-        <image name="Favourites" width="25" height="25"/>
+        <image name="MyRecipes" width="25" height="25"/>
         <image name="PrepTimeBlack" width="50" height="50"/>
         <image name="RecipeHomeIcon" width="25" height="25"/>
         <image name="Review" width="24" height="24"/>
@@ -3126,7 +3132,7 @@
         <image name="emptyStar" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ffd-FT-QIb"/>
-        <segue reference="Gsd-Ql-P6A"/>
+        <segue reference="c06-aR-0kd"/>
+        <segue reference="DtH-93-lRa"/>
     </inferredMetricsTieBreakers>
 </document>

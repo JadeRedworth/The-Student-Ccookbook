@@ -60,6 +60,12 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBOutlet weak var reviewsTableView: UITableView!
     
+    @IBOutlet weak var buttonEdit: UIBarButtonItem!
+    
+    @IBAction func buttonEdit(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "EditRecipeSegue", sender: nil)
+        
+    }
     
     //MARK: Main
     override func viewDidLoad() {
@@ -67,8 +73,11 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         ref = FIRDatabase.database().reference()
         userID = (FIRAuth.auth()?.currentUser?.uid)!
-        
+    
         self.reviewsTableView.register(RecipeDetailsReviewsTableCell.self, forCellReuseIdentifier: cellId)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
+        
         
         fillData()
     }
@@ -139,6 +148,9 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         self.present(alertController, animated: true, completion: nil)
     }
     
+    func reloadData(){
+        fillData()
+    }
     
     func fillData(){
         
@@ -149,7 +161,13 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             } else {
                 self.recipeList = result
                 self.recipe = self.recipeList[0]
-                
+                if self.recipe?.addedBy == self.userID {
+                    self.buttonEdit.isEnabled = true
+                    self.buttonEdit.tintColor = .white
+                } else {
+                    self.buttonEdit.isEnabled = false
+                    self.buttonEdit.tintColor = .clear
+                }
                 self.labelRecipeName.text = self.recipe?.name
                 self.labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
                 self.labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
@@ -158,7 +176,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 self.labelCourse.text = (self.recipe?.course).map { $0.rawValue }
                 self.labelDateAdded.text = "Added: \(self.recipe!.dateAdded!)"
                 self.labelDifficulty.text = "\(self.recipe!.difficulty!)"
-                self.recipeRating = self.recipe!.rating!
+                self.recipeRating = self.recipe!.averageRating!
                 self.ingredientsList = self.recipe!.ingredients
                 self.stepsList = self.recipe!.steps
                 
@@ -419,6 +437,17 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             return 100
         } else {
             return 40
+        }
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let nav = segue.destination as! UINavigationController
+        
+        if segue.identifier == "EditRecipeSegue" {
+            let controller = nav.topViewController as! AddRecipeViewController
+            controller.recipe = recipe!
+            controller.editCheck = true
         }
     }
 }

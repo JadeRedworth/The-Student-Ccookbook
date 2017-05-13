@@ -359,7 +359,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                     }
                 })
                 var starRating: String = ""
-                starRating = starRating.getStarRating(rating: "\(recipe.rating!)")
+                starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
                 cell.labelRating.text = starRating
                 
                 if recipe.imageURL != nil {

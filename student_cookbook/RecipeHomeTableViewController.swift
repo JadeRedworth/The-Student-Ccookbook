@@ -30,6 +30,11 @@ class RecipeHomeTableViewController: UITableViewController {
     ]
     
     
+    @IBAction func buttonAdd(_ sender: Any) {
+        print("Button pressed")
+        performSegue(withIdentifier: "AddRecipeSegue", sender: nil)
+    }
+    
     @IBAction func buttonLogout(_ sender: Any) {
         handleLogout()
     }
@@ -85,6 +90,8 @@ class RecipeHomeTableViewController: UITableViewController {
             } else {
                 return false
             }
+        } else if identifier == "AddRecipeSegue" {
+            return true
         } else {
             return false
         }

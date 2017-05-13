@@ -26,13 +26,15 @@ class Recipes: NSObject {
     var prepTimeHour: Int?
     var prepTimeMinute: Int?
     var servingSize: Int?
-    var rating: Int?
+    var averageRating: Int?
     
     var approved: Bool?
     var addedByAdmin: Bool?
    
     var ingredients = [Ingredients]()
     var steps = [Steps]()
+    var reviews = [RecipeReviews]()
+    var ratings = Ratings()
     
     enum Course: String {
         case Breakfast
@@ -46,7 +48,7 @@ class Recipes: NSObject {
         
     }
     
-    init(id: String, name: String, imageURL: String, addedBy: String, dateAdded: String, difficulty: Int, cookTimeHour: Int, cookTimeMin: Int, prepTimeHour: Int, prepTimeMin: Int, servingSize: Int, rating: Int, course: Course, type: String, approved: Bool?, addedByAdmin: Bool?, ingredients: [Ingredients], steps: [Steps]) {
+    init(id: String, name: String, imageURL: String, addedBy: String, dateAdded: String, difficulty: Int, cookTimeHour: Int, cookTimeMin: Int, prepTimeHour: Int, prepTimeMin: Int, servingSize: Int, averageRating: Int, course: Course, type: String, approved: Bool?, addedByAdmin: Bool?, ingredients: [Ingredients], steps: [Steps], reviews: [RecipeReviews], ratings: Ratings) {
         self.id = id
         self.name = name
         self.imageURL = imageURL
@@ -58,13 +60,15 @@ class Recipes: NSObject {
         self.prepTimeHour = prepTimeHour
         self.prepTimeMinute = prepTimeMin
         self.servingSize = servingSize
-        self.rating = rating
+        self.averageRating = averageRating
         self.course = course
         self.type = type
         self.approved = approved
         self.addedByAdmin = addedByAdmin
         self.ingredients = ingredients
         self.steps = steps
+        self.reviews = reviews
+        self.ratings = ratings
      
     }
     
@@ -84,13 +88,15 @@ class Recipes: NSObject {
                 prepTimeHour: recipeList[i].prepTimeHour!,
                 prepTimeMin: recipeList[i].prepTimeMinute!,
                 servingSize: recipeList[i].servingSize!,
-                rating: recipeList[i].rating!,
+                averageRating: recipeList[i].averageRating!,
                 course: recipeList[i].course!,
                 type: recipeList[i].type!,
                 approved: recipeList[i].approved,
                 addedByAdmin: recipeList[i].addedByAdmin,
                 ingredients: recipeList[i].ingredients,
-                steps: recipeList[i].steps))
+                steps: recipeList[i].steps,
+                reviews: recipeList[i].reviews,
+                ratings: recipeList[i].ratings))
         }
         return recipeArray
     }

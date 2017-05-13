@@ -18,14 +18,13 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
     
-    var myRecipeList = [Recipes]()
     var favRecipeList = [Recipes]()
-    
-    var selectedFavouritesRecipeList = [Recipes]()
+    var myPublicRecipeList = [Recipes]()
+    var myPrivateRecipeList = [Recipes]()
+
     var filteredFavouritesRecipeList = [Recipes]()
-    
-    var selectedMyRecipeList = [Recipes]()
-    var filteredMyRecipeList = [Recipes]()
+    var filteredMyPublicRecipeList = [Recipes]()
+    var filteredMyPrivateRecipeList = [Recipes]()
     
     var ingredientsList = [Ingredients]()
     var stepsList = [Steps]()
@@ -105,27 +104,27 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     
     func getMyRecipes() {
         
-        self.myRecipeList.removeAll()
-        self.filteredMyRecipeList.removeAll()
+        self.myPrivateRecipeList.removeAll()
+        self.filteredMyPrivateRecipeList.removeAll()
         self.tableView.reloadData()
-        myRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: uid! as AnyObject, recipeToSearch: "", ref: ref) {
+        myPrivateRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: uid! as AnyObject, recipeToSearch: "", ref: ref) {
             (result: [Recipes]) in
             if result.isEmpty {
-                self.myRecipeList = []
+                self.myPrivateRecipeList = []
             } else {
-                self.myRecipeList = result
-                self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
+                self.myPrivateRecipeList = result
+                self.filteredMyPrivateRecipeList = Recipes.generateModelArray(self.myPrivateRecipeList)
                 self.tableView.reloadData()
             }
         }
         
-        self.myRecipeList.removeAll()
-        self.filteredMyRecipeList.removeAll()
+        self.myPublicRecipeList.removeAll()
+        self.filteredMyPublicRecipeList.removeAll()
         self.tableView.reloadData()
-        myRecipeList.fetchRecipes(refName: "Recipes", queryKey:  "AddedBy", queryValue: uid! as AnyObject, recipeToSearch: "", ref: ref) {
+        myPublicRecipeList.fetchRecipes(refName: "Recipes", queryKey:  "AddedBy", queryValue: uid! as AnyObject, recipeToSearch: "", ref: ref) {
             (result: [Recipes]) in
-            self.myRecipeList = result
-            self.filteredMyRecipeList = Recipes.generateModelArray(self.myRecipeList)
+            self.myPublicRecipeList = result
+            self.filteredMyPublicRecipeList = Recipes.generateModelArray(self.myPublicRecipeList)
             self.tableView.reloadData()
         }
     }
@@ -164,7 +163,13 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         let selectedCourse = Recipes.Course(rawValue: scopeString) ?? .All
         let searchText = searchBar.text ?? ""
         
-        filteredMyRecipeList = myRecipeList.filter { recipe in
+        filteredMyPublicRecipeList = myPublicRecipeList.filter { recipe in
+            let matchingCourse = (selectedCourse == .All) || (recipe.course == selectedCourse)
+            let matchingText = (recipe.name?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
+            return matchingCourse && matchingText
+        }
+        
+        filteredMyPrivateRecipeList = myPrivateRecipeList.filter{ recipe in
             let matchingCourse = (selectedCourse == .All) || (recipe.course == selectedCourse)
             let matchingText = (recipe.name?.lowercased().contains(searchText.lowercased()))! || searchText.lowercased().characters.count == 0
             return matchingCourse && matchingText
@@ -206,14 +211,16 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         var returnValue: String = ""
         if (section == 0) {
-            returnValue = "My Recipes"
+            returnValue = "My Private Recipes"
         } else if (section == 1) {
+            returnValue = "My Public Recipes"
+        } else if (section == 2) {
             returnValue = "My Favourites"
         }
         return returnValue
@@ -223,9 +230,12 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     {
         var returnValue: Int = 0
         if (section == 0) {
-            returnValue = self.filteredMyRecipeList.count
+            returnValue = self.filteredMyPrivateRecipeList.count
         } else if (section == 1) {
-            returnValue = self.filteredFavouritesRecipeList.count
+            returnValue = self.filteredMyPublicRecipeList.count
+        } else if (section == 2) {
+              returnValue = self.filteredFavouritesRecipeList.count
+            
         }
         return returnValue
     }
@@ -236,7 +246,7 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         
         if (indexPath.section == 0){
             
-            let recipe = filteredMyRecipeList[indexPath.row]
+            let recipe = filteredMyPrivateRecipeList[indexPath.row]
             cell.labelRecipeName.text = recipe.name
             cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
             
@@ -245,7 +255,20 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
                     cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
                 }
             }
+            
         } else if (indexPath.section == 1){
+            
+            let recipe = filteredMyPublicRecipeList[indexPath.row]
+            cell.labelRecipeName.text = recipe.name
+            cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
+            
+            if recipe.imageURL != nil {
+                if let recipeImageURL = recipe.imageURL {
+                    cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
+                }
+            }
+          
+        } else if (indexPath.section == 2){
             
             let recipe = filteredFavouritesRecipeList[indexPath.row]
             cell.labelRecipeName.text = recipe.name
@@ -256,6 +279,7 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
                     cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
                 }
             }
+            
         }
         
         return cell
@@ -275,8 +299,10 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         var selectedRow = Recipes()
         
         if indexPath.section == 0 {
-            selectedRow = filteredMyRecipeList[indexPath.row]
+            selectedRow = filteredMyPrivateRecipeList[indexPath.row]
         } else if indexPath.section == 1 {
+            selectedRow = filteredMyPublicRecipeList[indexPath.row]
+        } else if indexPath.section == 2 {
             selectedRow = filteredFavouritesRecipeList[indexPath.row]
         }
         controller.recipeId = selectedRow.id!
@@ -290,8 +316,9 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(editingStyle == UITableViewCellEditingStyle.delete){
             
-            self.selectedRecipe = self.filteredMyRecipeList[indexPath.row]
             if indexPath.section == 0 {
+                
+                self.selectedRecipe = self.filteredMyPrivateRecipeList[indexPath.row]
                 let alert = UIAlertController(title: "❗️", message: "Are you sure you want to delete this recipe?", preferredStyle: UIAlertControllerStyle.actionSheet)
                 
                 alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: { (action: UIAlertAction!) in
@@ -303,15 +330,26 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
                         return
                     }
                 })
+                    alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler:nil))
                     
-                self.ref.child("Recipes").child(self.selectedRecipe.id!).removeValue(completionBlock: { (error, ref) in
+                    self.present(alert, animated: true, completion: nil)
+                
+                }))
+            } else if indexPath.section == 1 {
+                
+                self.selectedRecipe = self.filteredMyPublicRecipeList[indexPath.row]
+                let alert = UIAlertController(title: "❗️", message: "Are you sure you want to delete this recipe?", preferredStyle: UIAlertControllerStyle.actionSheet)
+                
+                alert.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: { (action: UIAlertAction!) in
+                    
+                    self.ref.child("Recipes").child(self.selectedRecipe.id!).removeValue(completionBlock: { (error, ref) in
                     if error != nil {
                         print("Failed to Delete Recipes", error as Any)
                         self.showAlert(title: "Error", message: "Failed to delete Recipe")
                         return
                     }
                 })
-                self.filteredMyRecipeList.remove(at: indexPath.row)
+                self.filteredMyPublicRecipeList.remove(at: indexPath.row)
                 self.tableView.reloadData()
                 }))
                 
@@ -319,7 +357,7 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
                 
                 self.present(alert, animated: true, completion: nil)
                 
-            } else if indexPath.section == 1 {
+            } else if indexPath.section == 2 {
                 
                 let alert = UIAlertController(title: "❗️", message: "Are you sure you want to remove this recipe from favourites?", preferredStyle: UIAlertControllerStyle.actionSheet)
                 

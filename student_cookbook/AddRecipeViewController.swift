@@ -51,7 +51,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     // Variables
     // Recipes
-    var recipes = Recipes()
+    var recipe = Recipes()
     var recipeID: String!
     
     // Ingredients
@@ -62,12 +62,9 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     var stepsID: String!
     var stepsList =  [Steps]()
     
-    var ref: FIRDatabaseReference!
     var refHandle: UInt!
-    var recipeRef: FIRDatabaseReference!
-    var ingredientsRef: FIRDatabaseReference!
-    var stepsRef: FIRDatabaseReference!
-    
+    var ref, recipeRef, ingredientsRef, stepsRef, ratingRef, reviewRef: FIRDatabaseReference!
+
     var returnValue: Int!
     var recipeDocument: String = ""
     var count: Int = 0
@@ -171,20 +168,20 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     }
     
     func fillRecipeInformation() {
-        recipeID = recipes.id
-        let imageURL = recipes.imageURL
+        recipeID = recipe.id
+        let imageURL = recipe.imageURL
         photoImageView.loadImageWithCacheWithUrlString(imageURL!)
-        textFieldRecipeName.text = recipes.name
-        textFieldServingSize.text = "\(recipes.servingSize!)"
-        textFieldCourse.text = recipes.course?.rawValue
-        textFieldType.text = recipes.type
-        textFieldDifficulty.text = "\(recipes.difficulty!)"
-        textFieldCookHour.text = "\(recipes.cookTimeHour!)"
-        textFieldCookMin.text = "\(recipes.cookTimeMinute!)"
-        textFieldPrepHour.text = "\(recipes.prepTimeHour!)"
-        textFieldPrepMin.text = "\(recipes.prepTimeMinute!)"
-        ingredientsList = recipes.ingredients
-        stepsList = recipes.steps
+        textFieldRecipeName.text = recipe.name
+        textFieldServingSize.text = "\(recipe.servingSize!)"
+        textFieldCourse.text = recipe.course?.rawValue
+        textFieldType.text = recipe.type
+        textFieldDifficulty.text = "\(recipe.difficulty!)"
+        textFieldCookHour.text = "\(recipe.cookTimeHour!)"
+        textFieldCookMin.text = "\(recipe.cookTimeMinute!)"
+        textFieldPrepHour.text = "\(recipe.prepTimeHour!)"
+        textFieldPrepMin.text = "\(recipe.prepTimeMinute!)"
+        ingredientsList = recipe.ingredients
+        stepsList = recipe.steps
     }
     
     
@@ -420,26 +417,38 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         
         self.recipeDocument = ""
         
-        if self.adminStatus == true || self.publicStatus == true {
+        if self.adminStatus == true || self.publicStatus == true || editCheck == true {
             
             self.recipeDocument = "Recipes"
-            recipeRef = ref.child(recipeDocument).childByAutoId()
-            recipeRef.setValue(recipeValues)
+            if editCheck == true {
+                recipeRef = ref.child(recipeDocument).child(recipe.id!)
+                recipeRef.updateChildValues(recipeValues as! [AnyHashable : Any])
+            } else {
+                recipeRef = ref.child(recipeDocument).childByAutoId()
+                recipeRef.setValue(recipeValues)
+            }
+            
             self.recipeID = recipeRef.key
             ingredientsRef = self.ref.child(recipeDocument).child(recipeID).child("Ingredients")
             stepsRef = self.ref.child(recipeDocument).child(recipeID).child("Steps")
+            ratingRef = self.ref.child(recipeDocument).child(recipeID).child("Ratings")
+            reviewRef = self.ref.child(recipeDocument).child(recipeID).child("Reviews")
             
         } else {
             self.recipeDocument = "UserRecipes"
             if editCheck == true {
                 self.recipeRef = ref.child(recipeDocument).child(userID).child(recipeID)
+                self.recipeRef.updateChildValues(recipeValues as! [AnyHashable : Any])
             } else {
                 self.recipeRef = ref.child(recipeDocument).child(userID).childByAutoId()
+                self.recipeRef.setValue(recipeValues)
+                self.recipeID = recipeRef.key
             }
-            self.recipeRef.setValue(recipeValues)
-            self.recipeID = recipeRef.key
+          
             ingredientsRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Ingredients")
             stepsRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Steps")
+            ratingRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Ratings")
+            reviewRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Reviews")
         }
         
         ingredientsRef.removeValue()
@@ -460,18 +469,27 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             let stepsValues = [
                 "Number" : self.stepsList[j].stepNo ?? 0,
                 "Step": self.stepsList[j].stepDesc ?? ""] as [String : Any]
-            if editCheck == true {
-                if editSteps == true {
-                    stepsRef.child(recipes.steps[j].id!).setValue(stepsValues)
-                } else {
-                    stepsRef.childByAutoId().setValue(stepsValues)
-                }
-            } else {
-                stepsRef.childByAutoId().setValue(stepsValues)
-                self.stepsID = stepsRef.key
-            }
+
+            stepsRef.childByAutoId().setValue(stepsValues)
+            self.stepsID = stepsRef.key
+
         }
         
+        for k in 0..<self.recipe.reviews.count {
+            let reviewValues = [
+                "RecipeRatingID" : self.recipe.reviews[k].recipeReviewID]
+            reviewRef.childByAutoId().setValue(reviewValues)
+        }
+
+        if editCheck == false {
+            let ratingValues = [
+                "1" : 0,
+                "2" : 0,
+                "3" : 0,
+                "4" : 0,
+                "5" : 0]
+            ratingRef.setValue(ratingValues)
+        }
         return true
     }
     

@@ -272,13 +272,15 @@ extension Array where Element: Recipes {
                 var averageRating: Int = 0
                 var key: Int = 0
                 var value: Int = 0
+
                 while let ratingItem = ratingsEnumerator.nextObject() as? FIRDataSnapshot {
+                    
                     value = (ratingItem.value as? Int)!
                     key = Int(ratingItem.key)!
                     rating += key*value
                 }
                 averageRating = rating/5
-                recipes.rating = averageRating
+                recipes.averageRating = averageRating
                 
                 recipes.difficulty = recipeDict["Difficulty"] as? Int
                 recipes.cookTimeHour = recipeDict["CookTimeHours"] as? Int
