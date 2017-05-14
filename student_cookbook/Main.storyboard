@@ -779,10 +779,10 @@
                                                         <color key="separatorColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                                         <prototypes>
                                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="IngredientsAndStepsCell" id="nNj-26-3Ap" customClass="IngredientsAndStepsTableViewCell" customModule="student_cookbook" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="55" width="414" height="44"/>
+                                                                <rect key="frame" x="0.0" y="55.333333333333336" width="414" height="44"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="nNj-26-3Ap" id="XDg-Ht-RIb">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.666666666666664"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b3C-DN-jBO">
@@ -793,7 +793,7 @@
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
                                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nt1-NJ-fMY">
-                                                                            <rect key="frame" x="80" y="8" width="326" height="28"/>
+                                                                            <rect key="frame" x="72" y="8" width="334" height="28"/>
                                                                             <color key="tintColor" red="0.4841271043" green="0.046976856890000002" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="13"/>
                                                                             <nil key="textColor"/>
@@ -801,12 +801,16 @@
                                                                         </label>
                                                                     </subviews>
                                                                     <constraints>
-                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="trailing" secondItem="XDg-Ht-RIb" secondAttribute="trailingMargin" id="6lE-zV-iGx"/>
-                                                                        <constraint firstItem="b3C-DN-jBO" firstAttribute="leading" secondItem="XDg-Ht-RIb" secondAttribute="leadingMargin" constant="8" id="IC8-bw-vkC"/>
-                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="leading" secondItem="b3C-DN-jBO" secondAttribute="trailing" constant="24" id="JQU-Rd-ZrW"/>
-                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="top" secondItem="XDg-Ht-RIb" secondAttribute="topMargin" id="KV0-8X-p9O"/>
-                                                                        <constraint firstItem="b3C-DN-jBO" firstAttribute="centerY" secondItem="nt1-NJ-fMY" secondAttribute="centerY" id="M8b-O4-HfX"/>
-                                                                        <constraint firstItem="b3C-DN-jBO" firstAttribute="centerY" secondItem="XDg-Ht-RIb" secondAttribute="centerY" id="nOX-s6-ORC"/>
+                                                                        <constraint firstItem="b3C-DN-jBO" firstAttribute="leading" secondItem="XDg-Ht-RIb" secondAttribute="leadingMargin" constant="8" id="3X6-mx-mCq"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="bottom" secondItem="XDg-Ht-RIb" secondAttribute="bottomMargin" id="8G3-id-XKB"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="top" secondItem="XDg-Ht-RIb" secondAttribute="topMargin" id="DlA-lr-IgH"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="leading" secondItem="b3C-DN-jBO" secondAttribute="trailing" constant="16" id="Eq2-YG-ygH"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="top" secondItem="XDg-Ht-RIb" secondAttribute="topMargin" id="FEd-fM-ANG"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="trailing" secondItem="XDg-Ht-RIb" secondAttribute="trailingMargin" id="LXQ-7v-2nN"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="centerY" secondItem="b3C-DN-jBO" secondAttribute="centerY" id="ay4-WE-EXN"/>
+                                                                        <constraint firstItem="nt1-NJ-fMY" firstAttribute="leading" secondItem="b3C-DN-jBO" secondAttribute="trailing" constant="16" id="cVD-6Z-IWE"/>
+                                                                        <constraint firstItem="b3C-DN-jBO" firstAttribute="top" secondItem="XDg-Ht-RIb" secondAttribute="topMargin" constant="5" id="se1-im-JiM"/>
+                                                                        <constraint firstAttribute="bottomMargin" secondItem="b3C-DN-jBO" secondAttribute="bottom" constant="5" id="yS2-Le-byK"/>
                                                                     </constraints>
                                                                 </tableViewCellContentView>
                                                                 <color key="tintColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1356,7 +1360,6 @@
                                         <rect key="frame" x="0.0" y="175" width="414" height="185"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="separatorColor" red="0.80000000000000004" green="0.40000000000000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ingredientsCell" textLabel="FIt-z9-GGX" detailTextLabel="8as-4d-5Qb" style="IBUITableViewCellStyleValue2" id="Ryg-i4-Zac">
                                                 <rect key="frame" x="0.0" y="28" width="414" height="44"/>

@@ -130,8 +130,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         self.stepsTableView.estimatedRowHeight = 44.0
         self.stepsTableView.rowHeight = UITableViewAutomaticDimension
         
-        buttonAddSteps.layer.cornerRadius = buttonAddSteps.bounds.size.height / 2
-        buttonAddIngredients.layer.cornerRadius = buttonAddIngredients.bounds.size.height / 2
         publicStatus = false
         
         
@@ -302,6 +300,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             textFieldIngredientName.text = ""
             textFieldIngredientsQuantity.text = ""
             textFieldMeasurement.text = ""
+            self.buttonAddIngredients.setTitle("Add Ingredient", for: .normal)
         } else {
             let alertController = UIAlertController(title: "Error", message: "Please make sure all fields have input!", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
@@ -332,6 +331,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             }
             
             textViewSteps.text = ""
+            self.buttonAddSteps.setTitle("Add Step", for: .normal)
         } else {
             let alertController = UIAlertController(title: "Error", message: "Please enter a step!", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
@@ -554,31 +554,37 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         return true
     }
     
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
-        let edit = UITableViewRowAction(style: .normal, title: "Edit") { action, index in
-            if tableView == self.ingredientsTableView {
-                tableView.cellForRow(at: indexPath)?.textLabel?.highlightedTextColor = UIColor(red:0.00, green:0.50, blue:0.25, alpha:0.5)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == self.ingredientsTableView {
+            if self.editIngredients == true {
+                self.editIngredients = false
+                self.textFieldIngredientName.text = ""
+                self.textFieldIngredientsQuantity.text = ""
+                    self.textFieldMeasurement.text = ""
+                    self.buttonAddIngredients.setTitle("Add Ingredient", for: .normal)
+            } else {
                 self.editIngredients = true
                 self.ingredientToEdit = indexPath.row
                 self.textFieldIngredientName.text = self.ingredientsList[indexPath.row].name
                 self.textFieldIngredientsQuantity.text = "\(self.ingredientsList[indexPath.row].quantity!)"
                 self.textFieldMeasurement.text = self.ingredientsList[indexPath.row].measurement
                 self.buttonAddIngredients.setTitle("Update Ingredient", for: .normal)
-            } else if tableView == self.stepsTableView {
-                tableView.cellForRow(at: indexPath)?.textLabel?.highlightedTextColor = UIColor(red:0.00, green:0.50, blue:0.25, alpha:0.5)
+            }
+        } else if tableView == self.stepsTableView {
+            if self.editSteps == true {
+                self.editSteps = false
+                self.textViewSteps.text = ""
+                self.buttonAddSteps.setTitle("Add Steps", for: .normal)
+            } else {
                 self.editSteps = true
                 self.stepToEdit = indexPath.row
                 self.textViewSteps.text = self.stepsList[indexPath.row].stepDesc
                 self.buttonAddSteps.setTitle("Update Steps", for: .normal)
             }
         }
-        
-        edit.backgroundColor = UIColor.clear
-        
-        return [edit]
     }
     
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(editingStyle == UITableViewCellEditingStyle.delete){
             if currentStoryboardName == "Ipad" {
@@ -652,7 +658,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
                 cell = tableView.dequeueReusableCell(withIdentifier: "stepsCell", for: indexPath)
                 cell?.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
                 cell?.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
-                
             }
         }
         return cell!

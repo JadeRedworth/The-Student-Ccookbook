@@ -140,13 +140,22 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             if snapshot.value is NSNull {
                 shoppingRef.setValue(self.shoppingList)
             } else {
+                let shoppingEnumerator = snapshot.children
+                while let shoppingItem = shoppingEnumerator.nextObject() as? FIRDataSnapshot {
+                    if self.shoppingList.contains(shoppingItem.value as! String){
+                        let alertController = UIAlertController(title: "Error", message: "\(shoppingItem.value!) is already in your shopping list!", preferredStyle: UIAlertControllerStyle.alert)
+                        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                        self.present(alertController, animated: true, completion: nil)
+                    } else {
+                        self.shoppingList.append(shoppingItem.value as! String)
+                    }
+                }
                 shoppingRef.setValue(self.shoppingList)
+                let alertController = UIAlertController(title: "Success", message: "Item(s) added to your Shopping List!", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
             }
         })
-        
-        let alertController = UIAlertController(title: "Success", message: "Item(s) added to your Shopping List!", preferredStyle: UIAlertControllerStyle.alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alertController, animated: true, completion: nil)
     }
     
     func reloadData(){
@@ -426,7 +435,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                     self.shoppingList.append((selectedRow.labelTitle?.text)!)
                 } else {
                     selectedRow.accessoryType = .none
-                    let indexToDelete = self.shoppingList.index(of: (selectedRow.textLabel?.text)!)
+                    let indexToDelete = self.shoppingList.index(of: (selectedRow.labelTitle?.text)!)
                     self.shoppingList.remove(at: indexToDelete!)
                 }
             }
