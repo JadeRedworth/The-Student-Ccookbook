@@ -28,6 +28,7 @@
 		8D439BF71EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */; };
 		8D457B071EB0CE8700A5BFCB /* EditUserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D457B061EB0CE8700A5BFCB /* EditUserDetailsViewController.swift */; };
 		8D4E0CDE1EB37347003DF63D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D4E0CDD1EB37347003DF63D /* Assets.xcassets */; };
+		8D5104001EC7B19E0099ED3E /* EditReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5103FF1EC7B19E0099ED3E /* EditReviewViewController.swift */; };
 		8D6EF5F81E6C458300D5FF82 /* AddRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6EF5F71E6C458300D5FF82 /* AddRecipeViewController.swift */; };
 		8D6EF6071E6DAEA900D5FF82 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D6EF6061E6DAEA900D5FF82 /* Extensions.swift */; };
 		8D81C12F1EB62774008D61F6 /* AdminUsersTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D81C12E1EB62774008D61F6 /* AdminUsersTableViewController.swift */; };
@@ -44,7 +45,6 @@
 		8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */; };
 		8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */; };
 		8DCC4FB21E718B6700BBB9DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCC4FB11E718B6700BBB9DA /* Main.storyboard */; };
-		8DCEB69F1EC33CBD00D68EC9 /* ExpandableUserInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCEB69E1EC33CBD00D68EC9 /* ExpandableUserInfoCell.swift */; };
 		8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266511E7ED705009B68A9 /* RegisterViewController.swift */; };
 		8DE266561E804252009B68A9 /* MyRecipeTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */; };
 		DB73B1C6EC6D04989F3734ED /* Pods_student_cookbook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0BF3D4AEB43827A0950306 /* Pods_student_cookbook.framework */; };
@@ -96,6 +96,7 @@
 		8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchIngredientsResultTableViewController.swift; sourceTree = "<group>"; };
 		8D457B061EB0CE8700A5BFCB /* EditUserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUserDetailsViewController.swift; sourceTree = "<group>"; };
 		8D4E0CDD1EB37347003DF63D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8D5103FF1EC7B19E0099ED3E /* EditReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditReviewViewController.swift; sourceTree = "<group>"; };
 		8D6EF5F71E6C458300D5FF82 /* AddRecipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddRecipeViewController.swift; sourceTree = "<group>"; };
 		8D6EF6061E6DAEA900D5FF82 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8D81C12E1EB62774008D61F6 /* AdminUsersTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminUsersTableViewController.swift; sourceTree = "<group>"; };
@@ -113,7 +114,6 @@
 		8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeReviews.swift; sourceTree = "<group>"; };
 		8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserShoppingListTableViewController.swift; sourceTree = "<group>"; };
 		8DCC4FB11E718B6700BBB9DA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		8DCEB69E1EC33CBD00D68EC9 /* ExpandableUserInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandableUserInfoCell.swift; sourceTree = "<group>"; };
 		8DE266511E7ED705009B68A9 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyRecipeTableTableViewController.swift; sourceTree = "<group>"; };
 		9132A56D773703389CA14514 /* Pods-student_cookbook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-student_cookbook.release.xcconfig"; path = "Pods/Target Support Files/Pods-student_cookbook/Pods-student_cookbook.release.xcconfig"; sourceTree = "<group>"; };
@@ -231,6 +231,15 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		8D5104011EC7B3910099ED3E /* Reviews */ = {
+			isa = PBXGroup;
+			children = (
+				8D2B666A1EC63A8A0057EC2A /* MyReviewsTableViewController.swift */,
+				8D5103FF1EC7B19E0099ED3E /* EditReviewViewController.swift */,
+			);
+			name = Reviews;
+			sourceTree = "<group>";
+		};
 		8D6EF5FD1E6C755300D5FF82 /* Recipes */ = {
 			isa = PBXGroup;
 			children = (
@@ -239,10 +248,10 @@
 				8D0ED61F1E6DD6A9001ABEC6 /* RecipeDetailViewController.swift */,
 				8D6EF5F71E6C458300D5FF82 /* AddRecipeViewController.swift */,
 				8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */,
-				8DEB4D471E8A88B9009164C5 /* Recipe Table Cell */,
 				8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */,
 				8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */,
-				8D2B666A1EC63A8A0057EC2A /* MyReviewsTableViewController.swift */,
+				8DEB4D471E8A88B9009164C5 /* Recipe Table Cell */,
+				8D5104011EC7B3910099ED3E /* Reviews */,
 			);
 			name = Recipes;
 			sourceTree = "<group>";
@@ -251,7 +260,6 @@
 			isa = PBXGroup;
 			children = (
 				8D8698A61E6B227A00998BF6 /* AccountViewController.swift */,
-				8DCEB69E1EC33CBD00D68EC9 /* ExpandableUserInfoCell.swift */,
 				8D457B061EB0CE8700A5BFCB /* EditUserDetailsViewController.swift */,
 				8D8698B01E6B3D3500998BF6 /* UserTableViewController.swift */,
 				8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */,
@@ -616,6 +624,7 @@
 				8D013CEA1EBA43FB00AAA21A /* RecipeTableViewController.swift in Sources */,
 				8DE266561E804252009B68A9 /* MyRecipeTableTableViewController.swift in Sources */,
 				8D8698AF1E6B3CDC00998BF6 /* User.swift in Sources */,
+				8D5104001EC7B19E0099ED3E /* EditReviewViewController.swift in Sources */,
 				8D2B666B1EC63A8A0057EC2A /* MyReviewsTableViewController.swift in Sources */,
 				8D1D63391E6B02DF00307B85 /* AppDelegate.swift in Sources */,
 				8D8698B11E6B3D3500998BF6 /* UserTableViewController.swift in Sources */,
@@ -627,7 +636,6 @@
 				8DAEAA111EC09DA0007DBD21 /* Ratings.swift in Sources */,
 				8D8698AD1E6B3CAF00998BF6 /* Recipes.swift in Sources */,
 				8D0ED6201E6DD6A9001ABEC6 /* RecipeDetailViewController.swift in Sources */,
-				8DCEB69F1EC33CBD00D68EC9 /* ExpandableUserInfoCell.swift in Sources */,
 				8D6EF6071E6DAEA900D5FF82 /* Extensions.swift in Sources */,
 				8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */,
 				8D6EF5F81E6C458300D5FF82 /* AddRecipeViewController.swift in Sources */,

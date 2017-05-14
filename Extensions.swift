@@ -116,9 +116,13 @@ extension Array where Element == String {
         var reviewIDs = [String]()
         let userReviewRef = ref.child(refName).child(queryKey)
         userReviewRef.observe(.value, with: { (snapshot) in
+            print(snapshot)
             let reviewsEnumerator = snapshot.childSnapshot(forPath: "Reviews").children
+            reviewIDs.removeAll()
             while let reviewsItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
-                reviewIDs.append(reviewsItem.childSnapshot(forPath: "RecipeReviewID").value as! String)
+                print(reviewsItem)
+                let key = reviewsItem.childSnapshot(forPath: "RecipeReviewID").value
+                reviewIDs.append(key as! String)
             }
             completion(reviewIDs)
         })
@@ -129,8 +133,12 @@ extension Array where Element == String {
         let recipeReviewRef = ref.child(refName).child(queryKey)
         recipeReviewRef.observe(.value, with: { (snapshot) in
             let reviewsEnumerator = snapshot.childSnapshot(forPath: "Reviews").children
+            reviewIDs.removeAll()
             while let reviewsItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
-                reviewIDs.append(reviewsItem.childSnapshot(forPath: "RecipeRatingID").value as! String)
+                let key = reviewsItem.childSnapshot(forPath: "RecipeRatingID").value
+                if reviewIDs.contains(key as! String){} else {
+                    reviewIDs.append(key as! String)
+                }
             }
             completion(reviewIDs)
         })
@@ -243,6 +251,7 @@ extension Array where Element: Recipes {
             completion(recipeList)
             
         }
+        
         if recipeList.isEmpty {
             completion(recipeList)
         }
@@ -257,7 +266,7 @@ extension Array where Element: Recipes {
             if let recipeDict = snapshot.value as? [String: AnyObject] {
                 
                 let recipes = Recipes()
-                let ratingsEnumerator = snapshot.childSnapshot(forPath: "Ratings").childSnapshot(forPath: "Values").children
+                let ratingsEnumerator = snapshot.childSnapshot(forPath: "Ratings").children
                 let ingredientsEnumerator = snapshot.childSnapshot(forPath: "Ingredients").children
                 let stepsEnumerator = snapshot.childSnapshot(forPath: "Steps").children
                 
@@ -272,14 +281,22 @@ extension Array where Element: Recipes {
                 var averageRating: Int = 0
                 var key: Int = 0
                 var value: Int = 0
+                var t: Int = 0
 
                 while let ratingItem = ratingsEnumerator.nextObject() as? FIRDataSnapshot {
                     
                     value = (ratingItem.value as? Int)!
                     key = Int(ratingItem.key)!
+                    t+=value
                     rating += key*value
                 }
-                averageRating = rating/5
+                
+                if rating == 0 {
+                    averageRating = 0
+                } else {
+                    averageRating = rating/t
+                }
+               
                 recipes.averageRating = averageRating
                 
                 recipes.difficulty = recipeDict["Difficulty"] as? Int
@@ -314,7 +331,9 @@ extension Array where Element: Recipes {
                 recipes.steps = stepsList
                 
                 if recipeToSearch.isEmpty {
-                    recipeList.append(recipes)
+                    if recipeList.contains(recipes){ } else {
+                        recipeList.append(recipes)
+                    }
                 } else {
                     if ("\(recipes.course!)" == recipeToSearch) || (recipes.type == recipeToSearch) {
                         recipeList.append(recipes)

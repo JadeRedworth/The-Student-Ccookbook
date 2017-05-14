@@ -13,6 +13,7 @@ class UserReviewsTableViewCell: UITableViewCell {
     @IBOutlet weak var labelRecipeName: UILabel!
     @IBOutlet weak var labelReview: UILabel!
     @IBOutlet weak var labelStar: UILabel!
+    @IBOutlet weak var photoViewRecipe: UIImageView!
 
     override func awakeFromNib() {
         super.awakeFromNib()

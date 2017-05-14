@@ -18,6 +18,8 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
     
+    var recipe = Recipes()
+    
     var favRecipeList = [Recipes]()
     var myPublicRecipeList = [Recipes]()
     var myPrivateRecipeList = [Recipes]()
@@ -28,8 +30,9 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     
     var ingredientsList = [Ingredients]()
     var stepsList = [Steps]()
-    
     var selectedRecipe = Recipes()
+    
+    var userList = [User]()
     
     var recipesID = [String]()
     
@@ -142,6 +145,18 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
     }
 
     
+    func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
+        userList.fetchUsers(refName: "Users", queryKey: self.recipe.addedBy!, queryValue: "" as AnyObject, ref: ref) {
+            (result: [User]) in
+            if result.isEmpty {
+                self.userList = []
+            } else {
+                self.userList = result
+                completion(true)
+            }
+        }
+    }
+    
     func handleLogout() {
         try! FIRAuth.auth()!.signOut()
         
@@ -246,28 +261,54 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         
         if (indexPath.section == 0){
             
-            let recipe = filteredMyPrivateRecipeList[indexPath.row]
-            cell.labelRecipeName.text = recipe.name
-            cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
+            recipe = filteredMyPrivateRecipeList[indexPath.row]
+            
+            cell.labelRecipeName?.text = recipe.name
+            cell.labelCourse.text = recipe.course.map { $0.rawValue }
+            
+            fetchUserWhoAddedRecipe(completion: {
+                result in
+                if result {
+                    cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                    cell.userImageView.loadImageWithCacheWithUrlString(self.userList[0].profilePicURL!)
+                    cell.userImageView.makeImageCircle()
+                }
+            })
+            var starRating: String = ""
+            starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
+            cell.labelRating.text = starRating
             
             if recipe.imageURL != nil {
                 if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
+                    cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
                 }
             }
-            
+
         } else if (indexPath.section == 1){
             
-            let recipe = filteredMyPublicRecipeList[indexPath.row]
-            cell.labelRecipeName.text = recipe.name
-            cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
+            recipe = filteredMyPublicRecipeList[indexPath.row]
+            
+            cell.labelRecipeName?.text = recipe.name
+            cell.labelCourse.text = recipe.course.map { $0.rawValue }
+            
+            fetchUserWhoAddedRecipe(completion: {
+                result in
+                if result {
+                    cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                    cell.userImageView.loadImageWithCacheWithUrlString(self.userList[0].profilePicURL!)
+                    cell.userImageView.makeImageCircle()
+                }
+            })
+            var starRating: String = ""
+            starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
+            cell.labelRating.text = starRating
             
             if recipe.imageURL != nil {
                 if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
+                    cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
                 }
             }
-          
+            
         } else if (indexPath.section == 2){
             
             let recipe = filteredFavouritesRecipeList[indexPath.row]
@@ -312,6 +353,9 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         return true
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 247
+    }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if(editingStyle == UITableViewCellEditingStyle.delete){

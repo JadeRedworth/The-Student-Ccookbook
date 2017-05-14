@@ -78,7 +78,12 @@ class RecipeHomeTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        recipeToSearch =  recipesToSearchList[indexPath.row]
+        if recipesToSearchList[indexPath.row] == "All Recipes" {
+            recipeToSearch = ""
+        } else {
+            recipeToSearch =  recipesToSearchList[indexPath.row]
+        }
+        
         recipePressed = true
         performSegue(withIdentifier: "ShowSelectedRecipesSegue", sender: nil)
     }
@@ -103,8 +108,8 @@ class RecipeHomeTableViewController: UITableViewController {
         
         if segue.identifier == "ShowSelectedRecipesSegue" {
             let controller = nav.topViewController as! RecipeTableViewController
-            controller.recipeToSearch = recipeToSearch
-            print(recipeToSearch)
+            controller.recipeToSearch = self.recipeToSearch
+            recipePressed = false
         }
     }
 }

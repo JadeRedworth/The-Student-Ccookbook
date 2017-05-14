@@ -10,7 +10,7 @@ import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 
-class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
     
     var ref: FIRDatabaseReference!
     var userID: String?
@@ -73,11 +73,13 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         ref = FIRDatabase.database().reference()
         userID = (FIRAuth.auth()?.currentUser?.uid)!
+        
+        self.ingredientsAndStepsTableView.estimatedRowHeight = 70.0
+        self.ingredientsAndStepsTableView.rowHeight = UITableViewAutomaticDimension
     
         self.reviewsTableView.register(RecipeDetailsReviewsTableCell.self, forCellReuseIdentifier: cellId)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
-        
         
         fillData()
     }
@@ -92,7 +94,6 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBAction func buttonCancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
-    
     
     @IBAction func starButtonTapped(_ sender: UIButton) {
         let tag = sender.tag
@@ -371,20 +372,20 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         if tableView == self.ingredientsAndStepsTableView {
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath) as! IngredientsAndStepsTableViewCell
             
             if (indexPath.section == 0) {
-                cell.textLabel?.text = ingredientsList[indexPath.row].name
-                cell.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
+                cell.labelTitle?.text = ingredientsList[indexPath.row].name
+                cell.labelDetail?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
                 
                 
             } else if (indexPath.section == 1){
                 
-                cell.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
-                cell.detailTextLabel?.numberOfLines = 0
-                cell.detailTextLabel?.lineBreakMode = .byWordWrapping
-                cell.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+                cell.labelTitle?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
+                cell.labelDetail?.text = stepsList[indexPath.row].stepDesc
             }
+            
+            cell.labelDetail?.preferredMaxLayoutWidth = tableView.bounds.width
             
             return cell
         }
@@ -419,10 +420,10 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.section == 0){
-            if let selectedRow = tableView.cellForRow(at: indexPath) {
+            if let selectedRow = tableView.cellForRow(at: indexPath) as? IngredientsAndStepsTableViewCell {
                 if selectedRow.accessoryType == .none {
                     selectedRow.accessoryType = .checkmark
-                    self.shoppingList.append((selectedRow.textLabel?.text)!)
+                    self.shoppingList.append((selectedRow.labelTitle?.text)!)
                 } else {
                     selectedRow.accessoryType = .none
                     let indexToDelete = self.shoppingList.index(of: (selectedRow.textLabel?.text)!)
@@ -432,11 +433,17 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
+    func calculateHeightForConfiguredSizingCell(sizingCell: UITableViewCell) -> CGFloat {
+        sizingCell.layoutIfNeeded()
+        let size = sizingCell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+        return size.height
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.reviewsTableView {
             return 100
         } else {
-            return 40
+            return UITableViewAutomaticDimension
         }
     }
     
@@ -470,4 +477,10 @@ class RecipeDetailsReviewsTableCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+}
+
+class IngredientsAndStepsTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var labelTitle: UILabel!
+    @IBOutlet weak var labelDetail: UILabel!
 }

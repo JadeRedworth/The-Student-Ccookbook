@@ -42,8 +42,8 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     // Steps
     @IBOutlet weak var stepsTableView: UITableView!
-    @IBOutlet weak var textFieldSteps: UITextField!
     @IBOutlet weak var buttonAddSteps: UIButton!
+    @IBOutlet weak var textViewSteps: UITextView!
     
     // Ipad outlets
     @IBOutlet weak var IngredientsAndStepsTableView: UITableView!
@@ -64,7 +64,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     
     var refHandle: UInt!
     var ref, recipeRef, ingredientsRef, stepsRef, ratingRef, reviewRef: FIRDatabaseReference!
-
+    
     var returnValue: Int!
     var recipeDocument: String = ""
     var count: Int = 0
@@ -127,6 +127,9 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         
         setUpToolBar()
         
+        self.stepsTableView.estimatedRowHeight = 44.0
+        self.stepsTableView.rowHeight = UITableViewAutomaticDimension
+        
         buttonAddSteps.layer.cornerRadius = buttonAddSteps.bounds.size.height / 2
         buttonAddIngredients.layer.cornerRadius = buttonAddIngredients.bounds.size.height / 2
         publicStatus = false
@@ -136,7 +139,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             fillRecipeInformation()
         }
     }
-
+    
     func setUpViews() {
         
         if currentStoryboardName == "Main" {
@@ -309,32 +312,32 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     @IBAction func buttonAddSteps(_ sender: UIButton) {
         
         let steps = Steps()
-        if textFieldSteps.text != "" {
-            
-            steps.stepDesc = textFieldSteps.text!
+        
+        if textViewSteps.text != "" {
             
             if editSteps == true {
                 stepsList[stepToEdit].stepDesc = steps.stepDesc
                 steps.stepNo = stepsList[stepToEdit].stepNo
             } else {
+                steps.stepDesc = textViewSteps.text
                 steps.stepNo = stepsList.count + 1
                 stepsList.append(steps)
             }
             
             if currentStoryboardName == "Main" {
                 stepsTableView.reloadData()
+            
             } else {
                 IngredientsAndStepsTableView.reloadData()
             }
             
-            textFieldSteps.text = ""
+            textViewSteps.text = ""
         } else {
             let alertController = UIAlertController(title: "Error", message: "Please enter a step!", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         }
     }
-    
     
     // Button to add recipe
     @IBAction func buttonSaveRecipe(_ sender: Any) {
@@ -444,7 +447,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
                 self.recipeRef.setValue(recipeValues)
                 self.recipeID = recipeRef.key
             }
-          
+            
             ingredientsRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Ingredients")
             stepsRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Steps")
             ratingRef = self.ref.child(recipeDocument).child(userID).child(recipeID).child("Ratings")
@@ -469,10 +472,10 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             let stepsValues = [
                 "Number" : self.stepsList[j].stepNo ?? 0,
                 "Step": self.stepsList[j].stepDesc ?? ""] as [String : Any]
-
+            
             stepsRef.childByAutoId().setValue(stepsValues)
             self.stepsID = stepsRef.key
-
+            
         }
         
         for k in 0..<self.recipe.reviews.count {
@@ -480,7 +483,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
                 "RecipeRatingID" : self.recipe.reviews[k].recipeReviewID]
             reviewRef.childByAutoId().setValue(reviewValues)
         }
-
+        
         if editCheck == false {
             let ratingValues = [
                 "1" : 0,
@@ -529,7 +532,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
                 textFieldPrepMin.text = timeMins[row]
             }
         }
-        
     }
     
     // MARK: Table View Methods
@@ -567,10 +569,11 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
                 tableView.cellForRow(at: indexPath)?.textLabel?.highlightedTextColor = UIColor(red:0.00, green:0.50, blue:0.25, alpha:0.5)
                 self.editSteps = true
                 self.stepToEdit = indexPath.row
-                self.textFieldSteps.text = self.stepsList[indexPath.row].stepDesc
+                self.textViewSteps.text = self.stepsList[indexPath.row].stepDesc
                 self.buttonAddSteps.setTitle("Update Steps", for: .normal)
             }
         }
+        
         edit.backgroundColor = UIColor.clear
         
         return [edit]
@@ -587,7 +590,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
                 if tableView == self.ingredientsTableView {
                     ingredientsList.remove(at: indexPath.row)
                     self.ingredientsTableView.reloadData()
-                
+                    
                 } else if tableView == self.stepsTableView {
                     stepsList.remove(at: indexPath.row)
                     self.stepsTableView.reloadData()
@@ -653,6 +656,10 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             }
         }
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
     }
     
     
@@ -747,7 +754,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             datasource = timeHours
             resetBools()
             prepHour = true
-
+            
         } else if textField == textFieldPrepMin {
             datasource = timeMins
             resetBools()
@@ -845,6 +852,3 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         return newImage!
     }
 }
-
-
-

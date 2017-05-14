@@ -18,7 +18,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     var ref: FIRDatabaseReference!
     var refHandle: FIRDatabaseHandle!
-    var recipeToSearch: String?
+    var recipeToSearch: String = ""
     var recipe: Recipes?
     var recipeList = [Recipes]()
     var userRecipeList = [Recipes]()
@@ -105,7 +105,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     func getRecipes(){
-        if (self.recipeToSearch?.isEmpty)! {
+        if (self.recipeToSearch.isEmpty) {
             recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved",queryValue: true as AnyObject, recipeToSearch: "", ref: ref) {
                 (result: [Recipes]) in
                 if result.isEmpty {
@@ -123,7 +123,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             
         } else {
             
-            recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: true as AnyObject, recipeToSearch: recipeToSearch!, ref: ref) {
+            recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: true as AnyObject, recipeToSearch: recipeToSearch, ref: ref) {
                 (result: [Recipes]) in
                 if result.isEmpty {
                     self.recipeList = []
@@ -334,6 +334,9 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         return returnValue
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 247
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -358,6 +361,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                         cell.userImageView.makeImageCircle()
                     }
                 })
+                
                 var starRating: String = ""
                 starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
                 cell.labelRating.text = starRating
@@ -424,6 +428,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         if (self.currentStoryboardName == "Main") {
             tableView.deselectRow(at: indexPath, animated: true)
             performSegue(withIdentifier: "RecipeDetailSegue", sender: indexPath)
+            
         } else if (self.currentStoryboardName == "Ipad"){
             
             if (tableView == self.recipesTableView){
@@ -436,7 +441,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             }
         }
     }
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let nav = segue.destination as! UINavigationController

@@ -215,7 +215,7 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
         var returnValue: Int = 0
         
         if tableView == self.recipesToApproveTableView {
-            returnValue = recipeList.count
+            returnValue = self.recipeList.count
         } else if tableView == self.ingredientsAndStepsTableView {
             if section == 0 {
                 returnValue = self.ingredientsList.count
@@ -228,9 +228,9 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let recipe = recipeList[indexPath.row]
-        
         if tableView == self.recipesToApproveTableView {
+            
+            let recipe = self.recipeList[indexPath.row]
             
             let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AdminRecipesToApproveTableViewCell
             
