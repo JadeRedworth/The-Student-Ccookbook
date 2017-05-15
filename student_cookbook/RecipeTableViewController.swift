@@ -334,10 +334,6 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         return returnValue
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 247
-    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if tableView == self.recipesTableView {

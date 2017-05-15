@@ -11,7 +11,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseStorage
 
-class RegisterViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class RegisterViewController: UIViewController {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -30,7 +30,10 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
+        self.dismissKeyboardWhenTappedAround()
+        self.dismissKeyboard()
+    
         ref = FIRDatabase.database().reference()
     }
 
@@ -83,7 +86,19 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
                                 
                                 let userPassword: String = checkedPassword
                                 
-                                self.ref.child("Users").child(userID).setValue(["Email": userEmail, "FirstName": userFName, "LastName": userLName, "Age" : userAge, "Gender" : userGender, "Location" : userLocation, "Password": userPassword, "ProfileImageURL": profileImageURL, "Admin": self.adminStatus])
+                                let userValue = (["Email": userEmail,
+                                                 "FirstName": userFName,
+                                                 "LastName": userLName,
+                                                 "Age" : userAge,
+                                                 "Gender" : userGender,
+                                                 "Location" : userLocation,
+                                                 "Password": userPassword,
+                                                 "ProfileImageURL": profileImageURL,
+                                                 "UserType": "User",
+                                                 "NoRecipesAdded" : 0,
+                                                 "NoRecipesRated" : 0] as [String : Any])
+                                self.ref.child("Users").child(userID).setValue(userValue)
+                                
                             })
                         }
                     })
@@ -94,44 +109,5 @@ class RegisterViewController: UIViewController, UIImagePickerControllerDelegate,
         } else {
             //TODO alert
         }
-    }
-    
-    //MARK: UIImagePickerControllerDelegate
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        // Dismiss the picker if the user canceled.
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        // The info dictionary may contain multiple representations of the image. You want to use the original.
-        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-        
-        // Set photoImageView to display the selected image.
-        profilePicture.image = selectedImage
-        
-        // Dismiss the picker.
-        dismiss(animated: true, completion: nil)
-    }
-    
-    
-    // MARK: Actions
-    
-    // Select photo from photo library
-    @IBAction func selectPhotoFromLibrary(_ sender: UITapGestureRecognizer) {
-        
-        print("imagePressed")
-        
-        let imagePickerController = UIImagePickerController()
-        
-        // only allows photos to be picked --> TODO allow user to take photos
-        imagePickerController.sourceType = .photoLibrary
-        
-        imagePickerController.delegate = self
-        present(imagePickerController, animated: true, completion: nil)
-        
     }
 }

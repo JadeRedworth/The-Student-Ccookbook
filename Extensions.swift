@@ -26,7 +26,7 @@ extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigation
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        print("Cancelled Picker")
+        dismiss(animated: true, completion: nil)
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
@@ -46,6 +46,73 @@ extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigation
         dismiss(animated: true, completion: nil)
     }
 }
+
+extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func handleSelectImageView() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] {
+            selectedImageFromPicker = editedImage as! UIImage
+        } else if let originalImage = info["UIImagePickerControllerOriginaImage"]{
+            selectedImageFromPicker = originalImage as! UIImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker {
+            profilePicture.image = selectedImage
+            profilePicture.makeImageCircle()
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+extension EditUserDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func handleSelectImageView() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        
+        var selectedImageFromPicker: UIImage?
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] {
+            selectedImageFromPicker = editedImage as! UIImage
+        } else if let originalImage = info["UIImagePickerControllerOriginaImage"]{
+            selectedImageFromPicker = originalImage as! UIImage
+        }
+        
+        if let selectedImage = selectedImageFromPicker {
+            profilePicture.image = selectedImage
+            profilePicture.makeImageCircle()
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+}
+
+
+
 
 extension String {
     

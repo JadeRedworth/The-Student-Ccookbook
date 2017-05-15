@@ -104,6 +104,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         super.viewDidLoad()
         
         self.dismissKeyboardWhenTappedAround()
+        self.dismissKeyboard()
         
         photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
         ref = FIRDatabase.database().reference()
@@ -127,11 +128,12 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         
         setUpToolBar()
         
-        self.stepsTableView.estimatedRowHeight = 44.0
-        self.stepsTableView.rowHeight = UITableViewAutomaticDimension
+        if currentStoryboardName == "Main" {
+            self.stepsTableView.estimatedRowHeight = 44.0
+            self.stepsTableView.rowHeight = UITableViewAutomaticDimension
+        }
         
         publicStatus = false
-        
         
         if editCheck == true {
             fillRecipeInformation()

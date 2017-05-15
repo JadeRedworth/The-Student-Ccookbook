@@ -37,7 +37,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     @IBOutlet weak var genderLabel: UILabel!
     @IBOutlet weak var noAddedRecipesLabel: UILabel!
     @IBOutlet weak var noRatedRecipesLabel: UILabel!
-    @IBOutlet weak var noCookedRecipesLabel: UILabel!
     
     @IBOutlet weak var addFriendButton: RoundButton!
     
@@ -58,16 +57,25 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         
         ref = FIRDatabase.database().reference()
         
-        recipeView.alpha = 1
-        friendsView.alpha = 0
-        reviewsView.alpha = 0
-        
         loggedInUser = (FIRAuth.auth()?.currentUser?.uid)!
         
-        fillData()
-
-        getFriends()
-        getReviews()
+        if user != nil {
+            fillData()
+            getRecipe()
+            getFriends()
+            getReviews()
+        } else {
+            userList.fetchUsers(refName: "Users", queryKey: loggedInUser, queryValue: "" as AnyObject, ref: ref){
+                (result: [User]) in
+                if result.isEmpty{
+                    print("No user")
+                } else {
+                    self.user = result[0]
+                    self.fillData()
+                    self.getFriends()
+                }
+            }
+        }
     }
     
     @IBAction func segmentControlView(_ sender: UISegmentedControl) {
@@ -133,7 +141,14 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             self.imageViewProfilePic.makeImageCircle()
             self.imageViewProfilePic.contentMode = .scaleAspectFill
         }
+    
+        self.noAddedRecipesLabel.text = "3"
         
+        self.noRatedRecipesLabel.text = "2"
+        
+    }
+    
+    func getRecipe() {
         userRecipeList.fetchRecipes(refName: "Recipes", queryKey: "AddedBy", queryValue: self.userID! as AnyObject, recipeToSearch: "", ref: self.ref) {
             (result: [Recipes]) in
             print(result)
@@ -149,12 +164,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             }
             
         }
-        
-        self.noAddedRecipesLabel.text = "\(userRecipeList.count)"
-        
-        self.noRatedRecipesLabel.text = "0"
-        
-        self.noCookedRecipesLabel.text = "0"
     }
     
     func getFriends(){
@@ -202,6 +211,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             if friendsList.isEmpty {
                 
             } else {
+                
                 cell?.labelFriendName.text = "\(self.friendsList[indexPath.row].firstName!) \(self.friendsList[indexPath.row].lastName!)"
                 if let profileImageURL = self.friendsList[indexPath.row].profilePicURL {
                     cell?.friendsImageView.loadImageWithCacheWithUrlString(profileImageURL)

@@ -11,7 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -40,6 +40,11 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIIm
         userID = user?.userID
         self.ref = FIRDatabase.database().reference()
         
+        profilePicture.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
+        profilePicture.makeImageCircle()
+        self.dismissKeyboardWhenTappedAround()
+        self.dismissKeyboard()
+
         fillData()
         
         self.age = [Int] (11...99).map{ String($0)}
@@ -67,26 +72,6 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIIm
         
     }
     
-    @IBAction func selectPhotoFromLibrary(_ sender: UITapGestureRecognizer) {
-        
-        print("imagePressed")
-        
-        // Hide the keyboard
-        textFieldFirstName.resignFirstResponder()
-        textFieldLastName.resignFirstResponder()
-        textFieldAge.resignFirstResponder()
-        textFieldGender.resignFirstResponder()
-        textFieldLocation.resignFirstResponder()
-        
-        let imagePickerController = UIImagePickerController()
-        
-        // only allows photos to be picked --> TODO allow user to take photos
-        imagePickerController.sourceType = .photoLibrary
-        
-        imagePickerController.delegate = self
-        
-        present(imagePickerController, animated: true, completion: nil)
-    }
     
     @IBAction func buttonBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -116,7 +101,7 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIIm
                 photoImageURL = result
                 
                 userRef.updateChildValues([
-                    "ImageURL": photoImageURL,
+                    "ProfileImageURL": photoImageURL,
                     "FirstName": self.textFieldFirstName.text!,
                     "LastName": self.textFieldLastName.text!,
                     "Age": Int(self.textFieldAge.text!) ?? 0,
@@ -189,20 +174,6 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIIm
         } else if datasource == gender {
             textFieldGender.text = datasource[row]
         }
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
-        guard let selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
-            fatalError("Expected a dictionary containing an image, but was provided the following: \(info)")
-        }
-        
-        profilePicture.image = selectedImage
-        
-        dismiss(animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {
