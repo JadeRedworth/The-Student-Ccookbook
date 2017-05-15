@@ -47,6 +47,9 @@
 		8DCC4FB21E718B6700BBB9DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCC4FB11E718B6700BBB9DA /* Main.storyboard */; };
 		8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266511E7ED705009B68A9 /* RegisterViewController.swift */; };
 		8DE266561E804252009B68A9 /* MyRecipeTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */; };
+		8DFB82A61ECA435A00FD51B7 /* FacebookCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */; };
+		8DFB82A71ECA435A00FD51B7 /* FacebookLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A41ECA435A00FD51B7 /* FacebookLogin.framework */; };
+		8DFB82A81ECA435A00FD51B7 /* FacebookShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A51ECA435A00FD51B7 /* FacebookShare.framework */; };
 		DB73B1C6EC6D04989F3734ED /* Pods_student_cookbook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF0BF3D4AEB43827A0950306 /* Pods_student_cookbook.framework */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +119,9 @@
 		8DCC4FB11E718B6700BBB9DA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8DE266511E7ED705009B68A9 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyRecipeTableTableViewController.swift; sourceTree = "<group>"; };
+		8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookCore.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookCore.framework"; sourceTree = "<group>"; };
+		8DFB82A41ECA435A00FD51B7 /* FacebookLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookLogin.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookLogin.framework"; sourceTree = "<group>"; };
+		8DFB82A51ECA435A00FD51B7 /* FacebookShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookShare.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookShare.framework"; sourceTree = "<group>"; };
 		9132A56D773703389CA14514 /* Pods-student_cookbook.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-student_cookbook.release.xcconfig"; path = "Pods/Target Support Files/Pods-student_cookbook/Pods-student_cookbook.release.xcconfig"; sourceTree = "<group>"; };
 		AFAB37B14AD91BB4E066DD61 /* Pods-student_cookbook.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-student_cookbook.debug.xcconfig"; path = "Pods/Target Support Files/Pods-student_cookbook/Pods-student_cookbook.debug.xcconfig"; sourceTree = "<group>"; };
 		C151514251854EE1654F874F /* Pods_student_cookbookUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_student_cookbookUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -129,7 +135,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8DFB82A81ECA435A00FD51B7 /* FacebookShare.framework in Frameworks */,
 				DB73B1C6EC6D04989F3734ED /* Pods_student_cookbook.framework in Frameworks */,
+				8DFB82A71ECA435A00FD51B7 /* FacebookLogin.framework in Frameworks */,
+				8DFB82A61ECA435A00FD51B7 /* FacebookCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,6 +164,9 @@
 		2EB496D147DAB91BB49D5BCE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */,
+				8DFB82A41ECA435A00FD51B7 /* FacebookLogin.framework */,
+				8DFB82A51ECA435A00FD51B7 /* FacebookShare.framework */,
 				CF0BF3D4AEB43827A0950306 /* Pods_student_cookbook.framework */,
 				FF62D45266DADA57AC16FADC /* Pods_student_cookbookTests.framework */,
 				C151514251854EE1654F874F /* Pods_student_cookbookUITests.framework */,
@@ -484,7 +496,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7E6112F1F551FC6B793BD226 /* [CP] Embed Pods Frameworks */ = {
@@ -529,7 +541,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		9DA3C9255FF1CEC699B01A96 /* [CP] Check Pods Manifest.lock */ = {
@@ -544,7 +556,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		B693483179F766E43AF38C97 /* [CP] Copy Pods Resources */ = {
@@ -787,6 +799,20 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = HCYY3PH5R7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMOAuth2\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMSessionFetcher\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GoogleToolboxForMac\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseCore/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseStorage/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
+					"\"${PODS_ROOT}/FacebookSignIn/Frameworks\"",
+				);
 				INFOPLIST_FILE = student_cookbook/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -805,6 +831,20 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = HCYY3PH5R7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMOAuth2\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GTMSessionFetcher\"",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/GoogleToolboxForMac\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseCore/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseStorage/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleSignIn/Frameworks\"",
+					"\"${PODS_ROOT}/FacebookSignIn/Frameworks\"",
+				);
 				INFOPLIST_FILE = student_cookbook/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

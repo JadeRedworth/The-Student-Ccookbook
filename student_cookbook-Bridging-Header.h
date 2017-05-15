@@ -10,5 +10,7 @@
 #define student_cookbook_Bridging_Header_h
 
 import <GoogleSignIn/GoogleSignIn.h>
+import <FBSDKCoreKit/FBSDKCoreKit.h>
+import <FBSDKLoginKit/FBSDKLoginKit.h>
 
 #endif /* student_cookbook_Bridging_Header_h */

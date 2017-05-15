@@ -12,8 +12,10 @@ import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
 import GoogleSignIn
+import FacebookLogin
+import FBSDKLoginKit
 
-class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -36,9 +38,17 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
     
     
     override func viewDidLoad() {
+
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
+        
+        let loginButton = FBSDKLoginButton()
+        view.addSubview(loginButton)
+        loginButton.readPermissions = ["email", "public_profile"]
+        loginButton.frame = CGRect(x: 52, y: 400, width: 308, height: 44)
+        loginButton.delegate = self
+     
         
         GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
@@ -48,15 +58,39 @@ class LogInViewController: UIViewController, GIDSignInDelegate, GIDSignInUIDeleg
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
     }
     
-    /*
-     // Check if user is an admin
-     func checkIfUserIsAdmin() -> Bool {
-     var result: Bool = false
-     DispatchQueue.main.async {
-     }
-     return result
-     } */
+
     
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        print("Did log out of facebook")
+    }
+    
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        if error != nil {
+            print(error)
+            return
+        }
+        
+        let accessToken = FBSDKAccessToken.current()
+        
+        let credentials = FIRFacebookAuthProvider.credential(withAccessToken: (accessToken?.tokenString)!)
+        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+            if error != nil {
+                print("Somethign wrong with user", error ?? "")
+                return
+            }
+            print("Logged in with user")
+            self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
+        })
+        
+        FBSDKGraphRequest(graphPath: "/me", parameters: ["fields": "id, name, email"]).start { (connection, result, err) in
+            
+            if err != nil {
+                print("Failed to start graph request:", err ?? "")
+                return
+            }
+            print(result ?? "")
+        }
+    }
     
     
     // button for log in
