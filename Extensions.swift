@@ -236,10 +236,6 @@ extension Array where Element: User {
                 users.userType = (userDict["UserType"] as? String).map { User.UserType(rawValue: $0) }! ?? User.UserType(rawValue: "")!
                 users.firstName = userDict["FirstName"] as? String ?? ""
                 users.lastName = userDict["LastName"] as? String ?? ""
-                users.email = userDict["Email"] as? String ?? ""
-                users.age = userDict["Age"] as? Int
-                users.gender = userDict["Gender"] as? String ?? ""
-                users.location = userDict["Location"] as? String ?? ""
                 users.profilePicURL = userDict["ProfileImageURL"] as? String ?? ""
                 
                 userList.append(users)
@@ -511,6 +507,31 @@ extension UIViewController {
     
     func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+extension UIViewController: UITextFieldDelegate{
+    func addToolBar(textField: UITextField){
+        let toolBar = UIToolbar()
+        toolBar.barStyle = UIBarStyle.default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
+        let doneButton = UIBarButtonItem(title: "Done", style: UIBarButtonItemStyle.done, target: self, action: #selector(UIViewController.donePressed))
+        let cancelButton = UIBarButtonItem(title: "Cancel", style: UIBarButtonItemStyle.plain, target: self, action: #selector(UIViewController.cancelPressed))
+        let spaceButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: nil, action: nil)
+        toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.sizeToFit()
+        
+        textField.delegate = self
+        textField.inputAccessoryView = toolBar
+    }
+    
+    func donePressed(){
+        view.endEditing(true)
+    }
+    func cancelPressed(){
+        view.endEditing(true) // or do something
     }
 }
 

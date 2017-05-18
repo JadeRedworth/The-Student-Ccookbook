@@ -384,8 +384,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath) as! IngredientsAndStepsTableViewCell
             
             if (indexPath.section == 0) {
-                cell.labelTitle?.text = ingredientsList[indexPath.row].name
-                cell.labelDetail?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
+                cell.labelDetail?.text = ingredientsList[indexPath.row].name
+                cell.labelTitle?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
                 
                 
             } else if (indexPath.section == 1){

@@ -11,9 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 
-class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
-    
-    @IBOutlet weak var segmentConrtolViews: UISegmentedControl!
+class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
     
     // Views
     @IBOutlet weak var infoView: UIView!
@@ -48,6 +46,23 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     // Ipad outlets
     @IBOutlet weak var IngredientsAndStepsTableView: UITableView!
     
+    @IBAction func buttonInfo(_ sender: Any) {
+        infoView.alpha = 1
+        ingredientsView.alpha = 0
+        stepsView.alpha = 0
+    }
+    
+    @IBAction func buttonIngredients(_ sender: Any) {
+        infoView.alpha = 0
+        ingredientsView.alpha = 1
+        stepsView.alpha = 0
+    }
+    
+    @IBAction func buttonSteps(_ sender: Any) {
+        infoView.alpha = 0
+        ingredientsView.alpha = 0
+        stepsView.alpha = 1
+    }
     
     // Variables
     // Recipes
@@ -89,7 +104,7 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     // Picker Lists
     var courses = ["Breakfast","Lunch","Dinner", "Dessert"]
     var types = ["Quick", "Healthy", "Easy", "On a Budget", "Treat your self"]
-    var measurements = ["Cup", "Grams", "ml", "Oz", "Tbsp", "tsp"]
+    var measurements = [" ", "Cup", "Grams", "ml", "Oz", "Tbsp", "tsp"]
     var difficulty = ["1", "2", "3", "4", "5"]
     var timeHours: [String] = []
     var timeMins: [String] = []
@@ -121,6 +136,8 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
         
         self.timeHours = [Int] (0...23).map{ String($0)}
         self.timeMins = [Int] (0...59).map{ String($0)}
+        
+        photoImageView.contentMode = .scaleAspectFill
         
         pickerView.delegate = self
         
@@ -237,26 +254,6 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
             break;
         }
         
-    }
-    
-    @IBAction func segmentControlViews(_ sender: UISegmentedControl) {
-        
-        switch sender.selectedSegmentIndex {
-        case 0:
-            infoView.alpha = 1
-            ingredientsView.alpha = 0
-            stepsView.alpha = 0
-        case 1:
-            infoView.alpha = 0
-            ingredientsView.alpha = 1
-            stepsView.alpha = 0
-        case 2:
-            infoView.alpha = 0
-            ingredientsView.alpha = 0
-            stepsView.alpha = 1
-        default:
-            break;
-        }
     }
     
     // Siwtch
@@ -696,49 +693,19 @@ class AddRecipeViewController: UIViewController, UITextFieldDelegate, UITableVie
     // ToolBar
     
     func setUpToolBar(){
-        
-        let toolBar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.size.height/6, width: self.view.frame.size.width, height: 40.0))
-        
-        toolBar.layer.position = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-20.0)
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.tintColor = UIColor.white
-        toolBar.backgroundColor = UIColor.black
-        
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.donePressed))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width / 3, height: self.view.frame.size.height))
-        label.font = UIFont(name: "Helvetica", size: 12)
-        label.backgroundColor = UIColor.clear
-        label.textColor = UIColor.white
-        label.text = "Pick an Option"
-        label.textAlignment = NSTextAlignment.center
-        let textBtn = UIBarButtonItem(customView: label)
-        toolBar.setItems([flexSpace,textBtn,flexSpace,doneButton], animated: true)
-        textFieldMeasurement.inputAccessoryView = toolBar
-        textFieldCourse.inputAccessoryView = toolBar
-        textFieldDifficulty.inputAccessoryView = toolBar
-        textFieldType.inputAccessoryView = toolBar
-        textFieldCookHour.inputAccessoryView = toolBar
-        textFieldCookMin.inputAccessoryView = toolBar
-        textFieldPrepHour.inputAccessoryView = toolBar
-        textFieldPrepMin.inputAccessoryView = toolBar
+        addToolBar(textField: textFieldType)
+        addToolBar(textField: textFieldMeasurement)
+        addToolBar(textField: textFieldCourse)
+        addToolBar(textField: textFieldDifficulty)
+        addToolBar(textField: textFieldCookHour)
+        addToolBar(textField: textFieldCookMin)
+        addToolBar(textField: textFieldPrepHour)
+        addToolBar(textField: textFieldPrepMin)
+        addToolBar(textField: textFieldRecipeName)
+        addToolBar(textField: textFieldServingSize)
+        addToolBar(textField: textFieldIngredientName)
+        addToolBar(textField: textFieldIngredientsQuantity)
     }
-    
-    func donePressed(sender: UIBarButtonItem) {
-        textFieldMeasurement.resignFirstResponder()
-        textFieldType.resignFirstResponder()
-        textFieldDifficulty.resignFirstResponder()
-        textFieldCourse.resignFirstResponder()
-        textFieldCookHour.resignFirstResponder()
-        textFieldCookMin.resignFirstResponder()
-        textFieldPrepHour.resignFirstResponder()
-        textFieldPrepMin.resignFirstResponder()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
-    }
-    
     
     func myTargetFunction(textField: UITextField) {
         if textField == textFieldMeasurement {

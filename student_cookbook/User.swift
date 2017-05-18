@@ -13,10 +13,6 @@ class User: NSObject {
     var userID: String?
     var firstName: String?
     var lastName: String?
-    var age: Int?
-    var gender: String?
-    var location: String?
-    var email: String?
     var profilePicURL: String?
     var userType: UserType?
     
@@ -30,14 +26,10 @@ class User: NSObject {
         
     }
     
-    init(userID: String, firstName: String, lastName: String, age: Int, gender: String, location: String, email: String, profilePicURL: String, userType: UserType) {
+    init(userID: String, firstName: String, lastName: String, profilePicURL: String, userType: UserType) {
         self.userID = userID
         self.firstName = firstName
         self.lastName = lastName
-        self.age = age
-        self.gender = gender
-        self.location = location
-        self.email = email
         self.profilePicURL = profilePicURL
         self.userType = userType
     }
@@ -50,10 +42,6 @@ class User: NSObject {
                 userID: userList[i].userID!,
                 firstName: userList[i].firstName!,
                 lastName: userList[i].lastName!,
-                age: userList[i].age!,
-                gender: userList[i].gender!,
-                location: userList[i].location!,
-                email: userList[i].email!,
                 profilePicURL: userList[i].profilePicURL!,
                 userType: userList[i].userType!))
         }

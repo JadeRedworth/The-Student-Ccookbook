@@ -33,8 +33,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     //Label Outlets
     
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var ageLabel: UILabel!
-    @IBOutlet weak var genderLabel: UILabel!
     @IBOutlet weak var noAddedRecipesLabel: UILabel!
     @IBOutlet weak var noRatedRecipesLabel: UILabel!
     
@@ -42,7 +40,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     
     @IBOutlet weak var recipesInfoLabel: UILabel!
     
-    @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak var myRecipesCollectionView: UICollectionView!
     @IBOutlet weak var friendsTableView: UITableView!
     @IBOutlet weak var reviewsTableView: UITableView!
@@ -78,24 +75,28 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         }
     }
     
-    @IBAction func segmentControlView(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0:
-            recipeView.alpha = 1
-            friendsView.alpha = 0
-            reviewsView.alpha = 0
-        case 1:
-            recipeView.alpha = 0
-            friendsView.alpha = 1
-            reviewsView.alpha = 0
-        case 2:
-            recipeView.alpha = 0
-            friendsView.alpha = 0
-            reviewsView.alpha = 1
-        default:
-            break
-        }
+    
+    @IBAction func buttonRecipes(_ sender: Any) {
+        
+        recipeView.alpha = 1
+        friendsView.alpha = 0
+        reviewsView.alpha = 0
     }
+  
+    @IBAction func buttonFriends(_ sender: Any) {
+        
+        recipeView.alpha = 0
+        friendsView.alpha = 1
+        reviewsView.alpha = 0
+    }
+    
+    @IBAction func buttonReviews(_ sender: Any) {
+        
+        recipeView.alpha = 0
+        friendsView.alpha = 0
+        reviewsView.alpha = 1
+    }
+
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -134,8 +135,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     func fillData(){
         self.userID = self.user?.userID
         self.nameLabel.text = "\(self.user!.firstName!) \(self.user!.lastName!)"
-        self.ageLabel.text = "\(self.user!.age!) y/o"
-        self.genderLabel.text = self.user?.gender
         if let userProfileURL = self.user?.profilePicURL {
             self.imageViewProfilePic.loadImageWithCacheWithUrlString(userProfileURL)
             self.imageViewProfilePic.makeImageCircle()

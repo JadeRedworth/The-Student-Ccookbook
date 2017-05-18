@@ -262,65 +262,35 @@ class MyRecipeTableViewController: UITableViewController, UISearchResultsUpdatin
         if (indexPath.section == 0){
             
             recipe = filteredMyPrivateRecipeList[indexPath.row]
-            
-            cell.labelRecipeName?.text = recipe.name
-            cell.labelCourse.text = recipe.course.map { $0.rawValue }
-            
-            fetchUserWhoAddedRecipe(completion: {
-                result in
-                if result {
-                    cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
-                    cell.userImageView.loadImageWithCacheWithUrlString(self.userList[0].profilePicURL!)
-                    cell.userImageView.makeImageCircle()
-                }
-            })
-            var starRating: String = ""
-            starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
-            cell.labelRating.text = starRating
-            
-            if recipe.imageURL != nil {
-                if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
-                }
-            }
 
         } else if (indexPath.section == 1){
             
             recipe = filteredMyPublicRecipeList[indexPath.row]
             
-            cell.labelRecipeName?.text = recipe.name
-            cell.labelCourse.text = recipe.course.map { $0.rawValue }
-            
-            fetchUserWhoAddedRecipe(completion: {
-                result in
-                if result {
-                    cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
-                    cell.userImageView.loadImageWithCacheWithUrlString(self.userList[0].profilePicURL!)
-                    cell.userImageView.makeImageCircle()
-                }
-            })
-            var starRating: String = ""
-            starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
-            cell.labelRating.text = starRating
-            
-            if recipe.imageURL != nil {
-                if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
-                }
-            }
-            
         } else if (indexPath.section == 2){
             
-            let recipe = filteredFavouritesRecipeList[indexPath.row]
-            cell.labelRecipeName.text = recipe.name
-            cell.labelRecipeAddedBy.text = "@: \(recipe.addedBy!)"
-            
-            if recipe.imageURL != nil {
-                if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
-                }
+            recipe = filteredFavouritesRecipeList[indexPath.row]
+        }
+        
+        cell.labelRecipeName.text = recipe.name
+        
+        fetchUserWhoAddedRecipe(completion: {
+            result in
+            if result {
+                cell.labelRecipeAddedBy?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                cell.userImageView.loadImageWithCacheWithUrlString(self.userList[0].profilePicURL!)
+                cell.userImageView.makeImageCircle()
             }
-            
+        })
+        
+        var starRating: String = ""
+        starRating = starRating.getStarRating(rating: "\(recipe.averageRating!)")
+        cell.labelRating.text = starRating
+        
+        if recipe.imageURL != nil {
+            if let recipeImageURL = recipe.imageURL {
+                cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
+            }
         }
         
         return cell

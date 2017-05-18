@@ -11,7 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
+class EditUserDetailsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -56,6 +56,8 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIPi
         textFieldAge.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
         textFieldGender.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
         
+
+        
         setUpToolBar()
     }
     
@@ -63,9 +65,6 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIPi
         
         textFieldFirstName.text = user?.firstName
         textFieldLastName.text = user?.lastName
-        textFieldAge.text = "\(user!.age!)"
-        textFieldGender.text = user?.gender
-        textFieldLocation.text = user?.location
         
         let imageURL = user?.profilePicURL
         profilePicture.loadImageWithCacheWithUrlString(imageURL!)
@@ -115,25 +114,8 @@ class EditUserDetailsViewController: UIViewController, UITextFieldDelegate, UIPi
     
     
     func setUpToolBar(){
-        
-        let toolBar = UIToolbar(frame: CGRect(x: 0, y: self.view.frame.size.height/6, width: self.view.frame.size.width, height: 40.0))
-        
-        toolBar.layer.position = CGPoint(x: self.view.frame.size.width/2, y: self.view.frame.size.height-20.0)
-        toolBar.barStyle = UIBarStyle.default
-        toolBar.tintColor = UIColor.white
-        toolBar.backgroundColor = UIColor.black
-        let doneButton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(self.donePressed))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width / 3, height: self.view.frame.size.height))
-        label.font = UIFont(name: "Helvetica", size: 12)
-        label.backgroundColor = UIColor.clear
-        label.textColor = UIColor.white
-        label.text = "Pick an Option"
-        label.textAlignment = NSTextAlignment.center
-        let textBtn = UIBarButtonItem(customView: label)
-        toolBar.setItems([flexSpace,textBtn,flexSpace,doneButton], animated: true)
-        textFieldAge.inputAccessoryView = toolBar
-        textFieldGender.inputAccessoryView = toolBar
+        addToolBar(textField: textFieldFirstName)
+        addToolBar(textField: textFieldLastName)
     }
     
     func donePressed(sender: UIBarButtonItem) {

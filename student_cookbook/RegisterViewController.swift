@@ -20,9 +20,6 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var textFieldRegisterFName: UITextField!
     @IBOutlet weak var textFieldRegisterLName: UITextField!
     @IBOutlet weak var textFieldRegisterEmail: UITextField!
-    @IBOutlet weak var textFieldRegisterAge: UITextField!
-    @IBOutlet weak var textFieldRegisterGender: UITextField!
-    @IBOutlet weak var textFieldRegisterLocation: UITextField!
     @IBOutlet weak var textFieldRegisterPassword: UITextField!
     @IBOutlet weak var textFieldRegisterRePassword: UITextField!
     @IBOutlet weak var profilePicture: UIImageView!
@@ -35,6 +32,20 @@ class RegisterViewController: UIViewController {
         self.dismissKeyboard()
     
         ref = FIRDatabase.database().reference()
+        
+        textFieldRegisterFName.layer.cornerRadius = 5.0
+        textFieldRegisterLName.layer.cornerRadius = 5.0
+        textFieldRegisterEmail.layer.cornerRadius = 5.0
+        textFieldRegisterPassword.layer.cornerRadius = 5.0
+        textFieldRegisterRePassword.layer.cornerRadius = 5.0
+        
+        addToolBar(textField: textFieldRegisterFName)
+        addToolBar(textField: textFieldRegisterLName)
+        addToolBar(textField: textFieldRegisterEmail)
+        addToolBar(textField: textFieldRegisterPassword)
+        addToolBar(textField: textFieldRegisterRePassword)
+
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,7 +68,7 @@ class RegisterViewController: UIViewController {
                 let storageRef = FIRStorage.storage().reference().child("user_profile_images").child("\(uniqueProfilePictureName).png")
                 
                 
-                  let imageToUpload = profilePicture.image?.scaleImageToSize(img: profilePicture.image!, size: CGSize(width: 200.0, height: 200.0))
+                let imageToUpload = profilePicture.image?.scaleImageToSize(img: profilePicture.image!, size: CGSize(width: 200.0, height: 200.0))
                 
                 if let uploadData = UIImagePNGRepresentation(imageToUpload!) {
                     
@@ -70,29 +81,23 @@ class RegisterViewController: UIViewController {
                             
                             FIRAuth.auth()?.createUser(withEmail: self.textFieldRegisterEmail.text!, password: checkedPassword, completion: { (user, error) in
                                 if error == nil {
-                                    self.dismiss(animated: true, completion: nil)
-                                    print("User regstered..")
+                                  
+                                    let alertController = UIAlertController(title: "Success", message: "Your account has been successfully registered! :)", preferredStyle: UIAlertControllerStyle.alert)
+                                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                                    self.present(alertController, animated: true, completion: nil)
+                                      self.dismiss(animated: true, completion: nil)
                                 } else {
-                                    // add alert
-                                    print(error!.localizedDescription)
+                                    let alertController = UIAlertController(title: "Error", message: "Failed to register your account, please try again! :(", preferredStyle: UIAlertControllerStyle.alert)
+                                    alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                                    self.present(alertController, animated: true, completion: nil)
+                                    self.dismiss(animated: true, completion: nil)
                                 }
                                 let userID: String = user!.uid
-                                let userEmail: String = self.textFieldRegisterEmail.text!
                                 let userFName: String = self.textFieldRegisterFName.text!
                                 let userLName: String = self.textFieldRegisterLName.text!
-                                let userAge: Int = Int(self.textFieldRegisterAge.text!)!
-                                let userGender: String = self.textFieldRegisterGender.text!
-                                let userLocation: String = self.textFieldRegisterLocation.text!
                                 
-                                let userPassword: String = checkedPassword
-                                
-                                let userValue = (["Email": userEmail,
-                                                 "FirstName": userFName,
+                                let userValue = (["FirstName": userFName,
                                                  "LastName": userLName,
-                                                 "Age" : userAge,
-                                                 "Gender" : userGender,
-                                                 "Location" : userLocation,
-                                                 "Password": userPassword,
                                                  "ProfileImageURL": profileImageURL,
                                                  "UserType": "User",
                                                  "NoRecipesAdded" : 0,
@@ -104,10 +109,16 @@ class RegisterViewController: UIViewController {
                     })
                 }
             } else {
-                //TODO alert
+                let alertController = UIAlertController(title: "Error", message: "Passwords do not match!", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
             }
         } else {
-            //TODO alert
+            let alertController = UIAlertController(title: "Error", message: "Password must be longer than 6 characters!", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         }
     }
+    
+    
 }

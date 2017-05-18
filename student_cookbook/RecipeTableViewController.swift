@@ -365,6 +365,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
                 if recipe.imageURL != nil {
                     if let recipeImageURL = recipe.imageURL {
                         cell.recipeImageView?.loadImageWithCacheWithUrlString(recipeImageURL)
+                        cell.recipeImageView.contentMode = .scaleAspectFill
                     }
                 }
                 return cell

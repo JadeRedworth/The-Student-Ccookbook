@@ -109,9 +109,6 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         labelUserName.text = "\(self.user.firstName!) \(self.user.lastName!)"
-        labelUserAge.text = "\(String(describing: self.user.age))"
-        labelUserGender.text = self.user.gender
-        labelUserLocation.text = self.user.location
         labelUserNoRecipesAdded.text = ""
         labelUserNoRecipesCooked.text = ""
         labelUserNoRecipesRated.text = ""
@@ -173,7 +170,6 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
         self.user = filteredUserList[indexPath.row]
         
         cell.textLabel?.text = "\(user.firstName!) \(user.lastName!)"
-        cell.detailTextLabel?.text = "Age: \(user.age!)  Gender: \(user.gender!)"
         
         if user.profilePicURL != nil {
             if let profileImageUrl = user.profilePicURL {
