@@ -11,12 +11,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseStorage
 
-class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,  UIPickerViewDataSource, UIPickerViewDelegate {
-    
-    // Views
-    @IBOutlet weak var infoView: UIView!
-    @IBOutlet weak var ingredientsView: UIView!
-    @IBOutlet weak var stepsView: UIView!
+class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     // Info
     @IBOutlet weak var textFieldRecipeName: UITextField!
@@ -45,24 +40,6 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
     
     // Ipad outlets
     @IBOutlet weak var IngredientsAndStepsTableView: UITableView!
-    
-    @IBAction func buttonInfo(_ sender: Any) {
-        infoView.alpha = 1
-        ingredientsView.alpha = 0
-        stepsView.alpha = 0
-    }
-    
-    @IBAction func buttonIngredients(_ sender: Any) {
-        infoView.alpha = 0
-        ingredientsView.alpha = 1
-        stepsView.alpha = 0
-    }
-    
-    @IBAction func buttonSteps(_ sender: Any) {
-        infoView.alpha = 0
-        ingredientsView.alpha = 0
-        stepsView.alpha = 1
-    }
     
     // Variables
     // Recipes
@@ -120,8 +97,8 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
         
         self.dismissKeyboardWhenTappedAround()
         self.dismissKeyboard()
-        
         photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
+        
         ref = FIRDatabase.database().reference()
         self.userID = FIRAuth.auth()?.currentUser?.uid
         currentStoryboard = self.storyboard
@@ -129,7 +106,6 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
         
         checkIfUserIsLoggedIn()
         checkIfUserIsAdmin()
-        setUpViews()
         
         buttonAddSteps.layer.cornerRadius = 5
         buttonAddIngredients.layer.cornerRadius = 5
@@ -157,15 +133,6 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
         }
     }
     
-    func setUpViews() {
-        
-        if currentStoryboardName == "Main" {
-            infoView.alpha = 1
-            ingredientsView.alpha = 0
-            stepsView.alpha = 0
-        }
-    }
-    
     func setUpPickerViews(){
         
         textFieldMeasurement.inputView = pickerView
@@ -177,14 +144,14 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
         textFieldPrepHour.inputView = pickerView
         textFieldPrepMin.inputView = pickerView
         
-        textFieldMeasurement.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldCourse.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldType.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldDifficulty.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldCookHour.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldCookMin.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldPrepHour.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldPrepMin.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
+        textFieldMeasurement.addTarget(self, action: #selector(AddRecipeViewController.myTargetFunction), for: .touchDown)
+        textFieldCourse.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldType.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldDifficulty.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldCookHour.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldCookMin.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldPrepHour.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldPrepMin.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
     }
     
     func fillRecipeInformation() {
@@ -237,23 +204,6 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
                 self.adminStatus = userDict["Admin"] as! Bool!
             }
         })
-    }
-    
-    // MARK: Actions
-    
-    @IBAction func segmentControlViewsIpad(_ sender: UISegmentedControl) {
-        
-        switch sender.selectedSegmentIndex {
-        case 0:
-            ingredientsView.alpha = 1
-            stepsView.alpha = 0
-        case 1:
-            ingredientsView.alpha = 0
-            stepsView.alpha = 1
-        default:
-            break;
-        }
-        
     }
     
     // Siwtch
@@ -708,6 +658,8 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
     }
     
     func myTargetFunction(textField: UITextField) {
+        print("Target Functions")
+        
         if textField == textFieldMeasurement {
             datasource = measurements
         } else if textField == textFieldCourse {

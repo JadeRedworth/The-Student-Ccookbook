@@ -11,7 +11,7 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 
-class EditUserDetailsViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class EditUserDetailsViewController: UIViewController {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -22,17 +22,6 @@ class EditUserDetailsViewController: UIViewController, UIPickerViewDataSource, U
     
     @IBOutlet weak var textFieldFirstName: UITextField!
     @IBOutlet weak var textFieldLastName: UITextField!
-    @IBOutlet weak var textFieldAge: UITextField!
-    @IBOutlet weak var textFieldGender: UITextField!
-    @IBOutlet weak var textFieldLocation: UITextField!
-    
-    // Picker Lists
-    var gender = ["Male","Female","Prefer Not To Say"]
-    var age: [String] = []
-    
-    var pickerView = UIPickerView()
-    var datasource = [String]()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,18 +35,6 @@ class EditUserDetailsViewController: UIViewController, UIPickerViewDataSource, U
         self.dismissKeyboard()
 
         fillData()
-        
-        self.age = [Int] (11...99).map{ String($0)}
-        
-        pickerView.delegate = self
-        textFieldAge.inputView = pickerView
-        textFieldGender.inputView = pickerView
-        
-        textFieldAge.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        textFieldGender.addTarget(self, action: #selector(myTargetFunction), for: .touchDown)
-        
-
-        
         setUpToolBar()
     }
     
@@ -102,10 +79,7 @@ class EditUserDetailsViewController: UIViewController, UIPickerViewDataSource, U
                 userRef.updateChildValues([
                     "ProfileImageURL": photoImageURL,
                     "FirstName": self.textFieldFirstName.text!,
-                    "LastName": self.textFieldLastName.text!,
-                    "Age": Int(self.textFieldAge.text!) ?? 0,
-                    "Gender": self.textFieldGender.text!,
-                    "Location": self.textFieldLocation.text!])
+                    "LastName": self.textFieldLastName.text!])
                 completion(true)
             }
         }
@@ -118,44 +92,9 @@ class EditUserDetailsViewController: UIViewController, UIPickerViewDataSource, U
         addToolBar(textField: textFieldLastName)
     }
     
-    func donePressed(sender: UIBarButtonItem) {
-        textFieldAge.resignFirstResponder()
-        textFieldGender.resignFirstResponder()
-    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
-    }
-    
-    func myTargetFunction(textField: UITextField) {
-        if textField == textFieldAge {
-            datasource = age
-            self.pickerView.reloadAllComponents()
-        } else if textField == textFieldGender {
-            datasource = gender
-            self.pickerView.reloadAllComponents()
-        }
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return datasource.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return datasource[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int){
-        if datasource == age {
-            textFieldAge.text = datasource[row]
-        } else if datasource == gender {
-            textFieldGender.text = datasource[row]
-        }
     }
     
     override func didReceiveMemoryWarning() {
