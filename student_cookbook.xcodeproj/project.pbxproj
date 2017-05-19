@@ -41,13 +41,12 @@
 		8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B41E6B4BFB00998BF6 /* Steps.swift */; };
 		8D8698B71E6B4C3C00998BF6 /* Timers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B61E6B4C3C00998BF6 /* Timers.swift */; };
 		8D9603E51E6B0469007C892B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D9603E41E6B0469007C892B /* GoogleService-Info.plist */; };
-		8D97C64B1ECDDB420082F84F /* HomePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D97C64A1ECDDB420082F84F /* HomePageViewController.swift */; };
 		8DAEAA111EC09DA0007DBD21 /* Ratings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA101EC09DA0007DBD21 /* Ratings.swift */; };
 		8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */; };
 		8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */; };
 		8DCC4FB21E718B6700BBB9DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCC4FB11E718B6700BBB9DA /* Main.storyboard */; };
 		8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266511E7ED705009B68A9 /* RegisterViewController.swift */; };
-		8DE266561E804252009B68A9 /* MyRecipeTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */; };
+		8DE266561E804252009B68A9 /* MyFavouritesTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266551E804252009B68A9 /* MyFavouritesTableTableViewController.swift */; };
 		8DFB82A61ECA435A00FD51B7 /* FacebookCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */; };
 		8DFB82A71ECA435A00FD51B7 /* FacebookLogin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A41ECA435A00FD51B7 /* FacebookLogin.framework */; };
 		8DFB82A81ECA435A00FD51B7 /* FacebookShare.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A51ECA435A00FD51B7 /* FacebookShare.framework */; };
@@ -114,13 +113,12 @@
 		8D8698B61E6B4C3C00998BF6 /* Timers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timers.swift; sourceTree = "<group>"; };
 		8D8C16291E6B15B70013AE67 /* student_cookbook-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "student_cookbook-Bridging-Header.h"; sourceTree = "<group>"; };
 		8D9603E41E6B0469007C892B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		8D97C64A1ECDDB420082F84F /* HomePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageViewController.swift; sourceTree = "<group>"; };
 		8DAEAA101EC09DA0007DBD21 /* Ratings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ratings.swift; sourceTree = "<group>"; };
 		8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeReviews.swift; sourceTree = "<group>"; };
 		8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserShoppingListTableViewController.swift; sourceTree = "<group>"; };
 		8DCC4FB11E718B6700BBB9DA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		8DE266511E7ED705009B68A9 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
-		8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyRecipeTableTableViewController.swift; sourceTree = "<group>"; };
+		8DE266551E804252009B68A9 /* MyFavouritesTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFavouritesTableTableViewController.swift; sourceTree = "<group>"; };
 		8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookCore.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookCore.framework"; sourceTree = "<group>"; };
 		8DFB82A41ECA435A00FD51B7 /* FacebookLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookLogin.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookLogin.framework"; sourceTree = "<group>"; };
 		8DFB82A51ECA435A00FD51B7 /* FacebookShare.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookShare.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookShare.framework"; sourceTree = "<group>"; };
@@ -261,7 +259,7 @@
 				8D013CE91EBA43FB00AAA21A /* RecipeTableViewController.swift */,
 				8D0ED61F1E6DD6A9001ABEC6 /* RecipeDetailViewController.swift */,
 				8D6EF5F71E6C458300D5FF82 /* AddRecipeViewController.swift */,
-				8DE266551E804252009B68A9 /* MyRecipeTableTableViewController.swift */,
+				8DE266551E804252009B68A9 /* MyFavouritesTableTableViewController.swift */,
 				8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */,
 				8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */,
 				8DEB4D471E8A88B9009164C5 /* Recipe Table Cell */,
@@ -292,7 +290,6 @@
 		8D8C162A1E6B1C730013AE67 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				8D97C64A1ECDDB420082F84F /* HomePageViewController.swift */,
 				8D1D633A1E6B02DF00307B85 /* LogInViewController.swift */,
 				8DE266511E7ED705009B68A9 /* RegisterViewController.swift */,
 				8D3083B21E88107B008EEC4D /* Admin */,
@@ -642,8 +639,7 @@
 				8D457B071EB0CE8700A5BFCB /* EditUserDetailsViewController.swift in Sources */,
 				8D1D633B1E6B02DF00307B85 /* LogInViewController.swift in Sources */,
 				8D013CEA1EBA43FB00AAA21A /* RecipeTableViewController.swift in Sources */,
-				8D97C64B1ECDDB420082F84F /* HomePageViewController.swift in Sources */,
-				8DE266561E804252009B68A9 /* MyRecipeTableTableViewController.swift in Sources */,
+				8DE266561E804252009B68A9 /* MyFavouritesTableTableViewController.swift in Sources */,
 				8D8698AF1E6B3CDC00998BF6 /* User.swift in Sources */,
 				8D5104001EC7B19E0099ED3E /* EditReviewViewController.swift in Sources */,
 				8D2B666B1EC63A8A0057EC2A /* MyReviewsTableViewController.swift in Sources */,

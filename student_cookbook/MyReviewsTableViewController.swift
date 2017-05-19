@@ -19,6 +19,8 @@ class MyReviewsTableViewController: UITableViewController {
     var recipeList = [Recipes]()
     var recipeID: String!
     
+    var i: Int = 0
+    
     var userID: String!
     var reviewPressed: Bool = false
     var checkUserReviewRemoval: Bool = false
@@ -46,19 +48,13 @@ class MyReviewsTableViewController: UITableViewController {
                 self.reviewListIDs = result
                 self.reviewList.removeAll()
                 for i in 0..<self.reviewListIDs.count {
-                    self.reviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: self.reviewListIDs[i], ref: self.ref) {
+                    self.reviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: [self.reviewListIDs[i]], ref: self.ref) {
                         (result: [RecipeReviews]) in
                         if result.isEmpty {
                             print("Result Empty")
                         } else {
-                            if self.reviewList.contains(result[0]) {
-                                self.reviewList.remove(at: i)
-                                self.reviewList.append(result[1])
-                                self.tableView.reloadData()
-                            } else {
-                                self.reviewList += result
-                                self.tableView.reloadData()
-                            }
+                            self.reviewList += result
+                            self.tableView.reloadData()
                         }
                     }
                 }
@@ -73,10 +69,11 @@ class MyReviewsTableViewController: UITableViewController {
             if result.isEmpty {
                 //self.recipeList = []
             } else {
-                if result.count > self.recipeList.count {
-                    self.recipeList.removeAll()
+                if self.reviewList[self.i].recipeID == result.first?.id {
+                    self.recipeList += result
+                    self.i += 1
+                } else {
                 }
-                self.recipeList = result
                 completion(true)
             }
         }
@@ -125,6 +122,8 @@ class MyReviewsTableViewController: UITableViewController {
                         }
                     })
                     
+                    // somethign in here
+                    
                     let userReviewRef = self.ref.child("Users").child(self.reviewList[indexPath.row].userID!).child("Reviews")
                     query = userReviewRef.queryOrdered(byChild: "RecipeReviewID").queryEqual(toValue: self.reviewListIDs[indexPath.row])
                     query.observe(.value, with: { (snapshot) in
@@ -136,8 +135,6 @@ class MyReviewsTableViewController: UITableViewController {
                             self.go(indexPath: indexPath)
                         }
                     })
-                    
-                    
                 }))
             
             alert.addAction(UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler:nil))
@@ -148,6 +145,8 @@ class MyReviewsTableViewController: UITableViewController {
     func go(indexPath: IndexPath){
         if checkedRecipeReviewRemoval == true && checkUserReviewRemoval == true {
             self.reviewList.remove(at: indexPath.row)
+            self.recipeList.removeAll()
+            self.i = 0
             self.tableView.reloadData()
         }
     }
@@ -165,8 +164,8 @@ class MyReviewsTableViewController: UITableViewController {
            getRecipeDetails(completion: {
                 result in
                 if result {
-                    cell?.labelRecipeName.text = self.recipeList[0].name
-                    cell?.photoViewRecipe.loadImageWithCacheWithUrlString(self.recipeList[0].imageURL!)
+                    cell?.labelRecipeName.text = self.recipeList[indexPath.row].name
+                    cell?.photoViewRecipe.loadImageWithCacheWithUrlString(self.recipeList[indexPath.row].imageURL!)
                     cell?.photoViewRecipe.makeImageCircle()
                     
                 }

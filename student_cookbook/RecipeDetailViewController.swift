@@ -37,6 +37,9 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     var recipeRating:Int = 0
     var recipeId: String = ""
     
+    var isFavourite: Bool = false
+    var lastSelectedIndexPath: IndexPath!
+    
     // Image outlets
     @IBOutlet weak var imageViewRecipe: UIImageView!
     @IBOutlet weak var imageViewUser: UIImageView!
@@ -54,7 +57,11 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var labelAverageRating: UILabel!
     @IBOutlet weak var labelNoOfReviews: UILabel!
     
+    @IBOutlet weak var buttonAddFavourite: UIButton!
+    
     @IBOutlet var starButtons: [UIButton]!
+    @IBOutlet weak var textViewReview: UITextView!
+    @IBOutlet weak var buttonAddReview: UIButton!
     
     @IBOutlet weak var ingredientsAndStepsTableView: UITableView!
     
@@ -64,7 +71,17 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     @IBAction func buttonEdit(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "EditRecipeSegue", sender: nil)
-        
+    }
+    
+    @IBAction func buttonAddFavourite(_ sender: UIButton){
+        if isFavourite == true {
+            self.showAlert(title: "Error", message: "This recipe has already been added to your Favourites.")
+        } else {
+            let favValue = ["RecipeID": self.recipe?.id]
+            ref.child("Users").child(self.userID!).child("Favourites").childByAutoId().setValue(favValue)
+            self.showAlert(title: "Success", message: "Recipe has been added to Favourites.")
+            self.buttonAddFavourite.setImage(UIImage(named: "filledHeart.png"), for:  UIControlState.normal)
+        }
     }
     
     //MARK: Main
@@ -76,7 +93,10 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         self.ingredientsAndStepsTableView.estimatedRowHeight = 70.0
         self.ingredientsAndStepsTableView.rowHeight = UITableViewAutomaticDimension
-    
+        
+        self.reviewsTableView.estimatedRowHeight = 85
+        self.reviewsTableView.rowHeight = UITableViewAutomaticDimension
+        
         self.reviewsTableView.register(RecipeDetailsReviewsTableCell.self, forCellReuseIdentifier: cellId)
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
@@ -103,34 +123,25 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         for button in starButtons {
             if button.tag <= tag {
                 button.setImage(UIImage(named: "highlightedStar.png"), for:  UIControlState.normal)
-                
-                let alert = UIAlertController(title: "Confirm Rating", message: "Would you like to confirm this rating?", preferredStyle: UIAlertControllerStyle.actionSheet)
-                
-                let yes = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: setRating)
-                
-                let no = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil)
-                
-                alert.addAction(yes)
-                alert.addAction(no)
-                
-                self.present(alert, animated: true, completion: nil)
-                
             } else {
                 button.setImage(UIImage(named: "emptyStar.png"), for: UIControlState.normal)
-                
-                let alert = UIAlertController(title: "Confirm Rating", message: "Would you like to confirm this rating?", preferredStyle: UIAlertControllerStyle.actionSheet)
-                
-                let yes = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: setRating)
-                
-                let no = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil)
-                
-                alert.addAction(yes)
-                alert.addAction(no)
-                
-                self.present(alert, animated: true, completion: nil)
             }
         }
+    }
+    
+    @IBAction func buttonAddReview(_ sender: Any) {
         
+        if textViewReview.text.isEmpty {
+            buttonAddReview.titleLabel?.text = "Save Rating"
+            setRating()
+        } else {
+            buttonAddReview.titleLabel?.text = "Add Review"
+            setRating()
+            leaveReview()
+        }
+        textViewReview.text = ""
+        self.fillStarRatings()
+        self.getReviews()
     }
     
     @IBAction func buttonAddIngredientsToShoppingList(_ sender: Any) {
@@ -209,6 +220,15 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 
                 self.fillStarRatings()
                 self.getReviews()
+                
+                let userRef = self.ref.child("Users").child(self.userID!).child("Favourites")
+                query = userRef.queryOrdered(byChild: "RecipeID").queryEqual(toValue: self.recipe?.id)
+                query.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        self.isFavourite = true
+                        self.buttonAddFavourite.setImage(UIImage(named: "filledHeart.png"), for:  UIControlState.normal)
+                    }
+                })
             }
         }
     }
@@ -231,6 +251,10 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     func fillStarRatings(){
         
         for button in starButtons {
+            button.setImage(UIImage(named: "emptyStar.png"), for: UIControlState.normal)
+        }
+        
+        for button in starButtons {
             if button.tag <= recipeRating {
                 button.setImage(UIImage(named: "filledStar.png"), for:  UIControlState.normal)
             }
@@ -241,7 +265,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         labelAverageRating.text = ratingString
     }
     
-    func setRating(alert: UIAlertAction){
+    func setRating(){
         
         let ratingRef = ref.child("Recipes").child((recipe?.id)!).child("Ratings").child("\(buttonTag)")
         
@@ -253,17 +277,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 value = value + 1
                 ratingRef.setValue(value)
             }
-            
-            let alert = UIAlertController(title: "Info", message: "Rating :\(self.buttonTag)/5 starts has been successfully Added...Would you like to leave a review?", preferredStyle: UIAlertControllerStyle.actionSheet)
-            
-            let yes = UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: self.leaveReview)
-            
-            let no = UIAlertAction(title: "No", style: UIAlertActionStyle.cancel, handler: nil)
-            
-            alert.addAction(yes)
-            alert.addAction(no)
-            
-            self.present(alert, animated: true, completion: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadRecipes"), object: nil)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadData"), object: nil)
         })
     }
     
@@ -274,62 +289,40 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         recipeReviewIDs.fetchRecipeReviews(refName: "Recipes", queryKey: (recipe?.id)!, ref: ref) {
             (result: [String]) in
             if result.isEmpty {
-               
+                self.labelNoOfReviews.text = "0 reviews"
             } else {
                 self.recipeReviewIDs = result
-                for i in 0..<self.recipeReviewIDs.count {
-                    self.recipeReviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: self.recipeReviewIDs[i], ref: self.ref, completion: {
-                        (result: [RecipeReviews]) in
-                        self.recipeReviewList.removeAll()
-                        self.userReviewList.removeAll()
+                self.recipeReviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "", queryValue: self.recipeReviewIDs, ref: self.ref, completion: {
+                    (result: [RecipeReviews]) in
+                    self.recipeReviewList.removeAll()
+                    if result.isEmpty {
+                        
+                    } else {
+                        self.recipeReviewList = result
+                        self.labelNoOfReviews.text = "\(self.recipeReviewList.count) reviews"
                         self.reviewsTableView.reloadData()
-                        if result.isEmpty {
-                            self.labelNoOfReviews.text = "0 reviews"
-                        } else {
-                            self.recipeReviewList = result
-                            self.labelNoOfReviews.text = "\(self.recipeReviewList.count) reviews"
-                            for i in 0..<self.recipeReviewList.count {
-                                self.userReviewList.fetchUsers(refName: "Users", queryKey: self.recipeReviewList[i].userID!, queryValue: "" as AnyObject, ref: self.ref) {
-                                    (result: [User]) in
-                                    if result.isEmpty {
-                            
-                                    } else {
-                                        self.userReviewList += result
-                                        if self.userReviewList.count == self.recipeReviewList.count {
-                                            self.reviewsTableView.reloadData()
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    })
-                }
+                    }
+                })
             }
         }
     }
     
-    func leaveReview(alert: UIAlertAction){
+    func leaveReview(){
         
-        let alert = UIAlertController(title: "Review", message: "Enter your review..", preferredStyle: .alert)
+        self.review = textViewReview.text
         
-        alert.addTextField { (textField) in
-            textField.text = "Please leave your review!"
-        }
+        let reviewRef = self.ref.child("RecipeReviews").childByAutoId()
+        reviewRef.setValue(["RecipeID": self.recipe?.id! as Any, "UserID": self.userID!, "Review": self.review!, "Rating": self.buttonTag])
+        let userRef = self.ref.child("Users").child(self.userID!).child("Reviews").childByAutoId()
+        userRef.setValue(["RecipeReviewID": reviewRef.key])
+        let recipeRef = self.ref.child("Recipes").child((self.recipe?.id!)!).child("Reviews").childByAutoId()
+        recipeRef.setValue(["RecipeRatingID": reviewRef.key])
         
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
-            let textField = alert?.textFields![0]
-            self.review = textField?.text
-            let reviewRef = self.ref.child("RecipeReviews").childByAutoId()
-            reviewRef.setValue(["RecipeID": self.recipe?.id! as Any, "UserID": self.userID!, "Review": self.review!, "Rating": self.buttonTag])
-            let userRef = self.ref.child("Users").child(self.userID!).child("Reviews").childByAutoId()
-            userRef.setValue(["RecipeReviewID": reviewRef.key])
-            let recipeRef = self.ref.child("Recipes").child((self.recipe?.id!)!).child("Reviews").childByAutoId()
-            recipeRef.setValue(["RecipeRatingID": reviewRef.key])
-        }))
         
-        self.present(alert, animated:  true, completion: nil)
+        //self.present(alert, animated:  true, completion: nil)
+        
         fillData()
-        }
+    }
     
     
     
@@ -387,7 +380,6 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
                 cell.labelDetail?.text = ingredientsList[indexPath.row].name
                 cell.labelTitle?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
                 
-                
             } else if (indexPath.section == 1){
                 
                 cell.labelTitle?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
@@ -408,14 +400,17 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             var ratingString: String = ""
             ratingString = ratingString.getStarRating(rating: rating)
             
-            cell.labelUserName?.text = "\(self.userReviewList[indexPath.row].firstName!) \(self.userReviewList[indexPath.row].lastName!)"
+            self.userReviewList.fetchUsers(refName: "Users", queryKey: self.recipeReviewList[indexPath.row].userID!, queryValue: "" as AnyObject, ref: self.ref) {
+                (result: [User]) in
+                cell.labelUserName?.text = "\(result[0].firstName!) \(result[0].lastName!)"
+                if let imageURL = result[0].profilePicURL {
+                    cell.userReviewImageView.loadImageWithCacheWithUrlString(imageURL)
+                    cell.userReviewImageView.makeImageCircle()
+                }
+            }
+            
             cell.labelReviewStars.text = ratingString
             cell.labelReview.text = self.recipeReviewList[indexPath.row].review
-            
-            if let imageURL = self.userReviewList[indexPath.row].profilePicURL {
-                cell.userReviewImageView.loadImageWithCacheWithUrlString(imageURL)
-                cell.userReviewImageView.makeImageCircle()
-            }
             
             return cell
         } else {
@@ -427,21 +422,6 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.section == 0){
-            if let selectedRow = tableView.cellForRow(at: indexPath) as? IngredientsAndStepsTableViewCell {
-                if selectedRow.accessoryType == .none {
-                    selectedRow.accessoryType = .checkmark
-                    self.shoppingList.append((selectedRow.labelTitle?.text)!)
-                } else {
-                    selectedRow.accessoryType = .none
-                    let indexToDelete = self.shoppingList.index(of: (selectedRow.labelTitle?.text)!)
-                    self.shoppingList.remove(at: indexToDelete!)
-                }
-            }
-        }
-    }
-    
     func calculateHeightForConfiguredSizingCell(sizingCell: UITableViewCell) -> CGFloat {
         sizingCell.layoutIfNeeded()
         let size = sizingCell.contentView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
@@ -450,12 +430,49 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.reviewsTableView {
-            return 100
+            return UITableViewAutomaticDimension
         } else {
             return UITableViewAutomaticDimension
         }
     }
     
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        
+     var returnValue: Int = 0
+        if tableView == self.ingredientsAndStepsTableView {
+            if indexPath.section == 0 {
+                returnValue = UITableViewCellEditingStyle(rawValue: 3)!.rawValue
+            }
+        }
+        return UITableViewCellEditingStyle(rawValue: returnValue)!
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        var returnValue: Bool = false
+        if tableView == self.ingredientsAndStepsTableView {
+            if indexPath.section == 0 {
+                returnValue = true
+            }
+        }
+        return returnValue
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == self.ingredientsAndStepsTableView {
+            if (indexPath.section == 0){
+                if let selectedRow = tableView.cellForRow(at: indexPath) as? IngredientsAndStepsTableViewCell {
+                    if selectedRow.accessoryType == .none {
+                        selectedRow.accessoryType = .checkmark
+                        self.shoppingList.append((selectedRow.labelDetail?.text)!)
+                    } else {
+                        selectedRow.accessoryType = .none
+                        let indexToDelete = self.shoppingList.index(of: (selectedRow.labelDetail?.text)!)
+                        self.shoppingList.remove(at: indexToDelete!)
+                    }
+                }
+            }
+        }
+    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let nav = segue.destination as! UINavigationController
@@ -465,6 +482,13 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             controller.recipe = recipe!
             controller.editCheck = true
         }
+    }
+    
+    func showAlert(title: String, message: String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+        return
     }
 }
 
@@ -482,8 +506,6 @@ class RecipeDetailsReviewsTableCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
     
 }

@@ -99,6 +99,8 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
         self.dismissKeyboard()
         photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
         
+        //photoImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectImageView)))
+        
         ref = FIRDatabase.database().reference()
         self.userID = FIRAuth.auth()?.currentUser?.uid
         currentStoryboard = self.storyboard
@@ -135,6 +137,8 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
     
     func setUpPickerViews(){
         
+        textFieldMeasurement.delegate = self
+        
         textFieldMeasurement.inputView = pickerView
         textFieldType.inputView = pickerView
         textFieldCourse.inputView = pickerView
@@ -144,14 +148,14 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
         textFieldPrepHour.inputView = pickerView
         textFieldPrepMin.inputView = pickerView
         
-        textFieldMeasurement.addTarget(self, action: #selector(AddRecipeViewController.myTargetFunction), for: .touchDown)
-        textFieldCourse.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
-        textFieldType.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
-        textFieldDifficulty.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
-        textFieldCookHour.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
-        textFieldCookMin.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
-        textFieldPrepHour.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
-        textFieldPrepMin.addTarget(self, action: #selector(self.myTargetFunction), for: .touchDown)
+        textFieldMeasurement.addTarget(self, action: #selector(myTargetFunction), for: .editingDidBegin)
+        textFieldCourse.addTarget(self, action: #selector(myTargetFunction), for: .editingDidBegin)
+        textFieldType.addTarget(self, action: #selector(myTargetFunction), for: .editingDidBegin)
+        textFieldDifficulty.addTarget(self, action: #selector(self.myTargetFunction), for: .editingDidBegin)
+        textFieldCookHour.addTarget(self, action: #selector(self.myTargetFunction), for: .editingDidBegin)
+        textFieldCookMin.addTarget(self, action: #selector(self.myTargetFunction), for: .editingDidBegin)
+        textFieldPrepHour.addTarget(self, action: #selector(self.myTargetFunction), for: .editingDidBegin)
+        textFieldPrepMin.addTarget(self, action: #selector(self.myTargetFunction), for: .editingDidBegin)
     }
     
     func fillRecipeInformation() {
@@ -198,8 +202,7 @@ class AddRecipeViewController: UIViewController, UITableViewDataSource, UITableV
     func checkIfUserIsAdmin(){
         let userRef = ref.child("Users").child(self.userID)
         userRef.observe(.value, with: { (snapshot) in
-            
-            print(snapshot)
+
             if let userDict = snapshot.value as? [String: AnyObject] {
                 self.adminStatus = userDict["Admin"] as! Bool!
             }

@@ -69,10 +69,17 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
                 } else {
                     self.user = result[0]
                     self.fillData()
+                    self.getRecipe()
                     self.getFriends()
                 }
             }
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadRecipes), name: NSNotification.Name(rawValue: "reloadRecipes"), object: nil)
+    }
+    
+    func reloadRecipes() {
+        self.getRecipe()
     }
     
     
@@ -150,18 +157,23 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     func getRecipe() {
         userRecipeList.fetchRecipes(refName: "Recipes", queryKey: "AddedBy", queryValue: self.userID! as AnyObject, recipeToSearch: "", ref: self.ref) {
             (result: [Recipes]) in
-            print(result)
             self.userRecipeList = result
             self.myRecipesCollectionView.reloadData()
+        }
+        
+        userRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: self.userID! as AnyObject, recipeToSearch: "", ref: self.ref) {
+                (result: [Recipes]) in
+            self.userRecipeList += result
             
-            if self.userRecipeList.count > 0 {
-                self.myRecipesCollectionView.isHidden = false
-                self.recipesInfoLabel.isHidden = true
-            } else {
-                self.myRecipesCollectionView.isHidden = true
-                self.recipesInfoLabel.isHidden = false
-            }
-            
+            self.myRecipesCollectionView.reloadData()
+        }
+        
+        if self.userRecipeList.count > 0 {
+            self.myRecipesCollectionView.isHidden = false
+            self.recipesInfoLabel.isHidden = true
+        } else {
+            self.myRecipesCollectionView.isHidden = true
+            self.recipesInfoLabel.isHidden = false
         }
     }
     
@@ -182,7 +194,9 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     }
     
     func getReviews(){
-        reviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "UserID", queryValue: userID, ref: ref) {
+        let userIDs: [String] = [""]
+        userID.append(userID)
+        reviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "UserID", queryValue: userIDs, ref: ref) {
             (result: [RecipeReviews]) in
             if result.isEmpty {
                 print("Result Empty")
@@ -247,7 +261,12 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RecipesCell", for: indexPath) as! MyCollectionViewCell
         
         cell.recipeImageView.loadImageWithCacheWithUrlString(self.userRecipeList[indexPath.row].imageURL!)
-        cell.recipeName.text = self.userRecipeList[indexPath.row].name
+        
+        var ratingString: String = ""
+        ratingString = ratingString.getStarRating(rating: "\(self.userRecipeList[indexPath.row].averageRating!)")
+        
+        cell.labelRecipeName.numberOfLines = 0
+        cell.labelRecipeName.text = "\(self.userRecipeList[indexPath.row].name!) \n \(ratingString)"
         
         return cell
     }
@@ -285,6 +304,11 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             let selectedRow = userRecipeList[indexPath.row]
             controller.recipeId = selectedRow.id!
             selectedRecipe = false
+        } else if segue.identifier == "ViewAccountDetails" {
+            let indexPath = (sender as! NSIndexPath)
+            let controller = nav.topViewController as! AccountViewController
+            let selectedRow = friendsList[indexPath.row]
+            controller.user = selectedRow
         }
     }
 }
@@ -292,7 +316,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
 class MyCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var recipeImageView: UIImageView!
-    @IBOutlet weak var recipeName: UILabel!
+    @IBOutlet weak var labelRecipeName: UILabel!
 }
 
 class FriendsTableViewCell: UITableViewCell {

@@ -166,6 +166,7 @@ extension String {
 }
 
 extension Array where Element == String {
+    
     func fetchFavourites(refName: String, queryKey: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void) {
         var recipeIDs = [String]()
         let favouritesRef = ref.child(refName).child(queryValue)
@@ -210,6 +211,21 @@ extension Array where Element == String {
             completion(reviewIDs)
         })
     }
+    
+    func fetchShoppingList(refName: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void){
+        var shoppingList = [String]()
+        let shoppingListRef = ref.child(refName).child(queryValue).child("ShoppingList")
+        shoppingListRef.observe(.value, with: { (snapshot) in
+            let shoppingDict: [String] = snapshot.value as! [String]
+            shoppingList.removeAll()
+            for i in 0..<shoppingDict.count {
+                var item: String = ""
+                item = shoppingDict[i]
+                shoppingList.append(item)
+            }
+            completion(shoppingList)
+        })
+    }
 }
 
 extension Array where Element: User {
@@ -247,28 +263,30 @@ extension Array where Element: User {
 
 extension Array where Element: RecipeReviews {
     
-    func fetchRecipeReviews(refName: String, queryKey: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
+    func fetchRecipeReviews(refName: String, queryKey: String, queryValue: [String], ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
         
         let recipeReviewRef = ref.child(refName)
-        query = recipeReviewRef.child(queryValue)
-        dataEventType = .value
         
         var recipeReviewList = [RecipeReviews]()
-
-        query.observe(dataEventType, with: { (snapshot) in
+        
+        for i in 0..<queryValue.count {
+            let key:String = queryValue[i]
+            query = recipeReviewRef.child(key)
+            dataEventType = .value
             
-            if let reviewDict = snapshot.value as? [String: AnyObject] {
-                let review = RecipeReviews()
-                review.recipeID = reviewDict["RecipeID"] as? String ?? ""
-                review.userID = reviewDict["UserID"] as? String ?? ""
-                review.review = reviewDict["Review"] as? String ?? ""
-                review.ratingNo = reviewDict["Rating"] as? Int
+            query.observe(dataEventType, with: { (snapshot) in
+                if let reviewDict = snapshot.value as? [String: AnyObject] {
+                    let review = RecipeReviews()
+                    review.recipeID = reviewDict["RecipeID"] as? String ?? ""
+                    review.userID = reviewDict["UserID"] as? String ?? ""
+                    review.review = reviewDict["Review"] as? String ?? ""
+                    review.ratingNo = reviewDict["Rating"] as? Int
                 
-                recipeReviewList.append(review)
-            }
-             completion(recipeReviewList)
-            
-        })
+                    recipeReviewList.append(review)
+                }
+                 completion(recipeReviewList)
+            })
+        }
     }
 }
 
@@ -534,6 +552,3 @@ extension UIViewController: UITextFieldDelegate{
         view.endEditing(true) // or do something
     }
 }
-
-
-

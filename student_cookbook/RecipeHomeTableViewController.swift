@@ -31,12 +31,7 @@ class RecipeHomeTableViewController: UITableViewController {
     
     
     @IBAction func buttonAdd(_ sender: Any) {
-        print("Button pressed")
         performSegue(withIdentifier: "AddRecipeSegue", sender: nil)
-    }
-    
-    @IBAction func buttonLogout(_ sender: Any) {
-        handleLogout()
     }
     
     override func viewDidLoad() {
@@ -52,12 +47,6 @@ class RecipeHomeTableViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    func handleLogout() {
-        try! FIRAuth.auth()!.signOut()
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
-        present(vc!, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source

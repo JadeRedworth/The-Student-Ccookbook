@@ -23,21 +23,18 @@ class UserShoppingListTableViewController: UITableViewController {
         userID = (FIRAuth.auth()?.currentUser?.uid)!
         
         getShoppingList()
-        self.tableView.reloadData()
     }
     
     func getShoppingList(){
-        ref.child("Users").child(self.userID!).child("ShoppingList").observe(.value, with: { (snapshot) in
-            
-            let shoppingDict: [String] = snapshot.value as! [String]
-            
-            for i in 0..<shoppingDict.count {
-                var item: String = ""
-                item = shoppingDict[i]
-                self.shoppingList.append(item)
+        shoppingList.fetchShoppingList(refName: "Users", queryValue: userID!, ref: ref){
+            (result: [String]) in
+            if result.isEmpty {
+                
+            } else {
+                self.shoppingList = result
                 self.tableView.reloadData()
             }
-        })
+        }
     }
     
     override func didReceiveMemoryWarning() {

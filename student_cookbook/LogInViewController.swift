@@ -11,8 +11,11 @@ import Firebase
 import FirebaseAuth
 import FirebaseDatabase
 import FirebaseStorage
+import GoogleSignIn
+import FacebookLogin
+import FBSDKLoginKit
 
-class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -29,14 +32,13 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
     @IBOutlet weak var textFieldLoginEmail: UITextField!
     @IBOutlet weak var textFieldLoginPassword: UITextField!
     
-    //Button outlets
-    @IBOutlet weak var buttonLogin: UIButton!
-    
     override func viewDidLoad() {
 
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
+        
+        
         currentStoryboard = self.storyboard
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
         
@@ -45,8 +47,18 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         addToolBar(textField: textFieldLoginEmail)
         addToolBar(textField: textFieldLoginPassword)
-
-
+        
+        let loginButton = FBSDKLoginButton()
+        view.addSubview(loginButton)
+        loginButton.readPermissions = ["email", "public_profile"]
+        loginButton.frame = CGRect(x: 46.8, y: 481, width: 150, height: 44)
+        loginButton.delegate = self
+ 
+        
+        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
+        GIDSignIn.sharedInstance().delegate = self
+        GIDSignIn.sharedInstance().uiDelegate = self
+       
     }
     
     // button for log in
@@ -85,6 +97,74 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 self.loggedInSuccessfully = false
             }
         })
+    }
+    
+    
+    @IBAction func buttonRegister(_ sender: UIButton){
+        performSegue(withIdentifier: "RegisterSegue", sender: nil)
+    }
+    
+    
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        let authentication = user.authentication
+        let credential = FIRGoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!, accessToken: (authentication?.accessToken)!)
+        
+        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+                self.loggedInSuccessfully = false
+                return
+            }
+            print("User logged in with google")
+            self.loggedInSuccessfully = true
+        })
+    }
+    
+    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        try! FIRAuth.auth()!.signOut()
+    }
+    
+    
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        print("Did log out of facebook")
+    }
+    
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
+        if error != nil {
+            print(error)
+            return
+        }
+        
+        let accessToken = FBSDKAccessToken.current()
+        
+        let credentials = FIRFacebookAuthProvider.credential(withAccessToken: (accessToken?.tokenString)!)
+        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+            if error != nil {
+                print("Somethign wrong with user", error ?? "")
+                return
+            }
+            print("Logged in with user")
+            self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
+        })
+        
+        FBSDKGraphRequest(graphPath: "/me", parameters: ["fields": "id, name, email"]).start { (connection, result, err) in
+            
+            if err != nil {
+                print("Failed to start graph request:", err ?? "")
+                return
+            }
+            print(result ?? "")
+        }
     }
     
     override func didReceiveMemoryWarning() {
