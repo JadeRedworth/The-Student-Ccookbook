@@ -45,6 +45,9 @@
 		8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */; };
 		8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */; };
 		8DCC4FB21E718B6700BBB9DA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCC4FB11E718B6700BBB9DA /* Main.storyboard */; };
+		8DE052461ED0754C00141472 /* Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE052451ED0754C00141472 /* Messages.swift */; };
+		8DE052481ED076A500141472 /* MyMessagesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE052471ED076A500141472 /* MyMessagesTableViewController.swift */; };
+		8DE0524A1ED077C600141472 /* AdminRecipesToApproveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE052491ED077C600141472 /* AdminRecipesToApproveViewController.swift */; };
 		8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266511E7ED705009B68A9 /* RegisterViewController.swift */; };
 		8DE266561E804252009B68A9 /* MyFavouritesTableTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DE266551E804252009B68A9 /* MyFavouritesTableTableViewController.swift */; };
 		8DFB82A61ECA435A00FD51B7 /* FacebookCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */; };
@@ -117,6 +120,9 @@
 		8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeReviews.swift; sourceTree = "<group>"; };
 		8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserShoppingListTableViewController.swift; sourceTree = "<group>"; };
 		8DCC4FB11E718B6700BBB9DA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		8DE052451ED0754C00141472 /* Messages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Messages.swift; sourceTree = "<group>"; };
+		8DE052471ED076A500141472 /* MyMessagesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyMessagesTableViewController.swift; sourceTree = "<group>"; };
+		8DE052491ED077C600141472 /* AdminRecipesToApproveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminRecipesToApproveViewController.swift; sourceTree = "<group>"; };
 		8DE266511E7ED705009B68A9 /* RegisterViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8DE266551E804252009B68A9 /* MyFavouritesTableTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFavouritesTableTableViewController.swift; sourceTree = "<group>"; };
 		8DFB82A31ECA435A00FD51B7 /* FacebookCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookCore.framework; path = "../../Library/Developer/Xcode/DerivedData/FacebookSwift-egtyhemxpkudpkdqsfuxyrebixxp/Build/Products/Debug/FacebookCore.framework"; sourceTree = "<group>"; };
@@ -237,6 +243,7 @@
 			isa = PBXGroup;
 			children = (
 				8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */,
+				8DE052491ED077C600141472 /* AdminRecipesToApproveViewController.swift */,
 				8D81C12E1EB62774008D61F6 /* AdminUsersTableViewController.swift */,
 			);
 			name = Admin;
@@ -275,6 +282,7 @@
 				8D457B061EB0CE8700A5BFCB /* EditUserDetailsViewController.swift */,
 				8D8698B01E6B3D3500998BF6 /* UserTableViewController.swift */,
 				8DBEC8E41EB8F35500637D79 /* UserShoppingListTableViewController.swift */,
+				8DE052471ED076A500141472 /* MyMessagesTableViewController.swift */,
 			);
 			name = Users;
 			sourceTree = "<group>";
@@ -309,6 +317,7 @@
 				8D8698B41E6B4BFB00998BF6 /* Steps.swift */,
 				8DAEAA101EC09DA0007DBD21 /* Ratings.swift */,
 				8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */,
+				8DE052451ED0754C00141472 /* Messages.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -632,6 +641,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */,
+				8DE052461ED0754C00141472 /* Messages.swift in Sources */,
 				8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */,
 				8D439BF71EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift in Sources */,
 				8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */,
@@ -653,9 +663,11 @@
 				8DAEAA111EC09DA0007DBD21 /* Ratings.swift in Sources */,
 				8D8698AD1E6B3CAF00998BF6 /* Recipes.swift in Sources */,
 				8D0ED6201E6DD6A9001ABEC6 /* RecipeDetailViewController.swift in Sources */,
+				8DE0524A1ED077C600141472 /* AdminRecipesToApproveViewController.swift in Sources */,
 				8D6EF6071E6DAEA900D5FF82 /* Extensions.swift in Sources */,
 				8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */,
 				8D6EF5F81E6C458300D5FF82 /* AddRecipeViewController.swift in Sources */,
+				8DE052481ED076A500141472 /* MyMessagesTableViewController.swift in Sources */,
 				8D2B666D1EC63BD10057EC2A /* UserReviewsTableViewCell.swift in Sources */,
 				8D2B66691EC5F7150057EC2A /* RecipeHomeTableViewController.swift in Sources */,
 				8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */,

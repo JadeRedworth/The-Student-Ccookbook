@@ -38,22 +38,7 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
     //var recipeIDArray = [String]()
     
     @IBOutlet weak var recipesToApproveTableView: UITableView!
-    @IBOutlet weak var ingredientsAndStepsTableView: UITableView!
     
-    // Image outlets
-    @IBOutlet weak var imageViewRecipe: UIImageView!
-    
-    // Label outlets
-    @IBOutlet weak var labelRecipeName: UILabel!
-    @IBOutlet weak var labelServingSize: UILabel!
-    @IBOutlet weak var labelPrepTime: UILabel!
-    @IBOutlet weak var labelCookTime: UILabel!
-    @IBOutlet weak var labelType: UILabel!
-    @IBOutlet weak var labelCourse: UILabel!
-    @IBOutlet weak var labelAddedBy: UILabel!
-    @IBOutlet weak var labelDateAdded: UILabel!
-    
-    @IBOutlet weak var buttonApprove: UIButton!
     
     @IBAction func buttonLogout(_ sender: Any) {
         handleLogout()
@@ -77,31 +62,28 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
         
         self.recipesToApproveTableView.register(AdminRecipesToApproveTableViewCell.self, forCellReuseIdentifier: cellId)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(getRecipes), name: NSNotification.Name(rawValue: "getRecipes"), object: nil)
+
+        
         getRecipes()
         
         self.setupSearchController()
         self.recipesToApproveTableView.reloadData()
     }
     
-    
-    func fillData(){
-        if self.recipe != nil {
-            if recipeSelected != true {
-                self.recipe = self.recipeList[0]
+    func getRecipes(){
+        recipeList.removeAll()
+        recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: false as AnyObject, recipeToSearch: "", ref: ref) {
+            (result: [Recipes]) in
+            if result.isEmpty {
+                self.recipeList = []
+                self.recipesToApproveTableView.reloadData()
+            } else {
+                self.recipeList = result
+                self.recipesToApproveTableView.reloadData()
             }
-            
-            labelRecipeName.text = self.recipe?.name
-            labelServingSize.text = "Serves: \(String(describing: self.recipe?.servingSize))"
-            labelPrepTime.text = " \(String(describing: self.recipe!.prepTimeHour)) hrs \(self.recipe!.prepTimeMinute!) mins"
-            labelCookTime.text = "\(String(describing: self.recipe!.cookTimeHour)) hrs \(String(describing: self.recipe!.cookTimeMinute)) mins"
-            labelType.text = self.recipe?.type
-            labelCourse.text = (self.recipe?.course).map { $0.rawValue }
-            labelAddedBy.text = self.recipe!.addedBy
-            
-            imageURL = self.recipe?.imageURL
-            imageViewRecipe.loadImageWithCacheWithUrlString(imageURL!)
         }
-        
+        print("No Recipes")
     }
     
     func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
@@ -114,22 +96,6 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
                 completion(true)
             }
         }
-    }
-    
-    func getRecipes(){
-        recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: false as AnyObject, recipeToSearch: "", ref: ref) {
-            (result: [Recipes]) in
-            if result.isEmpty {
-                self.recipeList = []
-                self.recipesToApproveTableView.reloadData()
-            } else {
-                self.recipeList = result
-                self.recipesToApproveTableView.reloadData()
-            }
-            self.fillData()
-            self.recipesToApproveTableView.reloadData()
-        }
-        print("No Recipes")
     }
     
     func setupSearchController() {
@@ -175,127 +141,64 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func buttonApprove(_ sender: Any) {
-        
-        let recipeRef = self.ref.child("Recipes").child((recipe?.id)!).child("Approved")
-        recipeRef.setValue(true)
-        getRecipes()
-    }
-    
     // MARK: - Table view data source
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        var returnValue: String = ""
-        
-        if tableView == self.ingredientsAndStepsTableView {
-            if section == 0 {
-                returnValue = "Ingredients"
-            } else if section == 1 {
-                returnValue = "Steps"
-            }
-        }
-        return returnValue
-    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        var returnValue: Int = 0
-        
-        if (tableView == self.recipesToApproveTableView){
-            returnValue = 1
-        } else if (tableView == self.ingredientsAndStepsTableView){
-            returnValue = 2
-        }
-        
-        return returnValue
+        return 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        var returnValue: Int = 0
-        
-        if tableView == self.recipesToApproveTableView {
-            returnValue = self.recipeList.count
-        } else if tableView == self.ingredientsAndStepsTableView {
-            if section == 0 {
-                returnValue = self.ingredientsList.count
-            } else if section == 1 {
-                returnValue = self.stepsList.count
-            }
-        }
-        return returnValue
+        return recipeList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if tableView == self.recipesToApproveTableView {
             
-            let recipe = self.recipeList[indexPath.row]
+        let recipe = self.recipeList[indexPath.row]
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AdminRecipesToApproveTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! AdminRecipesToApproveTableViewCell
             
-            cell.textLabel?.text = recipe.name
+        cell.textLabel?.text = recipe.name
             
-            self.recipe = recipe
-            fetchUserWhoAddedRecipe(completion: {
-                result in
-                if result {
-                    cell.detailTextLabel?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
-                }
-            })
-            
-            
-            if recipe.imageURL != nil {
-                
-                if let recipeImageURL = recipe.imageURL {
-                    cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
-                }
+        self.recipe = recipe
+        fetchUserWhoAddedRecipe(completion: {
+            result in
+            if result {
+                cell.detailTextLabel?.text = "Added by: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
             }
-            return cell
-        }
-        
-        if tableView == self.ingredientsAndStepsTableView {
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
+        })
             
             
-            if (indexPath.section == 0) {
-                cell.textLabel?.text = ingredientsList[indexPath.row].name
-                cell.detailTextLabel?.text = "\(ingredientsList[indexPath.row].quantity!)  \( ingredientsList[indexPath.row].measurement!)"
+        if recipe.imageURL != nil {
                 
-                
-            } else {
-                
-                cell.textLabel?.text = (stepsList[indexPath.row].stepNo).map{ String($0)}
-                cell.detailTextLabel?.numberOfLines = 0
-                cell.detailTextLabel?.lineBreakMode = .byWordWrapping
-                cell.detailTextLabel?.text = stepsList[indexPath.row].stepDesc
+            if let recipeImageURL = recipe.imageURL {
+                cell.recipeImageView.loadImageWithCacheWithUrlString(recipeImageURL)
             }
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "IngredientsAndStepsCell", for: indexPath)
-            cell.textLabel?.text = ""
-            return cell
         }
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView == self.recipesToApproveTableView {
-            recipeSelected = true
-            self.recipe = self.recipeList[indexPath.row]
-            self.ingredientsList = recipe.ingredients
-            self.stepsList = recipe.steps
-            fillData()
-            self.ingredientsAndStepsTableView.reloadData()
-        }
+       performSegue(withIdentifier: "ReicpeToAproveDetailsSegue", sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == self.recipesToApproveTableView {
-            return 72
-        } else {
-            return 40
+       return 72
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        let nav = segue.destination as! UINavigationController
+        
+        if segue.identifier == "ReicpeToAproveDetailsSegue" {
+            let controller = nav.topViewController as! AdminRecipesToApproveViewController
+            
+            let indexPath = (sender as! NSIndexPath)
+            let selectedRow = recipeList[indexPath.row].id
+            controller.recipeId = selectedRow!
         }
     }
 }

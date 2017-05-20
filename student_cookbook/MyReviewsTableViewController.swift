@@ -167,7 +167,6 @@ class MyReviewsTableViewController: UITableViewController {
                     cell?.labelRecipeName.text = self.recipeList[indexPath.row].name
                     cell?.photoViewRecipe.loadImageWithCacheWithUrlString(self.recipeList[indexPath.row].imageURL!)
                     cell?.photoViewRecipe.makeImageCircle()
-                    
                 }
             })
             

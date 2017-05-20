@@ -290,6 +290,35 @@ extension Array where Element: RecipeReviews {
     }
 }
 
+extension Array where Element: Messages {
+    
+    func fecthMessages(refName: String, queryKey: String, queryValue: Bool, ref: FIRDatabaseReference, completion: @escaping (_ result: [Messages]) -> Void) {
+        
+        var messageList = [Messages]()
+        
+        let messageRef = ref.child(refName).child(queryKey)
+        query = messageRef.queryOrdered(byChild: "Opened").queryEqual(toValue: queryValue)
+        query.observe(.childAdded, with: { (snapshot) in
+            if let messageDict = snapshot.value as? [String: AnyObject] {
+                    
+                let message = Messages()
+                message.messageID = snapshot.key
+                message.recipeID = messageDict["RecipeID"] as? String ?? ""
+                message.recipeName = messageDict["RecipeName"] as? String ?? ""
+                message.recipeImageURL = messageDict["RecipeImageURL"] as? String ?? ""
+                message.addedBy = messageDict["AddedBy"] as? String ?? ""
+                message.date = messageDict["Date"] as? String ?? ""
+                message.decision = messageDict["Decision"] as? String ?? ""
+                message.comment = messageDict["Comment"] as? String ?? ""
+                message.opened = messageDict["Opened"] as? Bool
+                
+                messageList.append(message)
+            }
+            completion(messageList)
+        })
+    }
+}
+
 extension Array where Element: Recipes {
     
     func fetchRecipes(refName: String, queryKey: String, queryValue: AnyObject, recipeToSearch: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [Recipes]) -> Void) {

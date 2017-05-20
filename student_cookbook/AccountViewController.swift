@@ -24,6 +24,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     
     var user: User?
     var selectedRecipe = false
+    var selectedFriend = false
     
     var selectedIndexPath: IndexPath?
     
@@ -42,8 +43,8 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     
     @IBOutlet weak var myRecipesCollectionView: UICollectionView!
     @IBOutlet weak var friendsTableView: UITableView!
-    @IBOutlet weak var reviewsTableView: UITableView!
     
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     // View outlets
     @IBOutlet weak var recipeView: UIView!
     @IBOutlet weak var friendsView: UIView!
@@ -82,28 +83,26 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         self.getRecipe()
     }
     
-    
-    @IBAction func buttonRecipes(_ sender: Any) {
-        
-        recipeView.alpha = 1
-        friendsView.alpha = 0
-        reviewsView.alpha = 0
-    }
-  
-    @IBAction func buttonFriends(_ sender: Any) {
-        
-        recipeView.alpha = 0
-        friendsView.alpha = 1
-        reviewsView.alpha = 0
-    }
-    
-    @IBAction func buttonReviews(_ sender: Any) {
-        
-        recipeView.alpha = 0
-        friendsView.alpha = 0
-        reviewsView.alpha = 1
-    }
+    @IBAction func segmentControlIndexChanges(_ sender: UISegmentedControl) {
+        switch segmentControl.selectedSegmentIndex {
+        case 0:
+            recipeView.alpha = 1
+            friendsView.alpha = 0
+            reviewsView.alpha = 0
 
+        case 1:
+            recipeView.alpha = 0
+            friendsView.alpha = 1
+            reviewsView.alpha = 0
+        case 2:
+            recipeView.alpha = 0
+            friendsView.alpha = 0
+            reviewsView.alpha = 1
+        default:
+            break
+        }
+    }
+    
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -164,16 +163,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         userRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: self.userID! as AnyObject, recipeToSearch: "", ref: self.ref) {
                 (result: [Recipes]) in
             self.userRecipeList += result
-            
             self.myRecipesCollectionView.reloadData()
-        }
-        
-        if self.userRecipeList.count > 0 {
-            self.myRecipesCollectionView.isHidden = false
-            self.recipesInfoLabel.isHidden = true
-        } else {
-            self.myRecipesCollectionView.isHidden = true
-            self.recipesInfoLabel.isHidden = false
         }
     }
     
@@ -249,6 +239,10 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedFriend = true
+        performSegue(withIdentifier: "ViewAccountDetails", sender: indexPath)
+    }
     
     //MARK: Collection View Methods
     
@@ -287,7 +281,11 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
                 return false
             }
         } else {
-            return true
+            if selectedFriend == true {
+                return true
+            } else {
+                return false
+            }
         }
     }
     
