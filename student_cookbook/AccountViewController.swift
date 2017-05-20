@@ -44,11 +44,9 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     @IBOutlet weak var myRecipesCollectionView: UICollectionView!
     @IBOutlet weak var friendsTableView: UITableView!
     
-    @IBOutlet weak var segmentControl: UISegmentedControl!
     // View outlets
     @IBOutlet weak var recipeView: UIView!
     @IBOutlet weak var friendsView: UIView!
-    @IBOutlet weak var reviewsView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +74,8 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             }
         }
         
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(reloadRecipes), name: NSNotification.Name(rawValue: "reloadRecipes"), object: nil)
     }
     
@@ -83,32 +83,12 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         self.getRecipe()
     }
     
-    @IBAction func segmentControlIndexChanges(_ sender: UISegmentedControl) {
-        switch segmentControl.selectedSegmentIndex {
-        case 0:
-            recipeView.alpha = 1
-            friendsView.alpha = 0
-            reviewsView.alpha = 0
-
-        case 1:
-            recipeView.alpha = 0
-            friendsView.alpha = 1
-            reviewsView.alpha = 0
-        case 2:
-            recipeView.alpha = 0
-            friendsView.alpha = 0
-            reviewsView.alpha = 1
-        default:
-            break
-        }
-    }
-    
     @IBAction func backButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
     @IBAction func editAccountDetails(_ sender: Any) {
-        if userID == (FIRAuth.auth()?.currentUser?.uid) {
+        if loggedInUser == (FIRAuth.auth()?.currentUser?.uid) {
             performSegue(withIdentifier: "EditAccountDetailsSegue", sender: self)
         }
     }
@@ -118,25 +98,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         userFriendRef.setValue(self.user?.userID)
     }
     
-    /*func reloadData() {
-        fetchUserData()
-    }
-    
-    if self.user == nil {
-    userID = (FIRAuth.auth()?.currentUser?.uid)!
-    fetchUserData()
-    func fetchUserData(){
-    userList.fetchUsers(refName: "Users", queryKey: userID, queryValue: "" as AnyObject, ref: ref) {
-    (result: [User]) in
-    if result.isEmpty {
-    self.userList = []
-    } else {
-    self.userList = result
-    self.user = self.userList[0]
-    self.fillData()
-    }
-    }
-    }*/
     
     func fillData(){
         self.userID = self.user?.userID
@@ -146,10 +107,6 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             self.imageViewProfilePic.makeImageCircle()
             self.imageViewProfilePic.contentMode = .scaleAspectFill
         }
-    
-        self.noAddedRecipesLabel.text = "3"
-        
-        self.noRatedRecipesLabel.text = "2"
         
     }
     
@@ -157,26 +114,27 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         userRecipeList.fetchRecipes(refName: "Recipes", queryKey: "AddedBy", queryValue: self.userID! as AnyObject, recipeToSearch: "", ref: self.ref) {
             (result: [Recipes]) in
             self.userRecipeList = result
+            self.noAddedRecipesLabel.text = "\(self.userRecipeList.count)"
             self.myRecipesCollectionView.reloadData()
         }
         
         userRecipeList.fetchRecipes(refName: "UserRecipes", queryKey: "", queryValue: self.userID! as AnyObject, recipeToSearch: "", ref: self.ref) {
                 (result: [Recipes]) in
             self.userRecipeList += result
+            self.noAddedRecipesLabel.text = "\(self.userRecipeList.count)"
             self.myRecipesCollectionView.reloadData()
         }
     }
     
     func getFriends(){
-        let friendIDRef = ref.child("UserFriends").child(loggedInUser)
+        let friendIDRef = ref.child("UserFriends").child(userID)
         friendIDRef.observe(.childAdded, with: { (snapshot) in
             self.friendsList.fetchUsers(refName: "Users", queryKey: snapshot.value as! String, queryValue: "" as AnyObject, ref: self.ref) {
                 (result: [User]) in
                 if result.isEmpty {
                     self.friendsList = []
-                    self.friendsTableView.reloadData()
                 } else {
-                    self.friendsList += result
+                    self.friendsList = result
                     self.friendsTableView.reloadData()
                 }
             }
@@ -184,14 +142,15 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     }
     
     func getReviews(){
-        let userIDs: [String] = [""]
-        userID.append(userID)
+        var userIDs: [String] = []
+        userIDs.append(userID)
         reviewList.fetchRecipeReviews(refName: "RecipeReviews", queryKey: "UserID", queryValue: userIDs, ref: ref) {
             (result: [RecipeReviews]) in
             if result.isEmpty {
                 print("Result Empty")
             } else {
                 self.reviewList = result
+                self.noRatedRecipesLabel.text = "\(self.reviewList.count)"
             }
         }
     }
@@ -205,38 +164,21 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             return reviewList.count
         }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        if tableView == self.friendsTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsCell", for: indexPath) as? FriendsTableViewCell
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FriendsCell", for: indexPath) as? FriendsTableViewCell
             
-            if friendsList.isEmpty {
+        if friendsList.isEmpty {
                 
-            } else {
-                
-                cell?.labelFriendName.text = "\(self.friendsList[indexPath.row].firstName!) \(self.friendsList[indexPath.row].lastName!)"
-                if let profileImageURL = self.friendsList[indexPath.row].profilePicURL {
-                    cell?.friendsImageView.loadImageWithCacheWithUrlString(profileImageURL)
-                    cell?.friendsImageView.makeImageCircle()
-                }
-            }
-            
-            return cell!
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "ReviewsCell", for: indexPath) as? UserReviewsTableViewCell
-            
-            if reviewList.isEmpty {
-                
-            } else {
-                cell?.labelRecipeName.text = self.reviewList[indexPath.row].recipeID
-                var starRating: String = ""
-                starRating = starRating.getStarRating(rating: "\(reviewList[indexPath.row].ratingNo!)")
-                cell?.labelStar.text = starRating
+            cell?.labelFriendName.text = "\(self.friendsList[indexPath.row].firstName!) \(self.friendsList[indexPath.row].lastName!)"
+            if let profileImageURL = self.friendsList[indexPath.row].profilePicURL {
+                cell?.friendsImageView.loadImageWithCacheWithUrlString(profileImageURL)
+                cell?.friendsImageView.makeImageCircle()
             }
-            
-            return cell!
         }
+        return cell!
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -280,12 +222,16 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             } else {
                 return false
             }
-        } else {
+        } else if identifier == "ViewAccountDetails" {
             if selectedFriend == true {
                 return true
             } else {
                 return false
             }
+        } else if identifier == "EditAccountDetailsSegue" {
+            return true
+        } else {
+            return true
         }
     }
     
@@ -307,6 +253,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             let controller = nav.topViewController as! AccountViewController
             let selectedRow = friendsList[indexPath.row]
             controller.user = selectedRow
+            selectedFriend = false
         }
     }
 }

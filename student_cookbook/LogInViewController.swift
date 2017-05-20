@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 import Firebase
 import FirebaseAuth
 import FirebaseDatabase
@@ -15,7 +16,7 @@ import GoogleSignIn
 import FacebookLogin
 import FBSDKLoginKit
 
-class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, GIDSignInDelegate, GIDSignInUIDelegate, FBSDKLoginButtonDelegate {
+class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, FBSDKLoginButtonDelegate {
     
     var ref: FIRDatabaseReference!
     var refHandle: UInt!
@@ -41,9 +42,9 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         
         currentStoryboard = self.storyboard
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
-        
-        textFieldLoginEmail.layer.cornerRadius = 5.0
-        textFieldLoginPassword.layer.cornerRadius = 5.0
+    
+        textFieldLoginPassword.underlined()
+        textFieldLoginEmail.underlined()
         
         addToolBar(textField: textFieldLoginEmail)
         addToolBar(textField: textFieldLoginPassword)
@@ -51,14 +52,8 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let loginButton = FBSDKLoginButton()
         view.addSubview(loginButton)
         loginButton.readPermissions = ["email", "public_profile"]
-        loginButton.frame = CGRect(x: 46.8, y: 481, width: 150, height: 44)
+        loginButton.frame = CGRect(x: 56, y: 591, width: 300, height: 40)
         loginButton.delegate = self
- 
-        
-        GIDSignIn.sharedInstance().clientID = FIRApp.defaultApp()?.options.clientID
-        GIDSignIn.sharedInstance().delegate = self
-        GIDSignIn.sharedInstance().uiDelegate = self
-       
     }
     
     // button for log in
@@ -104,37 +99,6 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         performSegue(withIdentifier: "RegisterSegue", sender: nil)
     }
     
-    
-    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
-        if let error = error {
-            print(error.localizedDescription)
-            return
-        }
-        
-        let authentication = user.authentication
-        let credential = FIRGoogleAuthProvider.credential(withIDToken: (authentication?.idToken)!, accessToken: (authentication?.accessToken)!)
-        
-        FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
-            if error != nil {
-                print(error!.localizedDescription)
-                self.loggedInSuccessfully = false
-                return
-            }
-            print("User logged in with google")
-            self.loggedInSuccessfully = true
-        })
-    }
-    
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        if let error = error {
-            print(error.localizedDescription)
-            return
-        }
-        
-        try! FIRAuth.auth()!.signOut()
-    }
-    
-    
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         print("Did log out of facebook")
     }
@@ -153,19 +117,75 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
                 print("Somethign wrong with user", error ?? "")
                 return
             }
-            print("Logged in with user")
-            self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
-        })
-        
-        FBSDKGraphRequest(graphPath: "/me", parameters: ["fields": "id, name, email"]).start { (connection, result, err) in
-            
-            if err != nil {
-                print("Failed to start graph request:", err ?? "")
+            guard let uid = user?.uid else {
                 return
             }
-            print(result ?? "")
-        }
+            
+            let userRef = self.ref.child("Users").child(uid)
+            
+            
+            print("Logged in with user")
+            
+            let graphRequest : FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, email"])
+            graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+                if error != nil {
+                    print(error!)
+                } else {
+                    let resultDict = result as! [String : AnyObject]
+                    let fid = resultDict["id"] as? String ?? ""
+                    let fullname = resultDict["name"] as? String ?? ""
+                    var fullNameArr = fullname.components(separatedBy: " ")
+                    let firstName = fullNameArr[0]
+                    let lastName = fullNameArr[1]
+                    
+                    let profilepic = FBSDKGraphRequest(graphPath: "me/picture", parameters: ["height":200, "width":200,"redirect":false], httpMethod: "GET")
+                    profilepic?.start(completionHandler: { (connection, result, error) -> Void in
+
+                        if error != nil { } else {
+                            
+                            print(result)
+                            
+                            let picDict = result as! [String: AnyObject]
+                            let data = picDict["data"]
+                            let profilePicURL = data?["url"] as? String ?? ""
+                            
+                            if let imageData = NSData(contentsOf: URL(string: profilePicURL)!){
+                            
+                                let uniqueProfilePictureName = UUID().uuidString
+                                let storageRef = FIRStorage.storage().reference().child("user_profile_images").child("\(uniqueProfilePictureName).png")
+                            
+                                _ = storageRef.put(imageData as Data, metadata: nil, completion: { (metadata, error) in
+                                    if error != nil {
+                                        print(error!)
+                                        return
+                                    } else {
+                                        if let downloadURL = metadata?.downloadURL()?.absoluteString {
+                                            
+                                            let userValue = (["FirstName": firstName,
+                                                              "LastName": lastName,
+                                                              "ProfileImageURL": downloadURL,
+                                                              "UserType": "User",
+                                                              "NoRecipesAdded" : 0,
+                                                              "NoRecipesRated" : 0] as [String : Any])
+                                            userRef.updateChildValues(userValue, withCompletionBlock: { (error, ref) in
+                                                if error != nil {
+                                                    print(error!)
+                                                    return
+                                                }
+                                                print("Save the user successfully into Firebase database")
+                                                self.performSegue(withIdentifier: "UserLoginSegue", sender: nil)
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+        })
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
