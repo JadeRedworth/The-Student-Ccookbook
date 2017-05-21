@@ -17,6 +17,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     var userID: String!
     var loggedInUser: String!
     var userList = [User]()
+    var loggedInUserList = [User]()
     
     var userRecipeList = [Recipes]()
     var friendsList = [User]()
@@ -52,8 +53,13 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
-        
+       
         loggedInUser = (FIRAuth.auth()?.currentUser?.uid)!
+        
+        if loggedInUser == nil {
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+            present(vc!, animated: true, completion: nil)
+        }
         
         if user != nil {
             fillData()
@@ -96,6 +102,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     @IBAction func buttonAddFriend(_ sender: Any) {
         let userFriendRef = ref.child("UserFriends").child(loggedInUser).childByAutoId()
         userFriendRef.setValue(self.user?.userID)
+        self.addFriendButton.setTitle("FOLLOWING", for: .normal)
     }
     
     
@@ -127,15 +134,32 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     }
     
     func getFriends(){
+        
         let friendIDRef = ref.child("UserFriends").child(userID)
         friendIDRef.observe(.childAdded, with: { (snapshot) in
             self.friendsList.fetchUsers(refName: "Users", queryKey: snapshot.value as! String, queryValue: "" as AnyObject, ref: self.ref) {
                 (result: [User]) in
                 if result.isEmpty {
-                    self.friendsList = []
+                    //self.friendsList = []
                 } else {
-                    self.friendsList = result
+                    self.friendsList += result
                     self.friendsTableView.reloadData()
+                }
+            }
+        })
+        
+        let loggedInFriendRef = ref.child("UserFriends").child(loggedInUser)
+        loggedInFriendRef.observe(.childAdded, with: { (snapshot) in
+            self.loggedInUserList.fetchUsers(refName: "Users", queryKey: snapshot.value as! String, queryValue: "" as AnyObject, ref: self.ref) {
+                (result: [User]) in
+                if result.isEmpty {
+                    print("NoResult")
+                } else {
+                    self.loggedInUserList = result
+                    if self.loggedInUserList[0].userID == self.user!.userID {
+                        self.addFriendButton.setTitle("FOLLOWING", for: .normal)
+                        self.addFriendButton.isEnabled = false
+                    }
                 }
             }
         })
@@ -183,7 +207,11 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedFriend = true
-        performSegue(withIdentifier: "ViewAccountDetails", sender: indexPath)
+        if self.friendsList[indexPath.row].userID == loggedInUser {
+            performSegue(withIdentifier: "ViewMyAccountDetails", sender: indexPath)
+        } else {
+            performSegue(withIdentifier: "ViewAccountDetails", sender: indexPath)
+        }
     }
     
     //MARK: Collection View Methods
@@ -222,7 +250,7 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
             } else {
                 return false
             }
-        } else if identifier == "ViewAccountDetails" {
+        } else if identifier == "ViewAccountDetails" || identifier == "ViewMyAccountDetails" {
             if selectedFriend == true {
                 return true
             } else {
@@ -238,21 +266,24 @@ class AccountViewController: UIViewController, UITabBarDelegate, UICollectionVie
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         let nav = segue.destination as! UINavigationController
+        let indexPath = (sender as! NSIndexPath)
         
         if segue.identifier == "EditAccountDetailsSegue" {
             let controller = nav.topViewController as! EditUserDetailsViewController
             controller.user = self.user
         } else if segue.identifier == "UserRecipeDetails" {
-            let indexPath = (sender as! NSIndexPath)
             let controller = nav.topViewController as! RecipeDetailViewController
             let selectedRow = userRecipeList[indexPath.row]
             controller.recipeId = selectedRow.id!
             selectedRecipe = false
         } else if segue.identifier == "ViewAccountDetails" {
-            let indexPath = (sender as! NSIndexPath)
             let controller = nav.topViewController as! AccountViewController
             let selectedRow = friendsList[indexPath.row]
             controller.user = selectedRow
+            selectedFriend = false
+        } else if segue.identifier == "ViewMyAccountDetails" {
+            let controller = nav.topViewController as! AccountViewController
+            let selectedRow = friendsList[indexPath.row]
             selectedFriend = false
         }
     }

@@ -14,7 +14,7 @@
         <!--Login-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="Login" id="BYZ-38-t0r" customClass="LogInViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController restorationIdentifier="LogInViewController" storyboardIdentifier="LogInViewController" title="Login" id="BYZ-38-t0r" customClass="LogInViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -112,9 +112,26 @@
                                 <state key="normal" title="Skip">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="buttonSkip:" destination="BYZ-38-t0r" eventType="touchUpInside" id="u6E-1Y-55d"/>
+                                    <segue destination="1Gt-V8-bGx" kind="show" identifier="GuestUserSegue" id="Rxb-Lb-eDV"/>
+                                </connections>
                             </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Ujd-sv-mJ7">
+                                <rect key="frame" x="58" y="361" width="299.99999999999977" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="15"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
+                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNZ-m1-3k1" customClass="RoundButton" customModule="student_cookbook" customModuleProvider="target">
-                                <rect key="frame" x="55.571718426966981" y="517" width="300" height="40.000000000000057"/>
+                                <rect key="frame" x="58" y="568" width="300" height="40.000000000000057"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="17"/>
@@ -137,19 +154,6 @@
                                     <segue destination="Pdd-NO-567" kind="show" identifier="RegisterSegue" id="4Ku-2s-6qi"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="Ujd-sv-mJ7">
-                                <rect key="frame" x="58" y="361" width="299.99999999999977" height="35"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="15"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="_placeholderLabel.textColor">
-                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </textField>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
@@ -663,6 +667,128 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pc4-CH-Ylt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1157" y="1619"/>
+        </scene>
+        <!--WelcomeViewController-->
+        <scene sceneID="euD-Aw-iBa">
+            <objects>
+                <viewController restorationIdentifier="WelcomeViewController" storyboardIdentifier="WelcomeViewController" title="WelcomeViewController" id="0AF-bO-0ca" customClass="WelcomeViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qbz-Pg-eav"/>
+                        <viewControllerLayoutGuide type="bottom" id="tOd-yw-Lc4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kIQ-OS-4Ds">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" alpha="0.40000000596046448" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Background-3" translatesAutoresizingMaskIntoConstraints="NO" id="7gJ-ra-N42">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="K" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Y9Q-VU-d9S">
+                                <rect key="frame" x="176" y="195" width="93" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="40"/>
+                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="O" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="huF-GG-FIp">
+                                <rect key="frame" x="176" y="162" width="93" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="40"/>
+                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="B" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qtg-74-1Hp">
+                                <rect key="frame" x="176" y="95" width="93" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="40"/>
+                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="COOK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s7Z-VS-4fU">
+                                <rect key="frame" x="28" y="129" width="358" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="40"/>
+                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="STUDENT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LHh-Va-nAK">
+                                <rect key="frame" x="28" y="65" width="358" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="30"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="THE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IDd-qz-nvl">
+                                <rect key="frame" x="149" y="41" width="116" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-Bold" family="Gill Sans" pointSize="30"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome Back" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hqr-Qp-QUp">
+                                <rect key="frame" x="117" y="273" width="180" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="24"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="@name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8W6-Z9-CAp">
+                                <rect key="frame" x="117" y="535" width="180" height="36"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="24"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b69-Td-u87" customClass="RoundButton" customModule="student_cookbook" customModuleProvider="target">
+                                <rect key="frame" x="177" y="613" width="60" height="60"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="GO">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="2"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="buttonGo:" destination="0AF-bO-0ca" eventType="touchUpInside" id="BDh-fh-eAI"/>
+                                    <segue destination="1Gt-V8-bGx" kind="show" identifier="GoSegue" id="CS4-hL-3Tp"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uSF-VI-Xe7">
+                                <rect key="frame" x="20" y="686" width="64" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Not me?">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="buttonNotMe:" destination="0AF-bO-0ca" eventType="touchUpInside" id="d4J-s7-SzL"/>
+                                    <segue destination="BYZ-38-t0r" kind="show" id="lh9-ku-Pkh"/>
+                                </connections>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mq6-FP-lkS">
+                                <rect key="frame" x="117" y="347" width="180" height="180"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageViewProfilePicture" destination="mq6-FP-lkS" id="Qfh-qq-Kb6"/>
+                        <outlet property="labelName" destination="8W6-Z9-CAp" id="bK4-OQ-fQC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Og3-NN-6bf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-426.08695652173918" y="-68.478260869565219"/>
         </scene>
         <!--Item-->
         <scene sceneID="DnV-qt-x9N">
@@ -1181,11 +1307,11 @@
                         <viewControllerLayoutGuide type="bottom" id="nCT-wg-T2r"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="qvc-bW-ceq">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uoM-xW-iXS">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GmG-GT-Cba">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="1628"/>
@@ -1688,7 +1814,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="o3x-At-OOu" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="8My-dQ-Kod">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="8My-dQ-Kod">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1764,10 +1890,10 @@
             </objects>
             <point key="canvasLocation" x="5784.057971014493" y="-1242.3913043478262"/>
         </scene>
-        <!--Recipe Home Table View Controller-->
+        <!--RecipeHomeTableViewController-->
         <scene sceneID="Pwg-aK-T14">
             <objects>
-                <tableViewController id="R4e-jY-bNN" customClass="RecipeHomeTableViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="RecipeHomeTableViewController" title="RecipeHomeTableViewController" id="R4e-jY-bNN" customClass="RecipeHomeTableViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="169" sectionHeaderHeight="28" sectionFooterHeight="28" id="Nzf-Fb-3b7">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1833,7 +1959,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qSy-5W-djD" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" tag="1" title="All Recipes" image="RecipeHomeIcon" selectedImage="RecipeHomeIcon" id="sX8-UV-MCb"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="RqE-kb-Re2">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RqE-kb-Re2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1985,7 +2111,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="aiE-jy-le9" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Sr8-O0-A2j">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Sr8-O0-A2j">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2053,7 +2179,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SJ3-MD-VXM" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My Favourites" image="MyRecipes" selectedImage="MyRecipes" id="en1-IH-xeg"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="DSG-Je-QRM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="DSG-Je-QRM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -2078,7 +2204,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7PW-3N-pyh" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Recipes To Approved" image="RecipeHomeIcon" selectedImage="RecipeHomeIcon" id="kdZ-FL-RLv"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="eIm-3e-Wpg">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="eIm-3e-Wpg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -2166,7 +2292,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bmC-qc-6iR" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="LwH-Jf-N8T">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="LwH-Jf-N8T">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
@@ -2321,7 +2447,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CNB-KN-Zbn" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="u5e-7K-1D0">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="u5e-7K-1D0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2344,7 +2470,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6oU-2g-eP5" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" selectedImage="Search" systemItem="search" id="fey-s4-KLZ"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="fmv-sQ-cOw">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="fmv-sQ-cOw">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -2366,7 +2492,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="k1P-ez-eR7" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="jaM-ka-SCS">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="jaM-ka-SCS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2389,7 +2515,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="i2O-E7-b48" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Users" image="UserAccount" selectedImage="UserAccount" id="u4N-YK-gEh"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="SE6-Ji-rmk">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="SE6-Ji-rmk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.098039217289999994" green="0.098039217289999994" blue="0.098039217289999994" alpha="1" colorSpace="calibratedRGB"/>
@@ -2455,7 +2581,7 @@
         <!--UserAccountVC-->
         <scene sceneID="GBC-vA-33T">
             <objects>
-                <viewController title="UserAccountVC" id="AbO-dw-Y0i" customClass="AccountViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AccountViewController" title="UserAccountVC" useStoryboardIdentifierAsRestorationIdentifier="YES" id="AbO-dw-Y0i" customClass="AccountViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="lF3-r2-f0q"/>
                         <viewControllerLayoutGuide type="bottom" id="w0x-mv-jVg"/>
@@ -2468,6 +2594,10 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFw-FQ-1lR">
+                                        <rect key="frame" x="87" y="304" width="240" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XmF-ZD-6t9">
                                         <rect key="frame" x="0.0" y="61" width="414" height="182"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -2484,11 +2614,11 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OJ0-3L-b0m" customClass="RoundButton" customModule="student_cookbook" customModuleProvider="target">
-                                                <rect key="frame" x="151" y="156" width="109" height="19"/>
+                                                <rect key="frame" x="151" y="158" width="109" height="19"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="13"/>
-                                                <state key="normal" title="Add Friend">
+                                                <fontDescription key="fontDescription" name="GillSans" family="Gill Sans" pointSize="12"/>
+                                                <state key="normal" title="FOLLOW">
                                                     <color key="titleColor" red="0.99019607843137258" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </state>
                                                 <userDefinedRuntimeAttributes>
@@ -2513,7 +2643,7 @@
                                         <rect key="frame" x="0.0" y="289" width="415" height="170"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <subviews>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bu0-g4-jRr">
+                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" indicatorStyle="black" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Bu0-g4-jRr">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="170"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2601,6 +2731,7 @@
                                                         <connections>
                                                             <outlet property="friendsImageView" destination="vMw-6Y-iLp" id="c81-84-KYZ"/>
                                                             <outlet property="labelFriendName" destination="kRe-nZ-Q0G" id="haN-f2-TAB"/>
+                                                            <segue destination="1kc-Mg-p1z" kind="show" identifier="ViewMyAccountDetails" id="5Kb-Zq-qsv"/>
                                                         </connections>
                                                     </tableViewCell>
                                                 </prototypes>
@@ -2686,7 +2817,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7IN-cl-SVJ" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Shopping List" image="Shopping List" selectedImage="Shopping List" id="Uq7-2O-Qm6"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="pu3-UF-tYd">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pu3-UF-tYd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.40000000000000002" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -2814,7 +2945,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qHS-Ck-sBs" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Find Friends" image="UserAccount" selectedImage="UserAccount" id="kaK-PI-CVT"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="4ch-Nc-gnp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="4ch-Nc-gnp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -2952,7 +3083,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1kc-Mg-p1z" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My Account" image="UserAccount" selectedImage="UserAccount" id="hqh-Jc-VvH"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="KYT-JM-2fp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="KYT-JM-2fp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -2973,7 +3104,7 @@
         <!--Account View Controller-->
         <scene sceneID="w46-Ok-9td">
             <objects>
-                <viewController id="Gvw-x8-1Jh" customClass="AccountViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MyAccountViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Gvw-x8-1Jh" customClass="AccountViewController" customModule="student_cookbook" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="RGp-q5-OQ7"/>
                         <viewControllerLayoutGuide type="bottom" id="le1-od-O31"/>
@@ -3001,51 +3132,6 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="7xP-Jc-RxG">
-                                                <rect key="frame" x="0.0" y="200" width="414" height="170"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="1" id="j0I-in-0Sc">
-                                                    <size key="itemSize" width="223" height="170"/>
-                                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                </collectionViewFlowLayout>
-                                                <cells>
-                                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RecipesCell" id="5BX-6L-9go" customClass="MyCollectionViewCell" customModule="student_cookbook" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                                            <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
-                                                            <subviews>
-                                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="D2G-i4-B8k">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                </imageView>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RaB-R8-1k2">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25334439212328769" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="17"/>
-                                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                                    <nil key="highlightedColor"/>
-                                                                </label>
-                                                            </subviews>
-                                                        </view>
-                                                        <size key="customSize" width="223" height="170"/>
-                                                        <connections>
-                                                            <outlet property="labelRecipeName" destination="RaB-R8-1k2" id="ygA-Zh-eeI"/>
-                                                            <outlet property="recipeImageView" destination="D2G-i4-B8k" id="Wp0-2a-xDx"/>
-                                                            <segue destination="o3x-At-OOu" kind="show" identifier="UserRecipeDetails" id="rPi-ub-Q0v"/>
-                                                        </connections>
-                                                    </collectionViewCell>
-                                                </cells>
-                                                <connections>
-                                                    <outlet property="dataSource" destination="Gvw-x8-1Jh" id="dud-9K-XNG"/>
-                                                    <outlet property="delegate" destination="Gvw-x8-1Jh" id="7mE-0e-8Bc"/>
-                                                </connections>
-                                            </collectionView>
                                         </subviews>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
@@ -3135,6 +3221,50 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="jVh-45-2KZ">
+                                        <rect key="frame" x="0.0" y="262" width="414" height="170"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="1" minimumInteritemSpacing="1" id="0Mm-1a-mID">
+                                            <size key="itemSize" width="223" height="170"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells>
+                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RecipesCell" id="ue7-Q4-00v" customClass="MyCollectionViewCell" customModule="student_cookbook" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                                    <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <subviews>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jJk-Yn-QdM">
+                                                            <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CEZ-m3-i6F">
+                                                            <rect key="frame" x="0.0" y="0.0" width="223" height="170"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25334439209999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <fontDescription key="fontDescription" name="GillSans-SemiBold" family="Gill Sans" pointSize="19"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </view>
+                                                <size key="customSize" width="223" height="170"/>
+                                                <connections>
+                                                    <outlet property="labelRecipeName" destination="CEZ-m3-i6F" id="tUC-9g-eK8"/>
+                                                    <outlet property="recipeImageView" destination="jJk-Yn-QdM" id="TYK-Kj-ea7"/>
+                                                </connections>
+                                            </collectionViewCell>
+                                        </cells>
+                                        <connections>
+                                            <outlet property="dataSource" destination="Gvw-x8-1Jh" id="cJP-pg-YYk"/>
+                                            <outlet property="delegate" destination="Gvw-x8-1Jh" id="alU-q6-wbd"/>
+                                        </connections>
+                                    </collectionView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
@@ -3164,7 +3294,7 @@
                         <outlet property="friendsTableView" destination="C1i-fX-XL7" id="g1N-k9-pi0"/>
                         <outlet property="friendsView" destination="Zx1-9u-hzM" id="LRy-hS-cNC"/>
                         <outlet property="imageViewProfilePic" destination="DzM-WC-Qi4" id="8Ev-rl-qBP"/>
-                        <outlet property="myRecipesCollectionView" destination="7xP-Jc-RxG" id="fxE-jn-bRQ"/>
+                        <outlet property="myRecipesCollectionView" destination="jVh-45-2KZ" id="aIz-1r-xHD"/>
                         <outlet property="nameLabel" destination="IkF-Gh-GfG" id="TUn-DQ-hHq"/>
                         <outlet property="noAddedRecipesLabel" destination="grq-8v-U9o" id="Ylz-je-FdE"/>
                         <outlet property="noRatedRecipesLabel" destination="jMh-iL-mPm" id="o2g-rw-TwD"/>
@@ -3180,7 +3310,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="0YS-FA-TYN" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="ezs-cn-N70">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="ezs-cn-N70">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -3203,7 +3333,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="8nj-4V-HPA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My Reviews" image="Review" selectedImage="Review" id="bcC-IY-Jhl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="muu-1y-nkt">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="muu-1y-nkt">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3225,7 +3355,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eUe-Zi-ddt" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="RMn-q5-z7S">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RMn-q5-z7S">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3248,7 +3378,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Nho-VS-tIN" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Recipes" image="RecipeHomeIcon" selectedImage="RecipeHomeIcon" id="mkK-WD-9Bo"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="brX-n2-cEA">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="brX-n2-cEA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.99019607840000001" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -3257,6 +3387,10 @@
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="3rJ-IU-u8O">
+                        <rect key="frame" x="0.0" y="692" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="R4e-jY-bNN" kind="relationship" relationship="rootViewController" id="XUM-hg-QV3"/>
                     </connections>
@@ -3270,7 +3404,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="spE-K8-XTP" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="dt2-Et-yhV">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="dt2-Et-yhV">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
@@ -3305,8 +3439,10 @@
         <image name="emptyStar" width="50" height="50"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="5Kb-Zq-qsv"/>
         <segue reference="EKb-oG-TPg"/>
         <segue reference="ADu-DM-2bd"/>
-        <segue reference="uJh-w6-yJP"/>
+        <segue reference="CS4-hL-3Tp"/>
+        <segue reference="c06-aR-0kd"/>
     </inferredMetricsTieBreakers>
 </document>

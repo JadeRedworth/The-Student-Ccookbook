@@ -30,6 +30,8 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
     var filteredRecipeList = [Recipes]()
     var recipeIDArray = [String]()
     
+    var guestID: String = ""
+    
     private let searchController = UISearchController(searchResultsController: nil)
     
     var mainStoryBoard: Bool = false
@@ -286,7 +288,11 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         var returnValue: Bool = false
         
         if (tableView == self.recipesTableView){
-            returnValue = true
+            if guestID != "" {
+                returnValue = false
+            } else {
+                returnValue = true
+            }
         } else if (tableView == self.ingredientsAndStepsTableView){
             returnValue = false
         }
@@ -312,6 +318,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
         }
         favorites.backgroundColor = UIColor.blue
         return [favorites]
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
@@ -448,6 +455,7 @@ class RecipeTableViewController: UIViewController, UITableViewDelegate, UITableV
             let indexPath = (sender as! NSIndexPath)
             let selectedRow = filteredRecipeList[indexPath.row].id
             controller.recipeId = selectedRow!
+            controller.guestID = guestID
         }
     }
     

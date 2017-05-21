@@ -14,6 +14,8 @@ class RecipeHomeTableViewController: UITableViewController {
     var recipeToSearch: String = ""
     var recipePressed: Bool = false
     
+    var guestID: String = ""
+    
     var recipesToSearchList = ["All Recipes", "Breakfast", "Lunch", "Dinner", "Dessert", "Quick", "Easy", "Healthy", "On a Budget", "Treat Yourself"]
     
     var pictures: [UIImage] = [
@@ -31,17 +33,14 @@ class RecipeHomeTableViewController: UITableViewController {
     
     
     @IBAction func buttonAdd(_ sender: Any) {
-        performSegue(withIdentifier: "AddRecipeSegue", sender: nil)
+        if guestID == "" {
+             performSegue(withIdentifier: "AddRecipeSegue", sender: nil)
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-        
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
     }
     
     override func didReceiveMemoryWarning() {
@@ -85,7 +84,15 @@ class RecipeHomeTableViewController: UITableViewController {
                 return false
             }
         } else if identifier == "AddRecipeSegue" {
-            return true
+            if guestID == "" {
+                return true
+            } else {
+                
+                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+                present(vc!, animated: true, completion: nil)
+                
+                return false
+            }
         } else {
             return false
         }
@@ -98,6 +105,7 @@ class RecipeHomeTableViewController: UITableViewController {
         if segue.identifier == "ShowSelectedRecipesSegue" {
             let controller = nav.topViewController as! RecipeTableViewController
             controller.recipeToSearch = self.recipeToSearch
+            controller.guestID = guestID
             recipePressed = false
         }
     }

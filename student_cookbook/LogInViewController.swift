@@ -27,6 +27,8 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
     var loggedInSuccessfully: Bool = false
     var adminStatus: Bool = false
     
+    var loggedInUser: String = ""
+    
     @IBOutlet weak var imageViewBackground: UIImageView!
     
     //Textfields for Login
@@ -38,7 +40,10 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
-        
+    
+        if (FIRAuth.auth()?.currentUser?.uid != nil){
+            loggedInUser = (FIRAuth.auth()?.currentUser?.uid)!
+        }
         
         currentStoryboard = self.storyboard
         self.currentStoryboardName = currentStoryboard.value(forKey: "name") as! String
@@ -52,8 +57,22 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         let loginButton = FBSDKLoginButton()
         view.addSubview(loginButton)
         loginButton.readPermissions = ["email", "public_profile"]
-        loginButton.frame = CGRect(x: 56, y: 591, width: 300, height: 40)
+        loginButton.frame = CGRect(x: 56, y: 617, width: 300, height: 40)
         loginButton.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+    
+        if loggedInUser == "" {
+        } else {
+            let vc = currentStoryboard.instantiateViewController(withIdentifier: "WelcomeViewController") as! WelcomeViewController
+            vc.userID = loggedInUser
+            self.present(vc, animated:true, completion:nil)
+        }
+    }
+    
+    @IBAction func buttonSkip(_ sender: Any) {
+        performSegue(withIdentifier: "GuestUserSegue", sender: nil)
     }
     
     // button for log in
@@ -186,6 +205,18 @@ class LogInViewController: UIViewController, UIImagePickerControllerDelegate, UI
         })
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let guestRef = ref.child("GuestUser").childByAutoId()
+        guestRef.setValue(["Date": "\(Date())",
+                            "Guest": true])
+        if segue.identifier == "GuestUserSegue" {
+            let tabBarController = segue.destination as! UITabBarController
+            let nav = tabBarController.viewControllers?[0] as! UINavigationController
+            let controller = nav.topViewController as! RecipeHomeTableViewController
+            controller.guestID = guestRef.key
+            print(guestRef.key)
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -16,6 +16,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     var userID: String?
     
     let cellId = "cellId"
+    var guestID: String = ""
     
     // Model
     var recipe: Recipes?
