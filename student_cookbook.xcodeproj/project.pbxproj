@@ -24,8 +24,6 @@
 		8D3083AD1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */; };
 		8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */; };
 		8D3083BE1E8A7B73008EEC4D /* RecipeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */; };
-		8D439BF51EB21D53007DD8F6 /* SearchIngredientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */; };
-		8D439BF71EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */; };
 		8D457B071EB0CE8700A5BFCB /* EditUserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D457B061EB0CE8700A5BFCB /* EditUserDetailsViewController.swift */; };
 		8D4E0CDE1EB37347003DF63D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D4E0CDD1EB37347003DF63D /* Assets.xcassets */; };
 		8D5104001EC7B19E0099ED3E /* EditReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5103FF1EC7B19E0099ED3E /* EditReviewViewController.swift */; };
@@ -39,8 +37,8 @@
 		8D8698B11E6B3D3500998BF6 /* UserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B01E6B3D3500998BF6 /* UserTableViewController.swift */; };
 		8D8698B31E6B4B1A00998BF6 /* Ingredients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B21E6B4B1A00998BF6 /* Ingredients.swift */; };
 		8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B41E6B4BFB00998BF6 /* Steps.swift */; };
-		8D8698B71E6B4C3C00998BF6 /* Timers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D8698B61E6B4C3C00998BF6 /* Timers.swift */; };
 		8D95030B1ED1A8EA00055C17 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D95030A1ED1A8E900055C17 /* WelcomeViewController.swift */; };
+		8D95030D1ED2137400055C17 /* LogoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D95030C1ED2137400055C17 /* LogoutViewController.swift */; };
 		8D9603E51E6B0469007C892B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D9603E41E6B0469007C892B /* GoogleService-Info.plist */; };
 		8DAEAA111EC09DA0007DBD21 /* Ratings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA101EC09DA0007DBD21 /* Ratings.swift */; };
 		8DAEAA191EC0E38E007DBD21 /* RecipeReviews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */; };
@@ -99,8 +97,6 @@
 		8D3083AC1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdminRecipesToApproveTableViewController.swift; sourceTree = "<group>"; };
 		8D3083BB1E8A7B73008EEC4D /* RecipeTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeTableViewCell.swift; sourceTree = "<group>"; };
 		8D3083BC1E8A7B73008EEC4D /* RecipeTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RecipeTableViewCell.xib; sourceTree = "<group>"; };
-		8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchIngredientsViewController.swift; sourceTree = "<group>"; };
-		8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchIngredientsResultTableViewController.swift; sourceTree = "<group>"; };
 		8D457B061EB0CE8700A5BFCB /* EditUserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditUserDetailsViewController.swift; sourceTree = "<group>"; };
 		8D4E0CDD1EB37347003DF63D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8D5103FF1EC7B19E0099ED3E /* EditReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditReviewViewController.swift; sourceTree = "<group>"; };
@@ -114,9 +110,9 @@
 		8D8698B01E6B3D3500998BF6 /* UserTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserTableViewController.swift; sourceTree = "<group>"; };
 		8D8698B21E6B4B1A00998BF6 /* Ingredients.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ingredients.swift; sourceTree = "<group>"; };
 		8D8698B41E6B4BFB00998BF6 /* Steps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Steps.swift; sourceTree = "<group>"; };
-		8D8698B61E6B4C3C00998BF6 /* Timers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Timers.swift; sourceTree = "<group>"; };
 		8D8C16291E6B15B70013AE67 /* student_cookbook-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "student_cookbook-Bridging-Header.h"; sourceTree = "<group>"; };
 		8D95030A1ED1A8E900055C17 /* WelcomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WelcomeViewController.swift; path = ../WelcomeViewController.swift; sourceTree = "<group>"; };
+		8D95030C1ED2137400055C17 /* LogoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogoutViewController.swift; sourceTree = "<group>"; };
 		8D9603E41E6B0469007C892B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8DAEAA101EC09DA0007DBD21 /* Ratings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ratings.swift; sourceTree = "<group>"; };
 		8DAEAA181EC0E38E007DBD21 /* RecipeReviews.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecipeReviews.swift; sourceTree = "<group>"; };
@@ -269,8 +265,6 @@
 				8D0ED61F1E6DD6A9001ABEC6 /* RecipeDetailViewController.swift */,
 				8D6EF5F71E6C458300D5FF82 /* AddRecipeViewController.swift */,
 				8DE266551E804252009B68A9 /* MyFavouritesTableTableViewController.swift */,
-				8D439BF41EB21D53007DD8F6 /* SearchIngredientsViewController.swift */,
-				8D439BF61EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift */,
 				8DEB4D471E8A88B9009164C5 /* Recipe Table Cell */,
 				8D5104011EC7B3910099ED3E /* Reviews */,
 			);
@@ -303,6 +297,7 @@
 				8D95030A1ED1A8E900055C17 /* WelcomeViewController.swift */,
 				8D1D633A1E6B02DF00307B85 /* LogInViewController.swift */,
 				8DE266511E7ED705009B68A9 /* RegisterViewController.swift */,
+				8D95030C1ED2137400055C17 /* LogoutViewController.swift */,
 				8D3083B21E88107B008EEC4D /* Admin */,
 				8D6EF5FE1E6C755B00D5FF82 /* Users */,
 				8D6EF5FD1E6C755300D5FF82 /* Recipes */,
@@ -314,7 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				8D8698AE1E6B3CDC00998BF6 /* User.swift */,
-				8D8698B61E6B4C3C00998BF6 /* Timers.swift */,
 				8D8698B21E6B4B1A00998BF6 /* Ingredients.swift */,
 				8D8698AC1E6B3CAF00998BF6 /* Recipes.swift */,
 				8D8698B41E6B4BFB00998BF6 /* Steps.swift */,
@@ -646,7 +640,6 @@
 				8DE266521E7ED705009B68A9 /* RegisterViewController.swift in Sources */,
 				8DE052461ED0754C00141472 /* Messages.swift in Sources */,
 				8D8698B51E6B4BFB00998BF6 /* Steps.swift in Sources */,
-				8D439BF71EB21FB3007DD8F6 /* SearchIngredientsResultTableViewController.swift in Sources */,
 				8D3083BD1E8A7B73008EEC4D /* RecipeTableViewCell.swift in Sources */,
 				8D8698B31E6B4B1A00998BF6 /* Ingredients.swift in Sources */,
 				8D457B071EB0CE8700A5BFCB /* EditUserDetailsViewController.swift in Sources */,
@@ -662,9 +655,9 @@
 				8D3083AD1E86DD0C008EEC4D /* AdminRecipesToApproveTableViewController.swift in Sources */,
 				8D81C1351EB7C8AE008D61F6 /* RoundButton.swift in Sources */,
 				8D81C12F1EB62774008D61F6 /* AdminUsersTableViewController.swift in Sources */,
-				8D439BF51EB21D53007DD8F6 /* SearchIngredientsViewController.swift in Sources */,
 				8DAEAA111EC09DA0007DBD21 /* Ratings.swift in Sources */,
 				8D8698AD1E6B3CAF00998BF6 /* Recipes.swift in Sources */,
+				8D95030D1ED2137400055C17 /* LogoutViewController.swift in Sources */,
 				8D0ED6201E6DD6A9001ABEC6 /* RecipeDetailViewController.swift in Sources */,
 				8DE0524A1ED077C600141472 /* AdminRecipesToApproveViewController.swift in Sources */,
 				8D95030B1ED1A8EA00055C17 /* WelcomeViewController.swift in Sources */,
@@ -675,7 +668,6 @@
 				8D2B666D1EC63BD10057EC2A /* UserReviewsTableViewCell.swift in Sources */,
 				8D2B66691EC5F7150057EC2A /* RecipeHomeTableViewController.swift in Sources */,
 				8DBEC8E51EB8F35500637D79 /* UserShoppingListTableViewController.swift in Sources */,
-				8D8698B71E6B4C3C00998BF6 /* Timers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

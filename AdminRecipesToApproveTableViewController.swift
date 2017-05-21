@@ -33,10 +33,6 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
     
     private let searchController = UISearchController(searchResultsController: nil)
     
-    //var selectedRecipeList = [Recipes]()
-    //var filteredRecipeList = [Recipes]()
-    //var recipeIDArray = [String]()
-    
     @IBOutlet weak var recipesToApproveTableView: UITableView!
     
     
@@ -62,17 +58,18 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
         
         self.recipesToApproveTableView.register(AdminRecipesToApproveTableViewCell.self, forCellReuseIdentifier: cellId)
         
+        // Add's an Observer to the Notificaition center to observe post from other classes with the relevant name.
         NotificationCenter.default.addObserver(self, selector: #selector(getRecipes), name: NSNotification.Name(rawValue: "getRecipes"), object: nil)
 
-        
         getRecipes()
-        
         self.setupSearchController()
         self.recipesToApproveTableView.reloadData()
     }
     
     func getRecipes(){
         recipeList.removeAll()
+        
+        // Retrieve all recipes that are approved by admin. This recipeList uses the recipe extension.
         recipeList.fetchRecipes(refName: "Recipes", queryKey: "Approved", queryValue: false as AnyObject, recipeToSearch: "", ref: ref) {
             (result: [Recipes]) in
             if result.isEmpty {
@@ -87,6 +84,7 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
     }
     
     func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
+        // Fetches each user associated with the recipe. The user ID is stored within the Recipe as 'addedBy'.
         userList.fetchUsers(refName: "Users", queryKey: self.recipe!.addedBy!, queryValue: "" as AnyObject, ref: ref) {
             (result: [User]) in
             if result.isEmpty {
@@ -98,6 +96,7 @@ class AdminRecipesToApproveTableViewController: UIViewController, UITableViewDel
         }
     }
     
+    // Create the search controller to allow users to search and use the built in segment control.
     func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false

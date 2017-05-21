@@ -59,13 +59,11 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
         
         uid = FIRAuth.auth()?.currentUser?.uid
         
-        if uid == nil {
-            perform(#selector(handleLogout), with: nil, afterDelay: 0)
-        }
-        
         self.dismissKeyboardWhenTappedAround()
+        
         self.userTableView.register(AdminUserTableViewCell.self, forCellReuseIdentifier: cellId)
         
+        // Add's an Observer to the Notificaition center to observe post from other classes with the relevant name.
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
         
         getUsers()
@@ -87,6 +85,8 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
     }
     
     func getUsers(){
+        
+        // Fetch a list of all users within the Firebase Database.
         userList.fetchUsers(refName: "Users", queryKey: "", queryValue: "" as AnyObject, ref: ref) {
             (result: [User]) in
             if result.isEmpty {
@@ -109,9 +109,8 @@ class AdminUsersTableViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         labelUserName.text = "\(self.user.firstName!) \(self.user.lastName!)"
-        labelUserNoRecipesAdded.text = ""
-        labelUserNoRecipesCooked.text = ""
-        labelUserNoRecipesRated.text = ""
+        labelUserNoRecipesAdded.text = "3"
+        labelUserNoRecipesRated.text = "5"
         imageURL = self.user.profilePicURL
         imageViewUser.loadImageWithCacheWithUrlString(imageURL!)
         

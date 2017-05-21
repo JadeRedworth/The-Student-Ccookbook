@@ -17,6 +17,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     let cellId = "cellId"
     var guestID: String = ""
+    var uid: String!
     
     // Model
     var recipe: Recipes?
@@ -63,6 +64,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet var starButtons: [UIButton]!
     @IBOutlet weak var textViewReview: UITextView!
     @IBOutlet weak var buttonAddReview: UIButton!
+    @IBOutlet weak var buttonAddIngredients: UIButton!
     
     @IBOutlet weak var ingredientsAndStepsTableView: UITableView!
     
@@ -90,7 +92,18 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
-        userID = (FIRAuth.auth()?.currentUser?.uid)!
+        
+        uid = FIRAuth.auth()?.currentUser?.uid
+        
+        if uid == nil {
+            buttonAddFavourite.isEnabled = false
+            textViewReview.isEditable = false
+            buttonAddReview.isEnabled = false
+            buttonAddIngredients.isEnabled = false
+            //perform(#selector(handleLogout), with: nil, afterDelay: 0)
+        } else {
+            userID = uid
+        }
         
         self.ingredientsAndStepsTableView.estimatedRowHeight = 70.0
         self.ingredientsAndStepsTableView.rowHeight = UITableViewAutomaticDimension
@@ -102,7 +115,8 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
         
-        fillData()
+        getRecipeData()
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -171,10 +185,10 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func reloadData(){
-        fillData()
+        getRecipeData()
     }
     
-    func fillData(){
+    func getRecipeData(){
         
         recipeList.fetchRecipes(refName: "Recipes", queryKey: "",queryValue: recipeId as AnyObject, recipeToSearch: "", ref: ref) {
             (result: [Recipes]) in
@@ -183,56 +197,71 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
             } else {
                 self.recipeList = result
                 self.recipe = self.recipeList[0]
-                if self.recipe?.addedBy == self.userID {
-                    self.buttonEdit.isEnabled = true
-                    self.buttonEdit.tintColor = .white
-                } else {
-                    self.buttonEdit.isEnabled = false
-                    self.buttonEdit.tintColor = .clear
-                }
-                self.labelRecipeName.text = self.recipe?.name
-                self.labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
-                self.labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
-                self.labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
-                self.labelType.text = self.recipe!.type
-                self.labelCourse.text = (self.recipe?.course).map { $0.rawValue }
-                self.labelDateAdded.text = "Added: \(self.recipe!.dateAdded!)"
-                self.labelDifficulty.text = "\(self.recipe!.difficulty!)"
-                self.recipeRating = self.recipe!.averageRating!
-                self.ingredientsList = self.recipe!.ingredients
-                self.stepsList = self.recipe!.steps
-                
-                self.ingredientsAndStepsTableView.reloadData()
-                
-                self.imageURL = self.recipe?.imageURL
-                self.imageViewRecipe.loadImageWithCacheWithUrlString(self.imageURL!)
-                
-                self.fetchUserWhoAddedRecipe(completion: {
-                    result in
-                    if result {
-                        self.labelAddedBy.text = "@: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
-                        if let userProfileURL = self.userList[0].profilePicURL {
-                            self.imageViewUser.loadImageWithCacheWithUrlString(userProfileURL)
-                            self.imageViewUser.makeImageCircle()
-                            self.imageViewUser.contentMode = .scaleAspectFill
-                        }
-                    }
-                })
-                
-                self.fillStarRatings()
-                self.getReviews()
-                
-                let userRef = self.ref.child("Users").child(self.userID!).child("Favourites")
-                query = userRef.queryOrdered(byChild: "RecipeID").queryEqual(toValue: self.recipe?.id)
-                query.observeSingleEvent(of: .value, with: { (snapshot) in
-                    if snapshot.exists() {
-                        self.isFavourite = true
-                        self.buttonAddFavourite.setImage(UIImage(named: "filledHeart.png"), for:  UIControlState.normal)
-                    }
-                })
+                self.fillData()
+            }
+        }
+        
+        recipeList.fetchRecipes(refName: "UserRecipes", queryKey: userID!, queryValue: "" as AnyObject, recipeToSearch: "", ref: ref) {
+            (result: [Recipes]) in
+            if result.isEmpty {
+                self.recipeList = []
+            } else {
+                self.recipeList = result
+                self.recipe = self.recipeList[0]
+                self.fillData()
             }
         }
     }
+    
+    func fillData(){
+        if self.recipe?.addedBy == self.userID {
+            self.buttonEdit.isEnabled = true
+        } else {
+            self.buttonEdit.isEnabled = false
+            self.buttonEdit.tintColor = .clear
+        }
+        self.labelRecipeName.text = self.recipe?.name
+        self.labelServingSize.text = "Serves: \(self.recipe!.servingSize!)"
+        self.labelPrepTime.text = " \(self.recipe!.prepTimeHour!) hrs \(self.recipe!.prepTimeMinute!) mins"
+        self.labelCookTime.text = "\(self.recipe!.cookTimeHour!) hrs \(self.recipe!.cookTimeMinute!) mins"
+        self.labelType.text = self.recipe!.type
+        self.labelCourse.text = (self.recipe?.course).map { $0.rawValue }
+        self.labelDateAdded.text = "Added: \(self.recipe!.dateAdded!)"
+        self.labelDifficulty.text = "\(self.recipe!.difficulty!)"
+        self.recipeRating = self.recipe!.averageRating!
+        self.ingredientsList = self.recipe!.ingredients
+        self.stepsList = self.recipe!.steps
+        
+        self.ingredientsAndStepsTableView.reloadData()
+        
+        self.imageURL = self.recipe?.imageURL
+        self.imageViewRecipe.loadImageWithCacheWithUrlString(self.imageURL!)
+        
+        self.fetchUserWhoAddedRecipe(completion: {
+            result in
+            if result {
+                self.labelAddedBy.text = "@: \(self.userList[0].firstName!) \(self.userList[0].lastName!)"
+                if let userProfileURL = self.userList[0].profilePicURL {
+                    self.imageViewUser.loadImageWithCacheWithUrlString(userProfileURL)
+                    self.imageViewUser.makeImageCircle()
+                    self.imageViewUser.contentMode = .scaleAspectFill
+                }
+            }
+        })
+        
+        self.fillStarRatings()
+        self.getReviews()
+        
+        let userRef = ref.child("Users").child(self.userID!).child("Favourites")
+        query = userRef.queryOrdered(byChild: "RecipeID").queryEqual(toValue: self.recipe?.id)
+        query.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                self.isFavourite = true
+                self.buttonAddFavourite.setImage(UIImage(named: "filledHeart.png"), for:  UIControlState.normal)
+            }
+        })
+    }
+    
     
     func fetchUserWhoAddedRecipe(completion: @escaping (Bool) -> ()) {
         userList.fetchUsers(refName: "Users", queryKey: recipe!.addedBy!, queryValue: "" as AnyObject, ref: ref) {
@@ -439,7 +468,7 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         
-     var returnValue: Int = 0
+        var returnValue: Int = 0
         if tableView == self.ingredientsAndStepsTableView {
             if indexPath.section == 0 {
                 returnValue = UITableViewCellEditingStyle(rawValue: 3)!.rawValue
@@ -451,7 +480,9 @@ class RecipeDetailViewController: UIViewController, UITableViewDelegate, UITable
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         var returnValue: Bool = false
         if tableView == self.ingredientsAndStepsTableView {
-            if indexPath.section == 0 {
+            if uid == nil {
+                returnValue = false
+            } else if indexPath.section == 0 {
                 returnValue = true
             }
         }

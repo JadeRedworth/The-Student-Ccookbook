@@ -27,6 +27,7 @@ class WelcomeViewController: UIViewController {
         
         currentStoryboard = self.storyboard
 
+        // Retrieves the logged in users details to display.
         userList.fetchUsers(refName: "Users", queryKey: userID, queryValue: "" as AnyObject, ref: ref){
             (result: [User]) in
             if result.isEmpty{
@@ -45,15 +46,17 @@ class WelcomeViewController: UIViewController {
     }
     
     @IBAction func buttonNotMe(_ sender: Any) {
-        try! FIRAuth.auth()!.signOut()
-        
-        let vc = currentStoryboard.instantiateViewController(withIdentifier: "LogInViewController") as! LogInViewController
-        vc.loggedInUser = "NotLoggedIn"
-        self.present(vc, animated:true, completion:nil)
+        perform(#selector(handleLogout), with: nil, afterDelay: 0)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func handleLogout() {
+        try! FIRAuth.auth()!.signOut()
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "LogInViewController") as! LogInViewController
+        present(vc, animated: true, completion: nil)
     }
 }

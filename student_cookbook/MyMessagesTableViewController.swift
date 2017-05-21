@@ -29,10 +29,21 @@ class MyMessagesTableViewController: UITableViewController {
         ref = FIRDatabase.database().reference()
         uid = FIRAuth.auth()?.currentUser?.uid
         
+        if uid == nil {
+            perform(#selector(handleLogout), with: nil, afterDelay: 0)
+        }
+        
         self.tableView.estimatedRowHeight = 88.0
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         getMessages()
+    }
+    
+    func handleLogout() {
+        try! FIRAuth.auth()!.signOut()
+        
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        present(vc!, animated: true, completion: nil)
     }
     
     func getMessages(){

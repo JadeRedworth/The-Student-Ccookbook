@@ -32,9 +32,19 @@ class MyReviewsTableViewController: UITableViewController {
         ref = FIRDatabase.database().reference()
         
         userID = (FIRAuth.auth()?.currentUser?.uid)
-        
-        getReviews()
+        if userID == nil {
+            perform(#selector(handleLogout), with: nil, afterDelay: 0)
+        } else {
+            getReviews()
+        }
 
+    }
+    
+    func handleLogout() {
+        try! FIRAuth.auth()!.signOut()
+        
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        present(vc!, animated: true, completion: nil)
     }
     
     func getReviews(){
@@ -69,11 +79,8 @@ class MyReviewsTableViewController: UITableViewController {
             if result.isEmpty {
                 //self.recipeList = []
             } else {
-                if self.reviewList[self.i].recipeID == result.first?.id {
-                    self.recipeList += result
-                    self.i += 1
-                } else {
-                }
+                self.recipeList += result
+                self.i += 1
                 completion(true)
             }
         }

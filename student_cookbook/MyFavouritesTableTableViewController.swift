@@ -54,14 +54,15 @@ class MyFavouritesTableViewController: UITableViewController, UISearchResultsUpd
         
         if uid == nil {
             perform(#selector(handleLogout), with: nil, afterDelay: 0)
+        } else {
+            reloadData()
+            
+            self.setupSearchController()
+            self.tableView.reloadData()
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData), name: NSNotification.Name(rawValue: "reloadData"), object: nil)
         
-        reloadData()
-        
-        self.setupSearchController()
-        self.tableView.reloadData()
     }
     
     func reloadData() {

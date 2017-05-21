@@ -87,7 +87,6 @@ class RecipeHomeTableViewController: UITableViewController {
             if guestID == "" {
                 return true
             } else {
-                
                 let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
                 present(vc!, animated: true, completion: nil)
                 

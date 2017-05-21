@@ -16,8 +16,14 @@ let imageCache = NSCache<AnyObject, AnyObject>()
 var query = FIRDatabaseQuery()
 var dataEventType: FIRDataEventType!
 
+// All extensions are used to reduce duplicate code and allow all asynchronous taks to be completed within 
+// a completion block. As all Firebase database queries are done asynchronously, completion blocks allow for the
+// deisre results to be obtained before the functions return the given value
+
 extension AddRecipeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    // Allows the user to pick the size of the image within a give frame. This was used to obtain the correct
+    // size image for uploading to Firebase Storage
     func handleSelectImageView() {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -112,13 +118,12 @@ extension EditUserDetailsViewController: UIImagePickerControllerDelegate, UINavi
 }
 
 
-
-
 extension String {
     
     func storeImage(image: UIImage!, completed: @escaping (_ result: String) -> Void) {
         
         let uniqueImageName = UUID().uuidString
+        // Upload the photo to the firebase storage
         let storageRef = FIRStorage.storage().reference().child("recipe_images").child("\(uniqueImageName).jpeg")
         
         if let storedImage = image, let uploadData = UIImageJPEGRepresentation(storedImage, 0.1) {
@@ -127,6 +132,7 @@ extension String {
                     print(error!)
                     return
                 } else if let photoImageURL = metadata?.downloadURL()?.absoluteString {
+                    // If the image was successfully uploaded into Firebase Storage, the associated imageURL can be returned.
                     completed(photoImageURL)
                 }
             })
@@ -167,11 +173,17 @@ extension String {
 
 extension Array where Element == String {
     
+    // Fetches the favourite recipes of the user queried. The user id will be passed through a parameter and all
+    // recipeID's in the favourites branch of Firebase are returned.
     func fetchFavourites(refName: String, queryKey: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void) {
         var recipeIDs = [String]()
         let favouritesRef = ref.child(refName).child(queryValue)
+        
+        // Observe the array of recipeID's within the favourite branch
         favouritesRef.observe(.value, with: { (snapshot) in
             recipeIDs.removeAll()
+            
+            // Cycles through the children of the snapshot, (snapshot is the whole array returned)
             let favourtiesEnumerator = snapshot.childSnapshot(forPath: "Favourites").children
             while let favItem = favourtiesEnumerator.nextObject() as? FIRDataSnapshot {
                 recipeIDs.append(favItem.childSnapshot(forPath: "RecipeID").value as! String)
@@ -180,13 +192,19 @@ extension Array where Element == String {
         })
     }
     
+    // Fetches the user reviews  of the user queried. The user id will be passed through a parameter and all
+    // recipeID's in the favourites branch of Firebase are returned.
     func fetchUserReviews(refName: String, queryKey: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void){
         var reviewIDs = [String]()
         let userReviewRef = ref.child(refName).child(queryKey)
+        
+        // Observe the array of recipeReviewID's within the RecipeReviews branch
         userReviewRef.observe(.value, with: { (snapshot) in
             print(snapshot)
             let reviewsEnumerator = snapshot.childSnapshot(forPath: "Reviews").children
             reviewIDs.removeAll()
+            
+            // Cycles through the children of the snapshot, (snapshot is the whole array returned)
             while let reviewsItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
                 print(reviewsItem)
                 let key = reviewsItem.childSnapshot(forPath: "RecipeReviewID").value
@@ -196,12 +214,17 @@ extension Array where Element == String {
         })
     }
     
+    // Fetches the reviews associated to the recipeID passed through as a parameter.
     func fetchRecipeReviews(refName: String, queryKey: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void){
         var reviewIDs = [String]()
         let recipeReviewRef = ref.child(refName).child(queryKey)
+        
+        // Observe the array of recipeReviewID's within the RecipeReviews branch
         recipeReviewRef.observe(.value, with: { (snapshot) in
             let reviewsEnumerator = snapshot.childSnapshot(forPath: "Reviews").children
             reviewIDs.removeAll()
+            
+            // Cycles through the children of the snapshot, (snapshot is the whole array returned)
             while let reviewsItem = reviewsEnumerator.nextObject() as? FIRDataSnapshot {
                 let key = reviewsItem.childSnapshot(forPath: "RecipeRatingID").value
                 if reviewIDs.contains(key as! String){} else {
@@ -212,23 +235,35 @@ extension Array where Element == String {
         })
     }
     
+    // Fetches the shopping list of the user queried. The user id will be passed through a parameter and all
+    // items from the shopping lsit will be returned and appended to a list.
     func fetchShoppingList(refName: String, queryValue: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [String]) -> Void){
         var shoppingList = [String]()
         let shoppingListRef = ref.child(refName).child(queryValue).child("ShoppingList")
         shoppingListRef.observe(.value, with: { (snapshot) in
-            let shoppingDict: [String] = snapshot.value as! [String]
-            shoppingList.removeAll()
-            for i in 0..<shoppingDict.count {
-                var item: String = ""
-                item = shoppingDict[i]
-                shoppingList.append(item)
+            if snapshot.exists(){
+                let shoppingDict: [String] = snapshot.value as! [String]
+                shoppingList.removeAll()
+                for i in 0..<shoppingDict.count {
+                    var item: String = ""
+                    item = shoppingDict[i]
+                    shoppingList.append(item)
+                }
+                completion(shoppingList)
+            } else {
+                
             }
-            completion(shoppingList)
         })
     }
 }
 
 extension Array where Element: User {
+    
+    // Fetches the users from the 'User' branch within the Firebase Database.
+    
+    // Specific parameters are passed through depenedent on the desired query.
+    // Check are made to identify whether to return all users or a specific user (with a passed through userID as a 
+    // parameter.
     
     func fetchUsers(refName: String, queryKey: String, queryValue: AnyObject, ref: FIRDatabaseReference, completion: @escaping (_ result: [User]) -> Void) {
         
@@ -263,6 +298,10 @@ extension Array where Element: User {
 
 extension Array where Element: RecipeReviews {
     
+    // Fetches the recipe reviews from the 'RecipeReviews' branch within the Firebase Database.
+    
+    // Specific parameters are passed through depenedent on the desired query.
+
     func fetchRecipeReviews(refName: String, queryKey: String, queryValue: [String], ref: FIRDatabaseReference, completion: @escaping (_ result: [RecipeReviews]) -> Void){
         
         let recipeReviewRef = ref.child(refName)
@@ -291,6 +330,8 @@ extension Array where Element: RecipeReviews {
 }
 
 extension Array where Element: Messages {
+    
+    // Fetches the users messages from the 'AdminRecipeCommments' branch within the Firebase Database.
     
     func fecthMessages(refName: String, queryKey: String, queryValue: Bool, ref: FIRDatabaseReference, completion: @escaping (_ result: [Messages]) -> Void) {
         
@@ -321,10 +362,20 @@ extension Array where Element: Messages {
 
 extension Array where Element: Recipes {
     
+    // Fetches the recipes from the 'Recipes' OR 'UserRecipes' branch within the Firebase Database. This is 
+    // depenedent on what value is passed through for 'refName'.
+    
+    // Mutlipe queries can be used within this function.
+    
+    // Specific parameters are passed through depenedent on the desired query.
+    
+    // Check are made to identify whether to return all recipes or a specific recipe (with a passed through recipeID as a parameter.
+    
+    
     func fetchRecipes(refName: String, queryKey: String, queryValue: AnyObject, recipeToSearch: String, ref: FIRDatabaseReference, completion: @escaping (_ result: [Recipes]) -> Void) {
         
         var recipeList = [Recipes]()
-        let recipeRef = ref.child(refName)
+        var recipeRef = ref.child(refName)
         
         if refName == "Recipes" {
             if (queryValue is Bool) {
@@ -347,13 +398,22 @@ extension Array where Element: Recipes {
             
         } else if refName == "UserRecipes" {
             if (queryValue is String) {
-                query = recipeRef.child(queryValue as! String)
-                dataEventType = .childAdded
+                if (queryKey != "") {
+                    query = recipeRef.child(queryKey)
+                    dataEventType = .childAdded
+                } else {
+                    query = recipeRef.child(queryValue as! String)
+                    dataEventType = .childAdded
+                }
             } else {
                 query = recipeRef
                 dataEventType = .childAdded
             }
         }
+        
+        // Once all the specific parameters and DatabaseReferences are setup, the method (fillData) is called.
+        
+        // A completion handler ensures the function is complete before the resutls are returned.
         
         recipeList.fillData(query: query, dataEventType: dataEventType!, recipeToSearch: recipeToSearch) {
             (result: [Recipes]) in
@@ -361,7 +421,7 @@ extension Array where Element: Recipes {
             completion(recipeList)
             
         }
-        
+    
         if recipeList.isEmpty {
             completion(recipeList)
         }
@@ -371,8 +431,11 @@ extension Array where Element: Recipes {
         
         var recipeList = [Recipes]()
         
+        // Observe the data obtained when the database is queried.
         query.observe(dataEventType, with: { (snapshot) in
             
+            
+            // A dictionary is used to store the results (snapshot). These are then cycled through creating a new instance of recipes to append to the recipe list.
             if let recipeDict = snapshot.value as? [String: AnyObject] {
                 
                 let recipes = Recipes()
@@ -419,6 +482,8 @@ extension Array where Element: Recipes {
                 recipes.prepTimeMinute = recipeDict["PrepTimeMinutes"] as? Int
                 recipes.servingSize = recipeDict["ServingSize"] as? Int
                 recipes.type = recipeDict["Type"] as? String ?? ""
+                
+                // The ingredients array within the recipe must be cycled through to obtain all results similar to that above.
                 var ingredientsList = [Ingredients]()
                 while let ingItem = ingredientsEnumerator.nextObject() as? FIRDataSnapshot {
                     let ingredients = Ingredients()
@@ -430,6 +495,8 @@ extension Array where Element: Recipes {
                 }
                 recipes.ingredients = ingredientsList
                 
+                
+                // The steps array within the recipe must be cycled through to obtain all results similar to that above.
                 var stepsList = [Steps]()
                 while let stepItem = stepsEnumerator.nextObject() as? FIRDataSnapshot {
                     let steps = Steps()
@@ -457,11 +524,14 @@ extension Array where Element: Recipes {
 
 extension UIImageView {
     
+    // Forces the UIImageView to be a perfect circle. This function can be called from any UIImageView
     func makeImageCircle(){
         self.layer.cornerRadius = self.frame.width/2
         self.layer.masksToBounds = true
     }
     
+    
+    // Both methods below are used within the default tableView layout.
     func setCircleSize() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.layer.cornerRadius = 5
@@ -476,19 +546,20 @@ extension UIImageView {
         self.contentMode = .scaleAspectFill
     }
     
+    
+    // An ImageURL is passed through which is obtained from the reference in the Firebase Database.
     func loadImageWithCacheWithUrlString(_ urlString: String) {
         
-        // Check cache for image first
+        // Check to see if the image has already been cached
         if let cachedImage = imageCache.object(forKey: urlString as AnyObject) as? UIImage {
             self.image = cachedImage
             return
         }
         
-        // otherwise fire off a new download
+        // else query a new download for the image associated with the imageURL path
         let url = URL(string: urlString)
         URLSession.shared.dataTask(with: url! as URL, completionHandler: { (data, response, error) in
             
-            // downloading hit an error so we need to return out
             if error != nil {
                 print(error!)
                 return
@@ -498,8 +569,8 @@ extension UIImageView {
                 
                 if let downloadedImage = UIImage(data: data!) {
                     
+                    // Cache the image for future use
                     imageCache.setObject(downloadedImage, forKey: urlString as AnyObject)
-                    
                     self.image = downloadedImage
                 }
             })
@@ -509,6 +580,7 @@ extension UIImageView {
 }
 
 extension UIImage {
+    
     
     func scaleImageToSize(img: UIImage,size: CGSize) -> UIImage {
         UIGraphicsBeginImageContext(size)
@@ -522,30 +594,9 @@ extension UIImage {
     }
 }
 
-extension UIColor{
-    func HexToColor(hexString: String, alpha:CGFloat? = 1.0) -> UIColor {
-        // Convert hex string to an integer
-        let hexint = Int(self.intFromHexString(hexStr: hexString))
-        let red = CGFloat((hexint & 0xff0000) >> 16) / 255.0
-        let green = CGFloat((hexint & 0xff00) >> 8) / 255.0
-        let blue = CGFloat((hexint & 0xff) >> 0) / 255.0
-        let alpha = alpha!
-        // Create color object, specifying alpha as well
-        let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
-        return color
-    }
-    
-    func intFromHexString(hexStr: String) -> UInt32 {
-        var hexInt: UInt32 = 0
-        let scanner: Scanner = Scanner(string: hexStr)
-        scanner.charactersToBeSkipped = CharacterSet.init(charactersIn: "#")
-        scanner.scanHexInt32(&hexInt)
-        return hexInt
-    }
-}
-
 extension UIViewController {
     
+    // All View Controllers can call this function to dismiss the keyboard when the area around it is tapped.
     func dismissKeyboardWhenTappedAround() {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(RecipeTableViewController.dismissKeyboard))
         tap.cancelsTouchesInView = false
@@ -558,6 +609,9 @@ extension UIViewController {
 }
 
 extension UIViewController: UITextFieldDelegate{
+    
+    // Adds a tool bar to all keyboards/spinners.
+    
     func addToolBar(textField: UITextField){
         let toolBar = UIToolbar()
         toolBar.barStyle = UIBarStyle.default
@@ -584,6 +638,7 @@ extension UIViewController: UITextFieldDelegate{
 
 extension UITextField {
     
+    // Creates a white line underneath the text field.
     func underlined(){
         let border = CALayer()
         let width = CGFloat(1.0)

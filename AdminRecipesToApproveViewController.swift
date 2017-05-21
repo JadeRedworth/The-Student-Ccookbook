@@ -76,9 +76,9 @@ class AdminRecipesToApproveViewController: UIViewController, UITableViewDelegate
             self.recipe = self.recipeList[0]
             
             labelRecipeName.text = self.recipe?.name
-            labelServingSize.text = "Serves: \(String(describing: self.recipe?.servingSize))"
-            labelPrepTime.text = " \(String(describing: self.recipe!.prepTimeHour)) hrs \(self.recipe!.prepTimeMinute!) mins"
-            labelCookTime.text = "\(String(describing: self.recipe!.cookTimeHour)) hrs \(String(describing: self.recipe!.cookTimeMinute)) mins"
+            labelServingSize.text = "Serves: \(self.recipe!.servingSize!))"
+            labelPrepTime.text = " \(String(self.recipe!.prepTimeHour!)) hrs \(self.recipe!.prepTimeMinute!) mins"
+            labelCookTime.text = "\(String(self.recipe!.cookTimeHour!)) hrs \(String(self.recipe!.cookTimeMinute!)) mins"
             labelType.text = self.recipe?.type
             labelCourse.text = (self.recipe?.course).map { $0.rawValue }
             labelAddedBy.text = self.recipe!.addedBy
@@ -137,6 +137,7 @@ class AdminRecipesToApproveViewController: UIViewController, UITableViewDelegate
         let recipeRef = self.ref.child("Recipes").child((recipe?.id)!).child("Approved")
         recipeRef.setValue(resultBool)
         
+        // Add a comment to the recipe, this will be stored in the Firebase Database.
         let commentRef = self.ref.child("AdminRecipeComments").child(recipe.addedBy!).childByAutoId()
         let commentValues = ([
             "RecipeID" : recipeId,
@@ -148,6 +149,7 @@ class AdminRecipesToApproveViewController: UIViewController, UITableViewDelegate
             "Comment" : textViewComment.text] as [String : Any])
         commentRef.setValue(commentValues)
         
+        // Posts to the Notifcation Center to allow all observers to observe 'getRecipes'
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "getRecipes"), object: nil)
         self.dismiss(animated: true, completion: nil)
     }

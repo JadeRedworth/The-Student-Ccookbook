@@ -58,7 +58,7 @@ class EditUserDetailsViewController: UIViewController {
         editUserDetails(completion: {
             result in
             if result {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadData"), object: nil)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadUserData"), object: nil)
                 self.dismiss(animated: true, completion: nil)
             }
         })

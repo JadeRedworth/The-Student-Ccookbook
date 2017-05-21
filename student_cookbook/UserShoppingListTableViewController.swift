@@ -20,9 +20,13 @@ class UserShoppingListTableViewController: UITableViewController {
         super.viewDidLoad()
         
         ref = FIRDatabase.database().reference()
-        userID = (FIRAuth.auth()?.currentUser?.uid)!
+        userID = FIRAuth.auth()?.currentUser?.uid
         
-        getShoppingList()
+        if userID == nil {
+            perform(#selector(handleLogout), with: nil, afterDelay: 0)    
+        } else {
+            getShoppingList()
+        }
     }
     
     func getShoppingList(){
@@ -36,6 +40,14 @@ class UserShoppingListTableViewController: UITableViewController {
             }
         }
     }
+    
+    func handleLogout() {
+        try! FIRAuth.auth()!.signOut()
+        
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+        present(vc!, animated: true, completion: nil)
+    }
+
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
